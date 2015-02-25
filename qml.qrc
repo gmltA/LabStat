@@ -5,6 +5,7 @@
         <file>MenuBackIcon.qml</file>
         <file>NavigationDrawer.qml</file>
         <file>SoftShadow.qml</file>
+        <file>NavigationDrawerItem.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>
