@@ -1,88 +1,152 @@
-import QtQuick 2.4
-import QtQuick.Controls 1.3
-import QtQuick.Window 2.2
-import QtQuick.Dialogs 1.2
-import QtQuick.Layouts 1.1
-import QtQuick.Controls.Styles 1.3
+import QtQuick 2.1
+import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.2
+
+import QtQuick.Controls 1.2
+//import QtWebKit 3.0
+//import "NavigationDrawer.qml" as MyModule
 
 ApplicationWindow {
-    title: qsTr("Hello World")
-    width: 640
+    title: "Navigation Drawer"
+    id: mainWindow
+    width: 320
     height: 480
     visible: true
 
-    menuBar: MenuBar {
-        Menu {
-            MenuItem {
-                text: "Something"
-            }
-            MenuItem {
-                text: "Something else"
-            }
-        }
-    }
+    readonly property real dp: mainWindow.width / 320
 
-    toolBar: ToolBar {
-        RowLayout {
-            anchors.fill: parent
-            ToolButton {
-                id: mainButton
-                //anchors.left: parent.left
-                text: "Work"
-            }
-            ToolButton {
-                id: settingsButton
-                //anchors.left: mainButton.right
-                text: "Settings"
-            }
-        }
-    }
+    FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
 
+        NavigationDrawer {
+            id: drawer
 
-    Item {
-        width: parent.width
-        height: parent.height
-        id: wtf
-        Button{
-            text:"lol"
-            onClicked: stackView.pop()
-        }
-    }
+            color: "white"
+            //anchors.top: navigationBar.bottom
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-    StackView {
-            id: stackView
-            anchors.fill: parent
-            // Implements back key navigation
-            focus: true
-            Keys.onReleased: if (event.key === Qt.Key_Back && stackView.depth > 1) {
-                                 stackView.pop();
-                                 event.accepted = true;
-                             }
-            initialItem: Item {
-                        width: parent.width
-                        height: parent.height
-                        Button{
-                            text: "Test"
-                            onClicked: stackView.push(wtf)
+            position: Qt.LeftEdge
+
+            Flickable {
+                anchors.fill: parent
+                contentHeight: mennu.height
+                contentWidth: parent.width
+
+                Column {
+                    id: mennu
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    Rectangle {
+                        height: 56 * dp
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+
+                    Button {
+                        id: button1
+                        opacity: parent.opacity
+                        height: 48 * dp
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        Text {
+                            id: caption
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.leftMargin: 72 * dp
+
+                            font.pointSize: 14
+                            font.family: "Roboto"
+                            text: "Groups"
+                        }
+
+                        Text {
+                            id: icon
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.rightMargin: 16 * dp
+
+                            font.family: materialIcons.name
+                            font.pointSize: 28
+                            text: ""
+                        }
+
+                        style: ButtonStyle {
+                            background: Rectangle {
+                                implicitWidth: 100
+                                implicitHeight: 25
+                                color: control.pressed ? "#E6E6E6" : "white"
+                            }
+                        }
+
+                        onClicked: {
+                            if (b1_subMenu.height > 0)
+                            {
+                                b1_subMenu.height = 0;
+                                b1_subMenu.opacity = 0;
+                                icon.text = "";
+                                caption.font.bold = false;
+
+                            }
+                            else
+                            {
+                                b1_subMenu.height = 100;
+                                b1_subMenu.opacity = 1;
+                                icon.text = "";
+                                caption.font.bold = true;
+                            }
                         }
                     }
-    }
 
-    /*MainForm {
-        anchors.fill: parent
+                    Rectangle {
+                        id: b1_subMenu
+                        width: parent.width
+                        height: 100
+                        color: "#D9D9D9"
 
-        button1.onClicked: messageDialog.show(qsTr("Button 1 pressed"))
-        button2.onClicked: messageDialog.show(qsTr("Button 2 pressed"))
-        button3.onClicked: messageDialog.show(qsTr("Button 3 pressed"))
-    }*/
+                        Rectangle {
+                            height: 4 * dp
+                            width: parent.width
+                            transformOrigin: Item.TopLeft
+                            gradient: Gradient{
+                                GradientStop { position: 1; color: "#00000000"}
+                                GradientStop { position: 0; color: "#2c000000"}
+                            }
+                        }
 
-    MessageDialog {
-        id: messageDialog
-        title: qsTr("May I have your attention, please?")
+                        Rectangle {
+                            height: 4 * dp
+                            width: parent.width
+                            anchors.bottom: parent.bottom
+                            gradient: Gradient {
+                                GradientStop { position: 0; color: "#00000000"}
+                                GradientStop { position: 1; color: "#2c000000"}
+                            }
+                        }
 
-        function show(caption) {
-            messageDialog.text = caption;
-            messageDialog.open();
+                        Behavior on height {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.OutCubic
+                            }
+                        }
+
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 300
+                                easing.type: Easing.OutCubic
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+          //  YourContentItem {
+            //    ....
+            //}
         }
-    }
+    //}
 }
