@@ -6,6 +6,7 @@
         <file>NavigationDrawer.qml</file>
         <file>SoftShadow.qml</file>
         <file>NavigationDrawerItem.qml</file>
+        <file>NavigationDrawerListItem.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

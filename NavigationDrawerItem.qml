@@ -4,16 +4,29 @@ import QtQuick.Controls.Styles 1.2
 
 Button {
     id: root
-    opacity: parent.opacity
     height: 48 * dp
     anchors.left: parent.left
     anchors.right: parent.right
 
-    property alias icon: icon.text
-    property alias caption: caption.text
+    property alias icon: leftIcon.text
+    property alias rightIcon: rightIcon.text
+    property alias rightIconItem: rightIcon
+    property alias caption: captionItem.text
+    property alias captionItem: captionItem
 
     Text {
-        id: caption
+        id: leftIcon
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 16 * dp
+
+        font.family: materialIcons.name
+        font.pointSize: 28
+        text: ""
+    }
+
+    Text {
+        id: captionItem
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 72 * dp
@@ -24,14 +37,14 @@ Button {
     }
 
     Text {
-        id: icon
+        id: rightIcon
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 16 * dp
 
         font.family: materialIcons.name
         font.pointSize: 28
-        text: ""
+        text: ""
     }
 
     style: ButtonStyle {

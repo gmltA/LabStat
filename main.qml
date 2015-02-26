@@ -17,45 +17,43 @@ ApplicationWindow {
 
     FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
 
-        NavigationDrawer {
-            id: drawer
+    NavigationDrawer {
+        id: drawer
 
-            color: "white"
-            //anchors.top: navigationBar.bottom
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+        color: "white"
+        //anchors.top: navigationBar.bottom
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
 
-            position: Qt.LeftEdge
+        position: Qt.LeftEdge
 
-            Flickable {
-                anchors.fill: parent
-                contentHeight: mennu.height
-                contentWidth: parent.width
+        Flickable {
+            anchors.fill: parent
+            contentHeight: drawerMenu.height
+            contentWidth: parent.width
 
-                Column {
-                    id: mennu
+            Column {
+                id: drawerMenu
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Rectangle {
+                    height: 56 * dp
                     anchors.left: parent.left
                     anchors.right: parent.right
+                }
 
-                    Rectangle {
-                        height: 56 * dp
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                    }
-
-                    NavigationDrawerItem
-                    {
-                        caption: "Item"
-                        icon: ""
+                NavigationDrawerListItem {
+                    icon: ""
+                    caption: "Item"
+                    NavigationDrawerItem {
+                        caption: "Test"
                     }
                 }
+                NavigationDrawerItem {
+                    caption: "Test"
+                }
             }
-
-
-
-          //  YourContentItem {
-            //    ....
-            //}
         }
-    //}
+    }
 }
