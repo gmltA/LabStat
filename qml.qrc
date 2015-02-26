@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>MainForm.ui.qml</file>
-        <file>MenuBackIcon.qml</file>
-        <file>NavigationDrawer.qml</file>
-        <file>SoftShadow.qml</file>
-        <file>NavigationDrawerItem.qml</file>
-        <file>NavigationDrawerListItem.qml</file>
+        <file>main.cpp</file>
+        <file>QML/main.qml</file>
+        <file>QML/NavigationDrawer/NavigationDrawer.qml</file>
+        <file>QML/NavigationDrawer/NavigationDrawerItem.qml</file>
+        <file>QML/NavigationDrawer/NavigationDrawerListItem.qml</file>
+        <file>QML/MenuBackIcon.qml</file>
+        <file>QML/SoftShadow.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

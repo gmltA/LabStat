@@ -18,4 +18,10 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
-DISTFILES +=
+DISTFILES += \
+    QML/NavigationDrawer/NavigationDrawer.qml \
+    QML/NavigationDrawer/NavigationDrawerItem.qml \
+    QML/NavigationDrawer/NavigationDrawerListItem.qml \
+    QML/main.qml \
+    QML/MenuBackIcon.qml \
+    QML/SoftShadow.qml

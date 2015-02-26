@@ -22,6 +22,8 @@ Button {
 
         font.family: materialIcons.name
         font.pointSize: 28
+
+        color: Qt.rgba(0,0,0,0.87)
         text: ""
     }
 
@@ -32,7 +34,9 @@ Button {
         anchors.leftMargin: 72 * dp
 
         font.pointSize: 14
-        font.family: "Roboto"
+        font.family: "Roboto Regular"
+
+        color: Qt.rgba(0,0,0,0.87)
         text: "Caption"
     }
 
@@ -44,6 +48,8 @@ Button {
 
         font.family: materialIcons.name
         font.pointSize: 28
+
+        color: Qt.rgba(0,0,0,0.87)
         text: ""
     }
 

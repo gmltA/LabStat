@@ -3,8 +3,7 @@ import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.2
 
 import QtQuick.Controls 1.2
-//import QtWebKit 3.0
-//import "NavigationDrawer.qml" as MyModule
+import "../QML/NavigationDrawer"
 
 ApplicationWindow {
     title: "Navigation Drawer"
