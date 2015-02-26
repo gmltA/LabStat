@@ -40,6 +40,24 @@ ApplicationWindow {
                     height: 56 * dp
                     anchors.left: parent.left
                     anchors.right: parent.right
+                    Column {
+                        anchors.left: parent.left
+                        anchors.leftMargin: 16 * dp
+                        anchors.verticalCenter: parent.verticalCenter
+                        Text {
+                            text: "Alex gmlt.A"
+
+                            font.pointSize: 14
+                            font.weight: Font.Black
+                            color: Qt.rgba(0,0,0,0.54)
+                        }
+                        Text {
+                            text: "Text"
+
+                            font.pointSize: 14
+                            color: Qt.rgba(0,0,0,0.54)
+                        }
+                    }
                 }
 
                 NavigationDrawerListItem {
