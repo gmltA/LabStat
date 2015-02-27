@@ -7,6 +7,9 @@
         <file>QML/main.qml</file>
         <file>QML/MenuBackIcon.qml</file>
         <file>QML/SoftShadow.qml</file>
+        <file>QML/NavigationDrawer/NavigationDrawerDivider.qml</file>
+        <file>QML/NavigationDrawer/NavigationDrawerHeader.qml</file>
+        <file>QML/NavigationDrawer/NavigationDrawerSubheader.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

@@ -36,38 +36,35 @@ ApplicationWindow {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                Rectangle {
-                    height: 56 * dp
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    Column {
-                        anchors.left: parent.left
-                        anchors.leftMargin: 16 * dp
-                        anchors.verticalCenter: parent.verticalCenter
-                        Text {
-                            text: "Alex gmlt.A"
+                NavigationDrawerHeader {
+                    mainText: "Alex gmlt.A"
+                    secondaryText: "Just a text"
+                }
 
-                            font.pointSize: 14
-                            font.weight: Font.Black
-                            color: Qt.rgba(0,0,0,0.54)
-                        }
-                        Text {
-                            text: "Text"
-
-                            font.pointSize: 14
-                            color: Qt.rgba(0,0,0,0.54)
-                        }
-                    }
+                NavigationDrawerDivider {
                 }
 
                 NavigationDrawerListItem {
                     icon: ""
-                    caption: "Item"
+                    caption: "Groups"
                     NavigationDrawerItem {
-                        caption: "Test"
+                        icon: ""
+                        caption: "250501"
                     }
                 }
                 NavigationDrawerItem {
+                    icon: ""
+                    caption: "Test"
+                }
+
+                NavigationDrawerDivider {
+                }
+
+                NavigationDrawerSubheader {
+                }
+
+                NavigationDrawerItem {
+                    icon: ""
                     caption: "Test"
                 }
             }

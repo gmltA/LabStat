@@ -24,4 +24,7 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerListItem.qml \
     QML/main.qml \
     QML/MenuBackIcon.qml \
-    QML/SoftShadow.qml
+    QML/SoftShadow.qml \
+    QML/NavigationDrawer/NavigationDrawerSubheader.qml \
+    QML/NavigationDrawer/NavigationDrawerDivider.qml \
+    QML/NavigationDrawer/NavigationDrawerHeader.qml
