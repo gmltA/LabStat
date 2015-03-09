@@ -11,6 +11,8 @@ QML_IMPORT_PATH =
 
 include(deployment.pri)
 
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-sources
+
 DISTFILES += \
     QML/NavigationDrawer/NavigationDrawer.qml \
     QML/NavigationDrawer/NavigationDrawerItem.qml \
@@ -21,6 +23,10 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerSubheader.qml \
     QML/NavigationDrawer/NavigationDrawerDivider.qml \
     QML/NavigationDrawer/NavigationDrawerHeader.qml
+
+DISTFILES += \ android-sources/AndroidManifest.xml \
+    android-sources/project.properties \
+    android-sources/src/org/qtproject/labstat/GoogleAuthClient.java
 
 HEADERS += \
     googleauthclient.h
