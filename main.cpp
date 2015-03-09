@@ -2,16 +2,18 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QScreen>
+
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras>
 #endif
 
+#include "googleauthclient.h"
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-    app.setApplicationName("Material");
-    app.setOrganizationName("Material");
-    app.setOrganizationDomain("ntuosc.org");
+    app.setApplicationName("LabStat");
+    app.setOrganizationName("BSUIR");
 
     QScreen *screen = qApp->primaryScreen();
     int dpi = screen->physicalDotsPerInch() * screen->devicePixelRatio();
@@ -56,6 +58,8 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
+
+    engine.rootContext()->setContextProperty("authClient", &GoogleAuthClient::getInstance());
     engine.load(QUrl("qrc:/QML/main.qml"));
 
     return app.exec();

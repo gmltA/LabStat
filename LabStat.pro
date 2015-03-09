@@ -1,21 +1,14 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick androidextras
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    googleauthclient.cpp
 
 RESOURCES += qml.qrc
 
-macx {
-    QMAKE_MAC_SDK = macosx10.9
-} android {
-    QT += androidextras
-}
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
-# Default rules for deployment.
 include(deployment.pri)
 
 DISTFILES += \
@@ -28,3 +21,6 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerSubheader.qml \
     QML/NavigationDrawer/NavigationDrawerDivider.qml \
     QML/NavigationDrawer/NavigationDrawerHeader.qml
+
+HEADERS += \
+    googleauthclient.h
