@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QAndroidJniEnvironment>
-#include <QNetworkAccessManager>
 
 class GoogleAuthClient : public QObject
 {
@@ -17,6 +16,7 @@ public:
     }
 
     GoogleAuthClient(QObject *parent = 0) {
+        Q_UNUSED(parent)
         connect(this, SIGNAL(tokenObtained(QString)), this, SLOT(apiTest(QString)));
     }
 
@@ -28,11 +28,9 @@ public slots:
     void processAuth();
 
 private slots:
-    void getEmail(QNetworkReply* reply);
     void apiTest(QString token);
 
 private:
-    QNetworkAccessManager* mgr;
 };
 
 #endif // GOOGLEAUTHCLIENT_H

@@ -3,7 +3,8 @@ TEMPLATE = app
 QT += qml quick androidextras
 
 SOURCES += main.cpp \
-    googleauthclient.cpp
+    googleauthclient.cpp \
+    googledriveapi.cpp
 
 RESOURCES += qml.qrc
 
@@ -29,4 +30,5 @@ DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/src/org/qtproject/labstat/GoogleAuthClient.java
 
 HEADERS += \
-    googleauthclient.h
+    googleauthclient.h \
+    googledriveapi.h

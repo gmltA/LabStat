@@ -3,31 +3,13 @@
 #include <QAndroidJniObject>
 #include <QtAndroid>
 #include <QDebug>
-#include <QUrl>
-#include <QNetworkRequest>
-#include <QJsonDocument>
-#include <QNetworkReply>
-#include <QJsonObject>
+
+#include "googledriveapi.h"
 
 void GoogleAuthClient::apiTest(QString token)
 {
-    mgr = new QNetworkAccessManager();
-    connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(getEmail(QNetworkReply*)));
-
-    QUrl url("https://www.googleapis.com/oauth2/v2/userinfo");
-    QNetworkRequest request;
-    request.setUrl(url);
-    request.setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
-    mgr->get(request);
-}
-
-void GoogleAuthClient::getEmail(QNetworkReply* reply)
-{
-    QString json = reply->readAll();
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(json.toUtf8());
-    //QJsonObject sett2 = jsonDoc.object();
-
-    qDebug() << json;
+    //GoogleDriveAPI::getInstance().test(token);
+    GoogleDriveAPI::getInstance().insert(token);
 }
 
 static void fjpassToken(JNIEnv *env, jobject thiz, jstring str)
