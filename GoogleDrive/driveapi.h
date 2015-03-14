@@ -1,12 +1,16 @@
 #ifndef GOOGLEDRIVEAPI_H
 #define GOOGLEDRIVEAPI_H
 
+#include "interface.datastore.h"
+
 #include <QNetworkAccessManager>
 #include <QObject>
 
-class GoogleDriveAPI : public QObject
+class GoogleDriveAPI : public QObject, public IDataStore
 {
         Q_OBJECT
+        Q_INTERFACES(IDataStore)
+
     public:
         static GoogleDriveAPI& getInstance()
         {
@@ -14,11 +18,11 @@ class GoogleDriveAPI : public QObject
             return instance;
         }
 
-        void test();
-        void insert();
+        void test() override;
+        void createFile() override;
 
-        QString getToken() const;
-        void setToken(const QString& value);
+        QString getToken() const override;
+        void setToken(const QString& value) override;
 
     private:
         ~GoogleDriveAPI();

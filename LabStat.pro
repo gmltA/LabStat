@@ -34,4 +34,5 @@ HEADERS += \
     googleauthclient.h \
     GoogleDrive/apirequest.h \
     GoogleDrive/driveapi.h \
-    GoogleDrive/enums.h
+    GoogleDrive/enums.h \
+    interface.datastore.h

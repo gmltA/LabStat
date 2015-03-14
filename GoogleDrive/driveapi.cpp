@@ -14,7 +14,7 @@ void GoogleDriveAPI::test()
     connect(reply, SIGNAL(finished()), this, SLOT(onAPITestFinished()));
 }
 
-void GoogleDriveAPI::insert()
+void GoogleDriveAPI::createFile()
 {
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
 

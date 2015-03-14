@@ -8,10 +8,11 @@
 
 void GoogleAuthClient::onTokenObtained(QString token)
 {
-    GoogleDriveAPI::getInstance().setToken(token);
+    IDataStore* dataStore = &GoogleDriveAPI::getInstance();
+    dataStore->setToken(token);
 
-    //GoogleDriveAPI::getInstance().test();
-    GoogleDriveAPI::getInstance().insert();
+    //dataStore->test();
+    dataStore->createFile();
 }
 
 static void fjpassToken(JNIEnv *env, jobject thiz, jstring str)
