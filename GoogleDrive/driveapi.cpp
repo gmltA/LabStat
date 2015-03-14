@@ -19,7 +19,7 @@ void GoogleDriveAPI::createFile()
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
 
     DriveFile file("Test", "root", "text/plain");
-    InsertFileRequest request(url, token, "ls_delim_boundary", file);
+    InsertFileRequest request(url, token, "ls_delim_boundary", &file);
 
     QNetworkReply* reply = network->post(request.build(), request.getRequestData());
     connect(reply, SIGNAL(finished()), this, SLOT(onInsertFinished()));

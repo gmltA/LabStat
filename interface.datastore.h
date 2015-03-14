@@ -11,7 +11,7 @@ class IDataStore
         virtual void createFile() = 0;
         virtual void test() = 0;
 
-        virtual void getToken() const = 0;
+        virtual QString getToken() const = 0;
         virtual void setToken(const QString& value) = 0;
 };
 

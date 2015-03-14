@@ -1,7 +1,7 @@
 #ifndef GOOGLEAPIREQUEST_H
 #define GOOGLEAPIREQUEST_H
 
-#include "enums.h"
+#include "drivefile.h"
 
 #include <QNetworkRequest>
 #include <QObject>
@@ -43,8 +43,8 @@ class InsertFileRequest : public GoogleAPIRequest
 {
         Q_OBJECT
     public:
-        InsertFileRequest(QUrl _requestUrl, QString _authToken, QString _boundary, DriveFile _file, QObject* parent = 0)
-            : GoogleAPIRequest(_requestUrl, _authToken, parent),requestBoundary(_boundary), file(_file)
+        InsertFileRequest(QUrl _requestUrl, QString _authToken, QString _boundary, DriveFile* _file, QObject* parent = 0)
+            : GoogleAPIRequest(_requestUrl, _authToken, parent), requestBoundary(_boundary), file(_file)
         {}
 
         QNetworkRequest build();
@@ -55,7 +55,7 @@ class InsertFileRequest : public GoogleAPIRequest
     private:
         QString requestBoundary;
         QByteArray requestData;
-        DriveFile file;
+        DriveFile* file;
 };
 
 

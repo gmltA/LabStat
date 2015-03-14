@@ -5,7 +5,8 @@ QT += qml quick androidextras
 SOURCES += main.cpp \
     googleauthclient.cpp \
     GoogleDrive/apirequest.cpp \
-    GoogleDrive/driveapi.cpp
+    GoogleDrive/driveapi.cpp \
+    GoogleDrive/drivefile.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,5 +35,6 @@ HEADERS += \
     googleauthclient.h \
     GoogleDrive/apirequest.h \
     GoogleDrive/driveapi.h \
-    GoogleDrive/enums.h \
-    interface.datastore.h
+    interface.datastore.h \
+    interface.dataitem.h \
+    GoogleDrive/drivefile.h

@@ -29,7 +29,7 @@ QNetworkRequest InsertFileRequest::build()
                                    "\"parents\": ["
                                    "{ \"id\": \"%2\"}"
                                    "]"
-                                   "}").arg(file.title).arg(file.parent);
+                                   "}").arg(file->getTitle()).arg(file->getParentId());
 
     request.setRawHeader("Content-Type", QString("multipart/related; boundary=\"%1\"").arg(requestBoundary).toLatin1());
 
@@ -37,7 +37,7 @@ QNetworkRequest InsertFileRequest::build()
     requestData += QString("Content-Type: application/json; charset=UTF-8\n\n").toLatin1();
     requestData += QString(metadata + "\n\n").toLatin1();
     requestData += QString("--" + requestBoundary + "\n").toLatin1();
-    requestData += QString("Content-Type: %1\n\n").arg(file.mimeType).toLatin1();
+    requestData += QString("Content-Type: %1\n\n").arg(file->getMimeType()).toLatin1();
     requestData += "";
     requestData += QString("\n--" + requestBoundary + "--").toLatin1();
 

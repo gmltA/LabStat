@@ -4,7 +4,6 @@
 #include "interface.datastore.h"
 
 #include <QNetworkAccessManager>
-#include <QObject>
 
 class GoogleDriveAPI : public QObject, public IDataStore
 {
