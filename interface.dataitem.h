@@ -27,6 +27,7 @@ class IDataItem
         }
 
     protected:
+        IDataItem() {}
         IDataItem(QString _title) : title(_title) {}
         IDataItem(QString _id, QString _title) : id(_id), title(_title) {}
         QString id;

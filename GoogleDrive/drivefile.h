@@ -3,14 +3,15 @@
 
 #include "interface.dataitem.h"
 
-class DriveFile : public QObject, public IDataItem
+class DriveFile : public IDataItem
 {
-        Q_OBJECT
         Q_INTERFACES(IDataItem)
 
     public:
-        DriveFile(QString _title, QString _parentId, QString _mimeType, QObject *parent = 0);
-        DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType, QObject *parent = 0);
+        DriveFile() {}
+        DriveFile(QString _title, QString _parentId, QString _mimeType);
+        DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType);
+        DriveFile(const DriveFile &other);
         ~DriveFile();
 
         QString getParentId() const;
