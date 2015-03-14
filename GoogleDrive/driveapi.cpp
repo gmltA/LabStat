@@ -1,5 +1,5 @@
-#include "googledriveapi.h"
-#include "googleapirequest.h"
+#include "driveapi.h"
+#include "apirequest.h"
 
 #include <QJsonDocument>
 #include <QNetworkReply>

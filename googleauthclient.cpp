@@ -4,12 +4,13 @@
 #include <QtAndroid>
 #include <QDebug>
 
-#include "googledriveapi.h"
+#include "GoogleDrive/driveapi.h"
 
 void GoogleAuthClient::onTokenObtained(QString token)
 {
-    //GoogleDriveAPI::getInstance().test(token);
     GoogleDriveAPI::getInstance().setToken(token);
+
+    //GoogleDriveAPI::getInstance().test();
     GoogleDriveAPI::getInstance().insert();
 }
 

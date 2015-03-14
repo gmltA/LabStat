@@ -1,4 +1,4 @@
-#include "googleapirequest.h"
+#include "apirequest.h"
 
 QNetworkRequest GoogleAPIRequest::build()
 {
@@ -19,7 +19,6 @@ void GoogleAPIRequest::setRequestURL(const QUrl& value)
 {
     requestURL = value;
 }
-
 
 QNetworkRequest InsertFileRequest::build()
 {

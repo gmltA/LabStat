@@ -1,7 +1,7 @@
 #ifndef GOOGLEAPIREQUEST_H
 #define GOOGLEAPIREQUEST_H
 
-#include "googledriveenums.h"
+#include "enums.h"
 
 #include <QNetworkRequest>
 #include <QObject>
