@@ -1,29 +1,8 @@
 #include "apirequest.h"
 
-QNetworkRequest GoogleAPIRequest::build()
+InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, QString _boundary, DriveFile* _file)
+    : GoogleAPIRequest(_requestUrl, _authToken), requestBoundary(_boundary), file(_file)
 {
-    QNetworkRequest request;
-
-    request.setUrl(requestURL);
-    request.setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
-
-    return request;
-}
-
-QUrl GoogleAPIRequest::getRequestURL() const
-{
-    return requestURL;
-}
-
-void GoogleAPIRequest::setRequestURL(const QUrl& value)
-{
-    requestURL = value;
-}
-
-QNetworkRequest InsertFileRequest::build()
-{
-    QNetworkRequest request = GoogleAPIRequest::build();
-
     QString metadata = QString("{"
                                    "\"title\": \"%1\","
                                    "\"parents\": ["
@@ -31,7 +10,7 @@ QNetworkRequest InsertFileRequest::build()
                                    "]"
                                    "}").arg(file->getTitle()).arg(file->getParentId());
 
-    request.setRawHeader("Content-Type", QString("multipart/related; boundary=\"%1\"").arg(requestBoundary).toLatin1());
+    setRawHeader("Content-Type", QString("multipart/related; boundary=\"%1\"").arg(requestBoundary).toLatin1());
 
     requestData = QString("--" + requestBoundary + "\n").toLatin1();
     requestData += QString("Content-Type: application/json; charset=UTF-8\n\n").toLatin1();
@@ -42,8 +21,7 @@ QNetworkRequest InsertFileRequest::build()
     requestData += QString("\n--" + requestBoundary + "--").toLatin1();
 
 
-    request.setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
-    return request;
+    setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
 }
 
 QByteArray InsertFileRequest::getRequestData() const

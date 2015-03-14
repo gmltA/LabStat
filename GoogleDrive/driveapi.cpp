@@ -10,7 +10,7 @@ void GoogleDriveAPI::test()
 {
     UserInfoRequest request(token);
 
-    QNetworkReply* reply = network->get(request.build());
+    QNetworkReply* reply = network->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(onAPITestFinished()));
 }
 
@@ -21,7 +21,7 @@ void GoogleDriveAPI::createFile()
     DriveFile file("Test", "root", "text/plain");
     InsertFileRequest request(url, token, "ls_delim_boundary", &file);
 
-    QNetworkReply* reply = network->post(request.build(), request.getRequestData());
+    QNetworkReply* reply = network->post(request, request.getRequestData());
     connect(reply, SIGNAL(finished()), this, SLOT(onInsertFinished()));
 }
 
