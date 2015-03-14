@@ -14,16 +14,20 @@ class GoogleDriveAPI : public QObject
             return instance;
         }
 
-        void test(QString token);
-        void insert(QString token);
+        void test();
+        void insert();
+
+        QString getToken() const;
+        void setToken(const QString& value);
 
     private:
         ~GoogleDriveAPI();
-        GoogleDriveAPI(QObject *parent = 0) { network = new QNetworkAccessManager(); }
+        GoogleDriveAPI(QObject *parent = 0) : QObject(parent) { network = new QNetworkAccessManager(); }
         GoogleDriveAPI(const GoogleDriveAPI&);
         GoogleDriveAPI& operator=(const GoogleDriveAPI&);
 
         QNetworkAccessManager* network;
+        QString token;
 
     signals:
 

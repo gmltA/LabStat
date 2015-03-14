@@ -6,10 +6,11 @@
 
 #include "googledriveapi.h"
 
-void GoogleAuthClient::apiTest(QString token)
+void GoogleAuthClient::onTokenObtained(QString token)
 {
     //GoogleDriveAPI::getInstance().test(token);
-    GoogleDriveAPI::getInstance().insert(token);
+    GoogleDriveAPI::getInstance().setToken(token);
+    GoogleDriveAPI::getInstance().insert();
 }
 
 static void fjpassToken(JNIEnv *env, jobject thiz, jstring str)

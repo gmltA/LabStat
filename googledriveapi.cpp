@@ -1,52 +1,27 @@
 #include "googledriveapi.h"
+#include "googleapirequest.h"
 
 #include <QJsonDocument>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrl>
 
-void GoogleDriveAPI::test(QString token)
+void GoogleDriveAPI::test()
 {
-    QUrl url("https://www.googleapis.com/oauth2/v2/userinfo");
-    QNetworkRequest request;
-    request.setUrl(url);
-    request.setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
+    UserInfoRequest request(token);
 
-    QNetworkReply* reply = network->get(request);
+    QNetworkReply* reply = network->get(request.build());
     connect(reply, SIGNAL(finished()), this, SLOT(onAPITestFinished()));
 }
 
-void GoogleDriveAPI::insert(QString token)
+void GoogleDriveAPI::insert()
 {
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
-    QNetworkRequest request;
 
-    QString parentId = "root";
-    QString boundary = "ls_delim_boundary";
+    DriveFile file("Test", "root", "text/plain");
+    InsertFileRequest request(url, token, "ls_delim_boundary", file);
 
-    QString metadata = QString("{"
-                                   "\"title\": \"%1\","
-                                   "\"parents\": ["
-                                   "{ \"id\": \"%2\"}"
-                                   "]"
-                                   "}").arg(QString("Test")).arg(parentId);
-
-    request.setUrl(url);
-    request.setRawHeader("Content-Type", QString("multipart/related; boundary=\"%1\"").arg(boundary).toLatin1());            //mimeType.name().toLatin1());
-    request.setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
-
-    QByteArray data = QString("--" + boundary + "\n").toLatin1();
-    data += QString("Content-Type: application/json; charset=UTF-8\n\n").toLatin1();
-    data += QString(metadata + "\n\n").toLatin1();
-    data += QString("--" + boundary + "\n").toLatin1();
-    data += QString("Content-Type: text/plain\n\n").toLatin1();
-    data += "";
-    data += QString("\n--" + boundary + "--").toLatin1();
-
-
-    request.setRawHeader("Content-Length", QString::number(data.size()).toLatin1());
-
-    QNetworkReply* reply = network->post(request, data);
+    QNetworkReply* reply = network->post(request.build(), request.getRequestData());
     connect(reply, SIGNAL(finished()), this, SLOT(onInsertFinished()));
 }
 
@@ -54,6 +29,16 @@ GoogleDriveAPI::~GoogleDriveAPI()
 {
 
 }
+QString GoogleDriveAPI::getToken() const
+{
+    return token;
+}
+
+void GoogleDriveAPI::setToken(const QString& value)
+{
+    token = value;
+}
+
 
 void GoogleDriveAPI::onAPITestFinished()
 {

@@ -17,7 +17,7 @@ public:
 
     GoogleAuthClient(QObject *parent = 0) {
         Q_UNUSED(parent)
-        connect(this, SIGNAL(tokenObtained(QString)), this, SLOT(apiTest(QString)));
+        connect(this, SIGNAL(tokenObtained(QString)), this, SLOT(onTokenObtained(QString)));
     }
 
 
@@ -28,7 +28,7 @@ public slots:
     void processAuth();
 
 private slots:
-    void apiTest(QString token);
+    void onTokenObtained(QString token);
 
 private:
 };
