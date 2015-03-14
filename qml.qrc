@@ -14,4 +14,7 @@
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>
     </qresource>
+    <qresource prefix="/img">
+        <file>bg.jpg</file>
+    </qresource>
 </RCC>

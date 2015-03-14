@@ -1,5 +1,4 @@
 import QtQuick 2.1
-import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.2
 
 import QtQuick.Controls 1.2
@@ -12,9 +11,46 @@ ApplicationWindow {
     height: 480
     visible: true
 
+    // for QMLScene debug only!
     readonly property real dp: mainWindow.width / 320
 
     FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
+
+    Rectangle {
+        anchors.top: parent.top
+        width: parent.width
+        height: 48 * dp
+        color: "blue"
+
+        MenuBackIcon {
+            anchors.left: parent.left
+            anchors.leftMargin: 16 * dp
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 72 * dp
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: "Application"
+            font.pointSize: 20
+            color: "white"
+        }
+
+        Rectangle {
+            height: 4 * dp
+            width: parent.width
+            z: 1
+            anchors.bottomMargin: -4*dp
+            anchors.bottom: parent.bottom
+            gradient: Gradient{
+                GradientStop { position: 1; color: "#00000000"}
+                GradientStop { position: 0; color: "#2c000000"}
+            }
+        }
+
+    }
 
     NavigationDrawer {
         id: drawer
@@ -60,12 +96,13 @@ ApplicationWindow {
                 NavigationDrawerDivider {
                 }
 
-                NavigationDrawerSubheader {
-                }
-
                 NavigationDrawerItem {
-                    icon: ""
-                    caption: "Test"
+                    icon: ""
+                    caption: "Settings"
+                }
+                NavigationDrawerItem {
+                    icon: ""
+                    caption: "Help"
                 }
             }
         }
