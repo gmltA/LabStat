@@ -25,4 +25,6 @@ class DriveFile : public IDataItem
         QString mimeType;
 };
 
+Q_DECLARE_METATYPE(DriveFile)
+
 #endif // DRIVEFILE_H
