@@ -1,7 +1,7 @@
 #include "apirequest.h"
 
-InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, QString _boundary, DriveFile* _file)
-    : GoogleAPIRequest(_requestUrl, _authToken), requestBoundary(_boundary), file(_file)
+InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, DriveFile* _file)
+    : GoogleAPIRequest(_requestUrl, _authToken, "POST"), file(_file)
 {
     QString metadata = QString("{"
                                    "\"title\": \"%1\","
@@ -24,12 +24,12 @@ InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, QStri
     setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
 }
 
-QByteArray InsertFileRequest::getRequestData() const
+QByteArray GoogleAPIRequest::getRequestData() const
 {
     return requestData;
 }
 
-void InsertFileRequest::setRequestData(const QByteArray& value)
+void GoogleAPIRequest::setRequestData(const QByteArray& value)
 {
     requestData = value;
 }

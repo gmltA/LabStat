@@ -17,9 +17,6 @@ class GoogleDriveAPI : public QObject, public IDataStore
             return instance;
         }
 
-        void test() override;
-        void createFile() override;
-
         QString getToken() const override;
         void setToken(const QString& value) override;
 
@@ -29,12 +26,17 @@ class GoogleDriveAPI : public QObject, public IDataStore
         GoogleDriveAPI(const GoogleDriveAPI&);
         GoogleDriveAPI& operator=(const GoogleDriveAPI&);
 
+        bool checkAuth(QNetworkReply* reply);
+
         QNetworkAccessManager* network;
         QString token;
 
     signals:
 
     public slots:
+        void test() override;
+        void createFile() override;
+
         void onAPITestFinished();
         void onInsertFinished();
 };
