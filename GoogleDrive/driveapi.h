@@ -24,8 +24,8 @@ class GoogleDriveAPI : public QObject, public IDataStore
         void setToken(const QString& value) override;
 
     private:
-        ~GoogleDriveAPI();
-        GoogleDriveAPI(QObject *parent = 0) : QObject(parent) { network = new QNetworkAccessManager(); }
+        ~GoogleDriveAPI() {}
+        GoogleDriveAPI(QObject *parent = 0) : QObject(parent), IDataStore(ORIGIN_ONLINE) { network = new QNetworkAccessManager(); }
         GoogleDriveAPI(const GoogleDriveAPI&);
         GoogleDriveAPI& operator=(const GoogleDriveAPI&);
 
