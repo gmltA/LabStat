@@ -6,7 +6,8 @@ SOURCES += main.cpp \
     googleauthclient.cpp \
     GoogleDrive/apirequest.cpp \
     GoogleDrive/driveapi.cpp \
-    GoogleDrive/drivefile.cpp
+    GoogleDrive/drivefile.cpp \
+    synchandler.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,4 +38,5 @@ HEADERS += \
     GoogleDrive/driveapi.h \
     interface.datastore.h \
     interface.dataitem.h \
-    GoogleDrive/drivefile.h
+    GoogleDrive/drivefile.h \
+    synchandler.h

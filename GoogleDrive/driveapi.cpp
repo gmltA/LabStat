@@ -1,6 +1,8 @@
 #include "driveapi.h"
 #include "apirequest.h"
+#include "googleauthclient.h"
 
+#include <QBuffer>
 #include <QJsonDocument>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -10,27 +12,27 @@ void GoogleDriveAPI::test()
 {
     UserInfoRequest request(token);
 
-    QNetworkReply* reply = network->get(request);
-    connect(reply, SIGNAL(finished()), this, SLOT(onAPITestFinished()));
+    QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray());
+    connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onAPITestFinished);
 }
 
 void GoogleDriveAPI::createFile()
 {
-    QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
-
     DriveFile file("Test", "root", "text/plain");
-    InsertFileRequest request(url, token, "ls_delim_boundary", &file);
 
-    QNetworkReply* reply = network->post(request, request.getRequestData());
+    QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
+    InsertFileRequest request(url, token, &file);
+
+    //todo: delete buffer later
+    QByteArray array = request.getRequestData();
+    QBuffer* buffer = new QBuffer;
+    buffer->setData(array);
+
+    QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
 
     reply->setProperty("file", QVariant::fromValue(file));
 
-    connect(reply, SIGNAL(finished()), this, SLOT(onInsertFinished()));
-}
-
-GoogleDriveAPI::~GoogleDriveAPI()
-{
-
+    connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onInsertFinished);
 }
 
 QString GoogleDriveAPI::getToken() const
