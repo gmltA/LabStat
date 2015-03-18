@@ -43,22 +43,38 @@ void GoogleDriveAPI::setToken(const QString& value)
     token = value;
 }
 
+bool GoogleDriveAPI::checkAuth(QNetworkReply* reply, std::function<void ()> callback)
+{
+    if (reply->error() == QNetworkReply::AuthenticationRequiredError)
+    {
+        GoogleAuthClient::getInstance().processAuth();
+        connect(&GoogleAuthClient::getInstance(), &GoogleAuthClient::authCompleted, [callback](){
+            callback();
+        });
+        return false;
+    }
+    return true;
+}
+
 void GoogleDriveAPI::onAPITestFinished()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    QString json = reply->readAll();
+    if (!checkAuth(reply, [this](){ this->test(); }))
+        return;
 
+    QString json = reply->readAll();
     qDebug() << json;
 }
 
 void GoogleDriveAPI::onInsertFinished()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if (!checkAuth(reply, [this](){ this->createFile(); }))
+        return;
 
     DriveFile file = reply->property("file").value<DriveFile>();
     qDebug() << file.getTitle();
 
     QString replyData = reply->readAll();
-
     qDebug() << replyData;
 }

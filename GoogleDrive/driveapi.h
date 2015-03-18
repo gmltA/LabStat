@@ -2,6 +2,7 @@
 #define GOOGLEDRIVEAPI_H
 
 #include "interface.datastore.h"
+#include <functional>
 
 #include <QNetworkAccessManager>
 
@@ -26,7 +27,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
         GoogleDriveAPI(const GoogleDriveAPI&);
         GoogleDriveAPI& operator=(const GoogleDriveAPI&);
 
-        bool checkAuth(QNetworkReply* reply);
+        bool checkAuth(QNetworkReply* reply, std::function<void ()> callback);
 
         QNetworkAccessManager* network;
         QString token;
