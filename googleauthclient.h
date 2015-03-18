@@ -6,31 +6,34 @@
 
 class GoogleAuthClient : public QObject
 {
-    Q_OBJECT
-public:
+        Q_OBJECT
+    public:
 
-    static GoogleAuthClient& getInstance()
-    {
-        static GoogleAuthClient instance;
-        return instance;
-    }
+        static GoogleAuthClient& getInstance()
+        {
+            static GoogleAuthClient instance;
+            return instance;
+        }
 
-    GoogleAuthClient(QObject *parent = 0) {
-        Q_UNUSED(parent)
-        connect(this, SIGNAL(tokenObtained(QString)), this, SLOT(onTokenObtained(QString)));
-    }
+    private:
+        ~GoogleAuthClient() {}
+        GoogleAuthClient(QObject *parent = 0) : QObject(parent)
+        {
+            connect(this, &GoogleAuthClient::tokenObtained, this, &GoogleAuthClient::onTokenObtained);
+        }
+        GoogleAuthClient(const GoogleAuthClient&);
+        GoogleAuthClient& operator=(const GoogleAuthClient&);
 
 
-signals:
-    void tokenObtained(QString);
+    signals:
+        void authCompleted();
+        void tokenObtained(QString);
 
-public slots:
-    void processAuth();
+    public slots:
+        void processAuth();
 
-private slots:
-    void onTokenObtained(QString token);
-
-private:
+    private slots:
+        void onTokenObtained(QString token);
 };
 
 #endif // GOOGLEAUTHCLIENT_H

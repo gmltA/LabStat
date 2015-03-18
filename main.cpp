@@ -7,7 +7,7 @@
 #include <QtAndroidExtras>
 #endif
 
-#include "googleauthclient.h"
+#include "GoogleDrive/driveapi.h"
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
 
-    engine.rootContext()->setContextProperty("authClient", &GoogleAuthClient::getInstance());
+    engine.rootContext()->setContextProperty("driveSync", &GoogleDriveAPI::getInstance());
     engine.load(QUrl("qrc:/QML/main.qml"));
 
     return app.exec();

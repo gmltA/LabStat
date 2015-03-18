@@ -11,8 +11,7 @@ void GoogleAuthClient::onTokenObtained(QString token)
     IDataStore* dataStore = &GoogleDriveAPI::getInstance();
     dataStore->setToken(token);
 
-    //dataStore->test();
-    dataStore->createFile();
+    emit authCompleted();
 }
 
 static void fjpassToken(JNIEnv *env, jobject thiz, jstring str)
@@ -53,8 +52,5 @@ void GoogleAuthClient::processAuth()
                                                                            "getActivity",
                                                                            "()Lorg/qtproject/labstat/GoogleAuthClient;");
 
-    QAndroidJniObject res = activity.callObjectMethod("processDriveAuth",
-                                           "()Ljava/lang/String;");
-
-    qDebug() << res.toString();
+    QAndroidJniObject res = activity.callObjectMethod("processDriveAuth", "()Ljava/lang/String;");
 }
