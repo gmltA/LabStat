@@ -12,7 +12,7 @@ class DriveFile : public IDataItem
         DriveFile(QString _title, QString _parentId, QString _mimeType);
         DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType);
         DriveFile(const DriveFile &other);
-        ~DriveFile();
+        ~DriveFile() {}
 
         QString getParentId() const;
         void setParentId(const QString& value);

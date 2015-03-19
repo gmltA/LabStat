@@ -19,11 +19,6 @@ DriveFile::DriveFile(const DriveFile& other)
     mimeType = other.mimeType;
 }
 
-DriveFile::~DriveFile()
-{
-
-}
-
 QString DriveFile::getParentId() const
 {
     return parentId;
