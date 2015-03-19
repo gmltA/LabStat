@@ -1,5 +1,9 @@
 #include "apirequest.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDebug>
+
 InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, DriveFile* _file)
     : GoogleAPIRequest(_requestUrl, _authToken, "POST")
 {
@@ -22,6 +26,14 @@ InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, Drive
 
 
     setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
+
+    result = new InsertFileRequestResult(_file);
+}
+
+GoogleAPIRequest::~GoogleAPIRequest()
+{
+    //todo: uncomment later
+    //delete result;
 }
 
 QByteArray GoogleAPIRequest::getRequestData() const
@@ -34,3 +46,12 @@ void GoogleAPIRequest::setRequestData(const QByteArray& value)
     requestData = value;
 }
 
+GoogleAPIRequestResult* GoogleAPIRequest::getResultPointer() const
+{
+    return result;
+}
+
+InsertFileRequestResult* InsertFileRequest::getResultPointer() const
+{
+    return static_cast<InsertFileRequestResult*>(GoogleAPIRequest::getResultPointer());
+}

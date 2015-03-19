@@ -7,7 +7,8 @@ SOURCES += main.cpp \
     GoogleDrive/apirequest.cpp \
     GoogleDrive/driveapi.cpp \
     GoogleDrive/drivefile.cpp \
-    synchandler.cpp
+    synchandler.cpp \
+    GoogleDrive/apirequestresult.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,4 +40,5 @@ HEADERS += \
     interface.datastore.h \
     interface.dataitem.h \
     GoogleDrive/drivefile.h \
-    synchandler.h
+    synchandler.h \
+    GoogleDrive/apirequestresult.h

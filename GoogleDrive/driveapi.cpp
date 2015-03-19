@@ -29,6 +29,7 @@ void GoogleDriveAPI::createFile()
     buffer->setData(array);
     QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
 
+    reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request.getResultPointer()));
 
     connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onInsertFinished);
 }
@@ -72,7 +73,6 @@ void GoogleDriveAPI::onInsertFinished()
     if (!checkAuth(reply, [this](){ this->createFile(); }))
         return;
 
-
-    QString replyData = reply->readAll();
-    qDebug() << replyData;
+    GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
+    result->handleReply(reply);
 }
