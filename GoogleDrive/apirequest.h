@@ -4,7 +4,6 @@
 #include "drivefile.h"
 
 #include <QNetworkRequest>
-#include <QNetworkReply>
 #include <QObject>
 #include <QUrl>
 
@@ -22,7 +21,6 @@ class GoogleAPIRequest : public QNetworkRequest
         QByteArray getRequestData() const;
         void setRequestData(const QByteArray& value);
 
-        virtual void handleReply(QNetworkReply* reply) = 0;
 
     protected:
         QByteArray requestData;
@@ -39,11 +37,6 @@ class UserInfoRequest : public GoogleAPIRequest
         UserInfoRequest(QString _authToken)
             : GoogleAPIRequest(QUrl("https://www.googleapis.com/oauth2/v2/userinfo"), _authToken, "GET")
         {}
-
-        void handleReply(QNetworkReply* reply) override
-        {
-            Q_UNUSED(reply)
-        }
 };
 
 class InsertFileRequest : public GoogleAPIRequest
@@ -54,7 +47,6 @@ class InsertFileRequest : public GoogleAPIRequest
 
     private:
         const QString requestBoundary = "ls_delim_boundary";
-        DriveFile* file;
 };
 
 

@@ -18,19 +18,17 @@ void GoogleDriveAPI::test()
 
 void GoogleDriveAPI::createFile()
 {
-    DriveFile file("Test", "root", "text/plain");
+    DriveFile* file = new DriveFile("Test", "root", "text/plain");
 
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
-    InsertFileRequest request(url, token, &file);
+    InsertFileRequest request(url, token, file);
 
     //todo: delete buffer later
     QByteArray array = request.getRequestData();
     QBuffer* buffer = new QBuffer;
     buffer->setData(array);
-
     QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
 
-    reply->setProperty("file", QVariant::fromValue(file));
 
     connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onInsertFinished);
 }
@@ -74,8 +72,6 @@ void GoogleDriveAPI::onInsertFinished()
     if (!checkAuth(reply, [this](){ this->createFile(); }))
         return;
 
-    DriveFile file = reply->property("file").value<DriveFile>();
-    qDebug() << file.getTitle();
 
     QString replyData = reply->readAll();
     qDebug() << replyData;
