@@ -1,5 +1,4 @@
 #include "driveapi.h"
-#include "apirequest.h"
 #include "googleauthclient.h"
 
 #include <QBuffer>
@@ -10,12 +9,8 @@
 
 void GoogleDriveAPI::test()
 {
-    UserInfoRequest request(token);
-
-    QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray());
-    reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request.getResultPointer()));
-
-    connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onAPITestFinished);
+    UserInfoRequest* request = new UserInfoRequest();
+    sendRequest(request);
 }
 
 void GoogleDriveAPI::createFile()
@@ -23,17 +18,28 @@ void GoogleDriveAPI::createFile()
     DriveFile* file = new DriveFile("Test", "root", "text/plain");
 
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
-    InsertFileRequest request(url, token, file);
+    InsertFileRequest* request = new InsertFileRequest(url, file);
+
+    sendRequest(request);
+}
+
+void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request)
+{
+    request->setToken(token);
 
     //todo: delete buffer later
-    QByteArray array = request.getRequestData();
+    QByteArray array = request->getRequestData();
     QBuffer* buffer = new QBuffer;
     buffer->setData(array);
-    QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
 
-    reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request.getResultPointer()));
+    QNetworkReply* reply = network->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
+    request->getResultPointer()->setCallback([request](){
+        GoogleDriveAPI::getInstance().sendRequest(request);
+    });
 
-    connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onInsertFinished);
+    reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request->getResultPointer()));
+
+    connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onRequestFinished);
 }
 
 QString GoogleDriveAPI::getToken() const
@@ -46,33 +52,23 @@ void GoogleDriveAPI::setToken(const QString& value)
     token = value;
 }
 
-bool GoogleDriveAPI::checkAuth(QNetworkReply* reply, std::function<void ()> callback)
+bool GoogleDriveAPI::checkAuth(QNetworkReply* reply)
 {
     if (reply->error() == QNetworkReply::AuthenticationRequiredError)
     {
         GoogleAuthClient::getInstance().processAuth();
-        connect(&GoogleAuthClient::getInstance(), &GoogleAuthClient::authCompleted, [callback](){
-            callback();
-        });
+
+        GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
+        connect(&GoogleAuthClient::getInstance(), &GoogleAuthClient::authCompleted, result->getCallback());
         return false;
     }
     return true;
 }
 
-void GoogleDriveAPI::onAPITestFinished()
+void GoogleDriveAPI::onRequestFinished()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if (!checkAuth(reply, [this](){ this->test(); }))
-        return;
-
-    QString json = reply->readAll();
-    qDebug() << json;
-}
-
-void GoogleDriveAPI::onInsertFinished()
-{
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if (!checkAuth(reply, [this](){ this->createFile(); }))
+    if (!checkAuth(reply))
         return;
 
     GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();

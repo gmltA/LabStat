@@ -25,3 +25,13 @@ void UserInfoRequestResult::handleReply(QNetworkReply* reply)
     QString replyData = reply->readAll();
     qDebug() << replyData;
 }
+
+std::function<void ()> GoogleAPIRequestResult::getCallback() const
+{
+    return callback;
+}
+
+void GoogleAPIRequestResult::setCallback(const std::function<void ()>& value)
+{
+    callback = value;
+}

@@ -3,6 +3,8 @@
 
 #include "drivefile.h"
 
+#include <functional>
+
 #include <QObject>
 #include <QNetworkReply>
 
@@ -17,6 +19,13 @@ class GoogleAPIRequestResult
         ~GoogleAPIRequestResult() {}
 
         virtual void handleReply(QNetworkReply* reply) = 0;
+
+        std::function<void ()> getCallback() const;
+        void setCallback(const std::function<void ()>& value);
+
+    private:
+        // Best thing that came to my mind after 3 days of brainstorm, think about rewriting it later
+        std::function<void ()> callback;
 };
 
 class UserInfoRequestResult : public GoogleAPIRequestResult

@@ -4,8 +4,14 @@
 #include <QJsonObject>
 #include <QDebug>
 
-InsertFileRequest::InsertFileRequest(QUrl _requestUrl, QString _authToken, DriveFile* _file)
-    : GoogleAPIRequest(_requestUrl, _authToken, "POST")
+GoogleAPIRequest::GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArray _data)
+    : QNetworkRequest(_requestURL), requestData(_data)
+{
+    setAttribute(QNetworkRequest::CustomVerbAttribute, _verb);
+}
+
+InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
+    : GoogleAPIRequest(_requestUrl, "POST")
 {
     QString metadata = QString("{"
                                    "\"title\": \"%1\","
@@ -51,14 +57,24 @@ GoogleAPIRequestResult* GoogleAPIRequest::getResultPointer() const
     return result;
 }
 
+QString GoogleAPIRequest::getToken() const
+{
+    return token;
+}
+
+void GoogleAPIRequest::setToken(const QString& value)
+{
+    token = value;
+    setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
+}
+
 InsertFileRequestResult* InsertFileRequest::getResultPointer() const
 {
     return static_cast<InsertFileRequestResult*>(GoogleAPIRequest::getResultPointer());
 }
 
-
-UserInfoRequest::UserInfoRequest(QString _authToken)
-    : GoogleAPIRequest(QUrl("https://www.googleapis.com/oauth2/v2/userinfo"), _authToken, "GET")
+UserInfoRequest::UserInfoRequest()
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/oauth2/v2/userinfo"), "GET")
 {
     result = new UserInfoRequestResult();
 }

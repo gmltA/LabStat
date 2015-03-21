@@ -11,18 +11,16 @@
 class GoogleAPIRequest : public QNetworkRequest
 {
     public:
-        GoogleAPIRequest(QUrl _requestURL, QString _authToken, QByteArray _verb, QByteArray _data = 0)
-            : QNetworkRequest(_requestURL), requestData(_data), token(_authToken)
-        {
-            setAttribute(QNetworkRequest::CustomVerbAttribute, _verb);
-            setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
-        }
+        GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArray _data = 0);
         ~GoogleAPIRequest();
 
         QByteArray getRequestData() const;
         void setRequestData(const QByteArray& value);
 
         GoogleAPIRequestResult* getResultPointer() const;
+
+        QString getToken() const;
+        void setToken(const QString& value);
 
     protected:
         GoogleAPIRequestResult* result;
@@ -37,13 +35,13 @@ class GoogleAPIRequest : public QNetworkRequest
 class UserInfoRequest : public GoogleAPIRequest
 {
     public:
-        UserInfoRequest(QString _authToken);
+        UserInfoRequest();
 };
 
 class InsertFileRequest : public GoogleAPIRequest
 {
     public:
-        InsertFileRequest(QUrl _requestUrl, QString _authToken, DriveFile* _file);
+        InsertFileRequest(QUrl _requestUrl, DriveFile* _file);
 
         InsertFileRequestResult* getResultPointer() const;
 
