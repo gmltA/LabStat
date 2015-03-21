@@ -19,3 +19,9 @@ DriveFile* InsertFileRequestResult::getFile() const
 {
     return file;
 }
+
+void UserInfoRequestResult::handleReply(QNetworkReply* reply)
+{
+    QString replyData = reply->readAll();
+    qDebug() << replyData;
+}

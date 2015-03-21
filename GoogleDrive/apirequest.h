@@ -37,9 +37,7 @@ class GoogleAPIRequest : public QNetworkRequest
 class UserInfoRequest : public GoogleAPIRequest
 {
     public:
-        UserInfoRequest(QString _authToken)
-            : GoogleAPIRequest(QUrl("https://www.googleapis.com/oauth2/v2/userinfo"), _authToken, "GET")
-        {}
+        UserInfoRequest(QString _authToken);
 };
 
 class InsertFileRequest : public GoogleAPIRequest

@@ -13,6 +13,8 @@ void GoogleDriveAPI::test()
     UserInfoRequest request(token);
 
     QNetworkReply* reply = network->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray());
+    reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request.getResultPointer()));
+
     connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onAPITestFinished);
 }
 

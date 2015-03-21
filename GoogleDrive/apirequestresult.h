@@ -19,6 +19,14 @@ class GoogleAPIRequestResult
         virtual void handleReply(QNetworkReply* reply) = 0;
 };
 
+class UserInfoRequestResult : public GoogleAPIRequestResult
+{
+    public:
+        UserInfoRequestResult() : GoogleAPIRequestResult() {}
+
+        void handleReply(QNetworkReply* reply) override;
+};
+
 class InsertFileRequestResult : public GoogleAPIRequestResult
 {
     public:

@@ -55,3 +55,10 @@ InsertFileRequestResult* InsertFileRequest::getResultPointer() const
 {
     return static_cast<InsertFileRequestResult*>(GoogleAPIRequest::getResultPointer());
 }
+
+
+UserInfoRequest::UserInfoRequest(QString _authToken)
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/oauth2/v2/userinfo"), _authToken, "GET")
+{
+    result = new UserInfoRequestResult();
+}
