@@ -21,8 +21,8 @@ class GoogleAuthClient : public QObject
         {
             connect(this, &GoogleAuthClient::tokenObtained, this, &GoogleAuthClient::onTokenObtained);
         }
-        GoogleAuthClient(const GoogleAuthClient&);
-        GoogleAuthClient& operator=(const GoogleAuthClient&);
+        GoogleAuthClient(const GoogleAuthClient&) = delete;
+        GoogleAuthClient& operator=(const GoogleAuthClient&) = delete;
 
 
     signals:

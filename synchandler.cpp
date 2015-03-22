@@ -6,6 +6,12 @@ SyncHandler::SyncHandler(QObject *parent) : QObject(parent)
 
 }
 
+SyncHandler& SyncHandler::getInstance()
+{
+    static SyncHandler instance;
+    return instance;
+}
+
 void SyncHandler::sync(IDataStore* processor)
 {
     if (!processor)

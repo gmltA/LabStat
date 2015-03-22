@@ -10,11 +10,7 @@ class SyncHandler : public QObject
 {
         Q_OBJECT
     public:
-        static SyncHandler& getInstance()
-        {
-            static SyncHandler instance;
-            return instance;
-        }
+        static SyncHandler& getInstance();
 
         void sync(IDataStore::Origin origin = IDataStore::OriginAny);
 
@@ -24,8 +20,8 @@ class SyncHandler : public QObject
     private:
         ~SyncHandler();
         SyncHandler(QObject *parent = 0);
-        SyncHandler(const SyncHandler&);
-        SyncHandler& operator=(const SyncHandler&);
+        SyncHandler(const SyncHandler&) = delete;
+        SyncHandler& operator=(const SyncHandler&) = delete;
 
         void sync(IDataStore* processor);
 
