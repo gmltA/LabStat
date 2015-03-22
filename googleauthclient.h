@@ -26,8 +26,8 @@ class GoogleAuthClient : public QObject
 
 
     signals:
-        void authCompleted();
         void tokenObtained(QString);
+        void authCompleted(QString);
 
     public slots:
         void processAuth();

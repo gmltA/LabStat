@@ -7,6 +7,17 @@
 #include <QNetworkRequest>
 #include <QUrl>
 
+GoogleDriveAPI::GoogleDriveAPI(QObject* parent)
+    : QObject(parent), IDataStore(IDataStore::OriginOnline)
+{
+    network = new QNetworkAccessManager();
+}
+
+GoogleDriveAPI::~GoogleDriveAPI()
+{
+    network->deleteLater();
+}
+
 void GoogleDriveAPI::test()
 {
     UserInfoRequest* request = new UserInfoRequest();
@@ -33,8 +44,8 @@ void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request)
     buffer->setData(array);
 
     QNetworkReply* reply = network->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
-    request->getResultPointer()->setCallback([request](){
-        GoogleDriveAPI::getInstance().sendRequest(request);
+    request->getResultPointer()->setCallback([this, request](){
+        this->sendRequest(request);
     });
 
     reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request->getResultPointer()));
@@ -59,7 +70,12 @@ bool GoogleDriveAPI::checkAuth(QNetworkReply* reply)
         GoogleAuthClient::getInstance().processAuth();
 
         GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
-        connect(&GoogleAuthClient::getInstance(), &GoogleAuthClient::authCompleted, result->getCallback());
+        connect(&GoogleAuthClient::getInstance(), &GoogleAuthClient::authCompleted, [=](QString token){
+            this->setToken(token);
+
+            auto callbackFunction = result->getCallback();
+            callbackFunction();
+        });
         return false;
     }
     return true;

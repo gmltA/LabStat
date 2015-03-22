@@ -8,10 +8,8 @@
 
 void GoogleAuthClient::onTokenObtained(QString token)
 {
-    IDataStore* dataStore = &GoogleDriveAPI::getInstance();
-    dataStore->setToken(token);
-
-    emit authCompleted();
+    // Why? Multithreading, that's why!
+    emit authCompleted(token);
 }
 
 static void fjpassToken(JNIEnv *env, jobject thiz, jstring str)

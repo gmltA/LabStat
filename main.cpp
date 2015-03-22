@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
 
-    engine.rootContext()->setContextProperty("driveSync", &GoogleDriveAPI::getInstance());
+    engine.rootContext()->setContextProperty("driveSync", new GoogleDriveAPI());
     engine.load(QUrl("qrc:/QML/main.qml"));
 
     return app.exec();

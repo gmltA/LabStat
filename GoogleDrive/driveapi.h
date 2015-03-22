@@ -13,27 +13,20 @@ class GoogleDriveAPI : public QObject, public IDataStore
         Q_INTERFACES(IDataStore)
 
     public:
-        static GoogleDriveAPI& getInstance()
-        {
-            static GoogleDriveAPI instance;
-            return instance;
-        }
+        GoogleDriveAPI(QObject *parent = 0);
+        ~GoogleDriveAPI();
 
         QString getToken() const override;
         void setToken(const QString& value) override;
 
     private:
-        ~GoogleDriveAPI() {}
-        GoogleDriveAPI(QObject *parent = 0) : QObject(parent), IDataStore(IDataStore::OriginOnline) { network = new QNetworkAccessManager(); }
-        GoogleDriveAPI(const GoogleDriveAPI&) = delete;
-        GoogleDriveAPI& operator=(const GoogleDriveAPI&) = delete;
-
         bool checkAuth(QNetworkReply* reply);
 
         QNetworkAccessManager* network;
         QString token;
 
     signals:
+        void authUpdated();
 
     public slots:
         void test() override;
