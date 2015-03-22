@@ -16,7 +16,7 @@ class SyncHandler : public QObject
             return instance;
         }
 
-        void sync(DataStoreOrigin origin = ORIGIN_ANY);
+        void sync(IDataStore::Origin origin = IDataStore::OriginAny);
 
         void registerProcessor(IDataStore* processor);
         void unregisterProcessor(IDataStore* processor);

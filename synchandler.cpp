@@ -15,11 +15,11 @@ void SyncHandler::sync(IDataStore* processor)
     }
 }
 
-void SyncHandler::sync(DataStoreOrigin origin)
+void SyncHandler::sync(IDataStore::Origin origin)
 {
     foreach(IDataStore* processor, syncProcessors)
     {
-        if (processor->getOrigin() == origin || origin == ORIGIN_ANY)
+        if (processor->getOrigin() == origin || origin == IDataStore::OriginAny)
         {
             sync(processor);
         }
@@ -41,4 +41,3 @@ SyncHandler::~SyncHandler()
 {
 
 }
-

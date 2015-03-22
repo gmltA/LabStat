@@ -4,7 +4,7 @@
 #include <QScreen>
 
 #ifdef Q_OS_ANDROID
-#include <QtAndroidExtras>
+    #include <QtAndroidExtras>
 #endif
 
 #include "GoogleDrive/driveapi.h"
