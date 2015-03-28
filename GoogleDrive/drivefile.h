@@ -1,7 +1,7 @@
 #ifndef DRIVEFILE_H
 #define DRIVEFILE_H
 
-#include "interface.dataitem.h"
+#include "../interface.dataitem.h"
 
 class DriveFile : public IDataItem
 {

@@ -78,3 +78,10 @@ UserInfoRequest::UserInfoRequest()
 {
     result = new UserInfoRequestResult();
 }
+
+
+ListFilesRequest::ListFilesRequest()
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files?q=mimeType+%3D+%27application%2Fvnd.google-apps.folder%27+and+title+%3D+%27LabStat%27"), "GET")
+{
+    result = new ListFilesRequestResult();
+}

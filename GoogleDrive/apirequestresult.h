@@ -8,11 +8,12 @@
 #include <QObject>
 #include <QNetworkReply>
 
-class GoogleAPIRequestResult
+class GoogleAPIRequestResult : public QObject
 {
+        Q_OBJECT
     public:
-        GoogleAPIRequestResult() {}
-        GoogleAPIRequestResult(const GoogleAPIRequestResult &other)
+        GoogleAPIRequestResult(QObject* parent = 0) : QObject(parent) {}
+        GoogleAPIRequestResult(const GoogleAPIRequestResult &other) : QObject(other.parent())
         {
             Q_UNUSED(other)
         }
@@ -47,6 +48,18 @@ class InsertFileRequestResult : public GoogleAPIRequestResult
 
     private:
         DriveFile* file;
+};
+
+class ListFilesRequestResult : public GoogleAPIRequestResult
+{
+        Q_OBJECT
+    public:
+        ListFilesRequestResult() : GoogleAPIRequestResult() {}
+
+        void handleReply(QNetworkReply* reply) override;
+
+    signals:
+        void emptyResult();
 };
 
 Q_DECLARE_METATYPE(GoogleAPIRequestResult*)

@@ -41,12 +41,19 @@ class UserInfoRequest : public GoogleAPIRequest
 class InsertFileRequest : public GoogleAPIRequest
 {
     public:
+        // todo: move URL into private methods of request
         InsertFileRequest(QUrl _requestUrl, DriveFile* _file);
 
         InsertFileRequestResult* getResultPointer() const;
 
     private:
         const QString requestBoundary = "ls_delim_boundary";
+};
+
+class ListFilesRequest : public GoogleAPIRequest
+{
+    public:
+        ListFilesRequest();
 };
 
 

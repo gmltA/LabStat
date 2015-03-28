@@ -1,7 +1,7 @@
 #ifndef GOOGLEDRIVEAPI_H
 #define GOOGLEDRIVEAPI_H
 
-#include "interface.datastore.h"
+#include "../interface.datastore.h"
 #include "apirequest.h"
 #include <functional>
 

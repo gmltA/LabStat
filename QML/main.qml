@@ -77,7 +77,7 @@ ApplicationWindow {
                     secondaryText: "Just a text"
 
                     buttonArea.onClicked: {
-                        driveSync.createFile()
+                        driveSync.test()
                     }
                 }
 

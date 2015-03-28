@@ -1,5 +1,6 @@
 #include "googleauthclient.h"
 
+#include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
 #include <QtAndroid>
 #include <QDebug>
@@ -45,7 +46,6 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
 
 void GoogleAuthClient::processAuth()
 {
-
     QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/labstat/GoogleAuthClient",
                                                                            "getActivity",
                                                                            "()Lorg/qtproject/labstat/GoogleAuthClient;");

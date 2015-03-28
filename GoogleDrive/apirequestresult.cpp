@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 void InsertFileRequestResult::handleReply(QNetworkReply* reply)
 {
@@ -34,4 +35,14 @@ std::function<void ()> GoogleAPIRequestResult::getCallback() const
 void GoogleAPIRequestResult::setCallback(const std::function<void ()>& value)
 {
     callback = value;
+}
+
+void ListFilesRequestResult::handleReply(QNetworkReply* reply)
+{
+    QString jsonData = reply->readAll();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
+    QJsonObject fileObject = jsonDoc.object();
+    if (fileObject["items"].toArray().isEmpty())
+        emit emptyResult();
 }

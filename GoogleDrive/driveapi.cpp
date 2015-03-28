@@ -1,5 +1,5 @@
 #include "driveapi.h"
-#include "googleauthclient.h"
+#include "../googleauthclient.h"
 
 #include <QBuffer>
 #include <QJsonDocument>
@@ -20,7 +20,8 @@ GoogleDriveAPI::~GoogleDriveAPI()
 
 void GoogleDriveAPI::test()
 {
-    UserInfoRequest* request = new UserInfoRequest();
+    ListFilesRequest* request = new ListFilesRequest();
+    connect(static_cast<ListFilesRequestResult*>(request->getResultPointer()), &ListFilesRequestResult::emptyResult, [](){qDebug() << "empty";});
     sendRequest(request);
 }
 

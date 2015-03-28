@@ -2,7 +2,6 @@
 #define GOOGLEAUTHCLIENT_H
 
 #include <QObject>
-#include <QAndroidJniEnvironment>
 
 class GoogleAuthClient : public QObject
 {
