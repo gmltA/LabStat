@@ -64,18 +64,17 @@ QString GoogleDriveAPI::getToken() const
 void GoogleDriveAPI::setToken(const QString& value)
 {
     token = value;
+    emit authRecovered();
 }
 
 bool GoogleDriveAPI::checkAuth(QNetworkReply* reply)
 {
     if (reply->error() == QNetworkReply::AuthenticationRequiredError)
     {
-        GoogleAuthClient::getInstance().processAuth();
+        emit authRequired();
 
         GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
-        connect(&GoogleAuthClient::getInstance(), &GoogleAuthClient::authCompleted, [=](QString token){
-            this->setToken(token);
-
+        connect(this, &GoogleDriveAPI::authRecovered, [=](){
             auto callbackFunction = result->getCallback();
             callbackFunction();
         });

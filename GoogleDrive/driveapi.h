@@ -27,8 +27,10 @@ class GoogleDriveAPI : public QObject, public IDataStore
         QString token;
 
         GoogleAuthClient* authClient;
+
     signals:
-        void authUpdated();
+        void authRequired();
+        void authRecovered();
 
     public slots:
         void test() override;
