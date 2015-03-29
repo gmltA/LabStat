@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     GoogleDrive/driveapi.cpp \
     GoogleDrive/drivefile.cpp \
     synchandler.cpp \
-    GoogleDrive/apirequestresult.cpp
+    GoogleDrive/apirequestresult.cpp \
+    googledesktopauthclient.cpp
 
 RESOURCES += qml.qrc
 
@@ -47,3 +48,4 @@ HEADERS += \
     synchandler.h \
     GoogleDrive/apirequestresult.h \
     interface.authclient.h \
+    googledesktopauthclient.h

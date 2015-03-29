@@ -9,6 +9,7 @@
 
 #include "GoogleDrive/driveapi.h"
 #include "googleauthclient.h"
+#include "googledesktopauthclient.h"
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +61,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
 
-    GoogleAuthClient* authClient = new GoogleAuthClient();
+    IAuthClient* authClient;
+#if defined(Q_OS_ANDROID)
+    authClient = new GoogleAuthClient();
+#else
+    authClient = new GoogleDesktopAuthClient();
+#endif
     GoogleDriveAPI* drive = new GoogleDriveAPI(authClient);
 
     engine.rootContext()->setContextProperty("driveSync", drive);
