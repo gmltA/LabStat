@@ -8,8 +8,6 @@
 
 #include <QDebug>
 
-#include "GoogleDrive/driveapi.h"
-
 void GoogleAuthClient::onTokenObtained(QString token)
 {
     // Why? Multithreading, that's why!

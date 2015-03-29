@@ -45,4 +45,5 @@ HEADERS += \
     interface.dataitem.h \
     GoogleDrive/drivefile.h \
     synchandler.h \
-    GoogleDrive/apirequestresult.h
+    GoogleDrive/apirequestresult.h \
+    interface.authclient.h \

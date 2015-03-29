@@ -1,18 +1,19 @@
 #include "driveapi.h"
 
 #include <QBuffer>
-#include <QJsonDocument>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrl>
 
-GoogleDriveAPI::GoogleDriveAPI(GoogleAuthClient* _authcClient, QObject* parent)
-    : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authcClient)
+#include "googleauthclient.h"
+
+GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QObject* parent)
+    : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authClient)
 {
     network = new QNetworkAccessManager();
 
-    connect(this, &GoogleDriveAPI::authRequired, authClient, &GoogleAuthClient::processAuth);
-    connect(authClient, &GoogleAuthClient::authCompleted, this, &GoogleDriveAPI::setToken);
+    connect(this, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
+    connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), this, SLOT(setToken(QString)));
 }
 
 GoogleDriveAPI::~GoogleDriveAPI()
@@ -23,6 +24,7 @@ GoogleDriveAPI::~GoogleDriveAPI()
 void GoogleDriveAPI::test()
 {
     ListFilesRequest* request = new ListFilesRequest();
+
     connect(static_cast<ListFilesRequestResult*>(request->getResultPointer()), &ListFilesRequestResult::emptyResult, [](){qDebug() << "empty";});
     sendRequest(request);
 }
