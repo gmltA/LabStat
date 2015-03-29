@@ -13,18 +13,19 @@ void GoogleAuthClient::onTokenObtained(QString token)
     emit authCompleted(token);
 }
 
-static void fjpassToken(JNIEnv *env, jobject thiz, jstring str)
+static void fjpassToken(JNIEnv *env, jobject thiz, jstring str, jlong authClientAddress)
 {
     Q_UNUSED(env)
     Q_UNUSED(thiz)
     QString token = QAndroidJniObject(str).toString();
 
-    GoogleAuthClient::getInstance().tokenObtained(token);
+    GoogleAuthClient* client = (GoogleAuthClient*)authClientAddress;
+    client->tokenObtained(token);
 }
 
 static JNINativeMethod methods[] =
 {
-    {"passToken", "(Ljava/lang/String;)V", (void*)(fjpassToken)}
+    {"passToken", "(Ljava/lang/String;J)V", (void*)(fjpassToken)}
 };
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
@@ -46,9 +47,10 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
 
 void GoogleAuthClient::processAuth()
 {
+    long thisAddress = (long)this;
     QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/labstat/GoogleAuthClient",
                                                                            "getActivity",
                                                                            "()Lorg/qtproject/labstat/GoogleAuthClient;");
 
-    QAndroidJniObject res = activity.callObjectMethod("processDriveAuth", "()Ljava/lang/String;");
+    QAndroidJniObject res = activity.callObjectMethod("processDriveAuth", "(J)Ljava/lang/String;", (jlong)thisAddress);
 }

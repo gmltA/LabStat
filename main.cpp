@@ -8,6 +8,7 @@
 #endif
 
 #include "GoogleDrive/driveapi.h"
+#include "googleauthclient.h"
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +60,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
 
-    engine.rootContext()->setContextProperty("driveSync", new GoogleDriveAPI());
+    GoogleAuthClient* authClient = new GoogleAuthClient();
+    GoogleDriveAPI* drive = new GoogleDriveAPI(authClient);
+
+    engine.rootContext()->setContextProperty("driveSync", drive);
     engine.load(QUrl("qrc:/QML/main.qml"));
 
     return app.exec();

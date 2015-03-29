@@ -2,6 +2,7 @@
 #define GOOGLEDRIVEAPI_H
 
 #include "../interface.datastore.h"
+#include "../googleauthclient.h"
 #include "apirequest.h"
 #include <functional>
 
@@ -13,7 +14,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
         Q_INTERFACES(IDataStore)
 
     public:
-        GoogleDriveAPI(QObject *parent = 0);
+        GoogleDriveAPI(GoogleAuthClient* _authcClient, QObject *parent = 0);
         ~GoogleDriveAPI();
 
         QString getToken() const override;
@@ -25,6 +26,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
         QNetworkAccessManager* network;
         QString token;
 
+        GoogleAuthClient* authClient;
     signals:
         void authUpdated();
 

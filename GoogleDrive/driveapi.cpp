@@ -1,5 +1,4 @@
 #include "driveapi.h"
-#include "../googleauthclient.h"
 
 #include <QBuffer>
 #include <QJsonDocument>
@@ -7,10 +6,13 @@
 #include <QNetworkRequest>
 #include <QUrl>
 
-GoogleDriveAPI::GoogleDriveAPI(QObject* parent)
-    : QObject(parent), IDataStore(IDataStore::OriginOnline)
+GoogleDriveAPI::GoogleDriveAPI(GoogleAuthClient* _authcClient, QObject* parent)
+    : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authcClient)
 {
     network = new QNetworkAccessManager();
+
+    connect(this, &GoogleDriveAPI::authRequired, authClient, &GoogleAuthClient::processAuth);
+    connect(authClient, &GoogleAuthClient::authCompleted, this, &GoogleDriveAPI::setToken);
 }
 
 GoogleDriveAPI::~GoogleDriveAPI()

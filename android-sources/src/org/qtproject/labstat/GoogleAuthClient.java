@@ -39,7 +39,7 @@ public class GoogleAuthClient extends org.qtproject.qt5.android.bindings.QtActiv
         thisActivity = this;
     }
 
-    public String processDriveAuth()
+    public String processDriveAuth(long authClientAddr)
     {
         Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
         if (accounts.length == 0) {
@@ -47,6 +47,8 @@ public class GoogleAuthClient extends org.qtproject.qt5.android.bindings.QtActiv
             return "";
         }
         mAccountName = accounts[0].name;
+
+        final long authClientAddress = authClientAddr;
 
         String token = "";
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
@@ -73,7 +75,7 @@ public class GoogleAuthClient extends org.qtproject.qt5.android.bindings.QtActiv
             @Override
             protected void onPostExecute(String token) {
                 Log.i(TAG, "Access token retrieved:" + token);
-                passToken(token);
+                passToken(token, authClientAddress);
             }
 
         };
@@ -82,5 +84,5 @@ public class GoogleAuthClient extends org.qtproject.qt5.android.bindings.QtActiv
         return mAccountName;
     }
 
-    private static native void passToken(String token);
+    private static native void passToken(String token, long authClientAddress);
 }
