@@ -1,6 +1,10 @@
 TEMPLATE = app
 
-QT += qml quick androidextras
+QT += qml quick
+
+android{
+    QT += androidextras
+}
 
 SOURCES += main.cpp \
     googleauthclient.cpp \

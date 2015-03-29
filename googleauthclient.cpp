@@ -1,8 +1,11 @@
 #include "googleauthclient.h"
 
+#if defined(Q_OS_ANDROID)
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
 #include <QtAndroid>
+#endif
+
 #include <QDebug>
 
 #include "GoogleDrive/driveapi.h"
@@ -12,6 +15,8 @@ void GoogleAuthClient::onTokenObtained(QString token)
     // Why? Multithreading, that's why!
     emit authCompleted(token);
 }
+
+#if defined(Q_OS_ANDROID)
 
 static void fjpassToken(JNIEnv *env, jobject thiz, jstring str, jlong authClientAddress)
 {
@@ -44,13 +49,17 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
     }
     return JNI_VERSION_1_6;
 }
+#endif
 
 void GoogleAuthClient::processAuth()
 {
+#if defined(Q_OS_ANDROID)
     long thisAddress = (long)this;
     QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/labstat/GoogleAuthClient",
                                                                            "getActivity",
                                                                            "()Lorg/qtproject/labstat/GoogleAuthClient;");
-
     QAndroidJniObject res = activity.callObjectMethod("processDriveAuth", "(J)Ljava/lang/String;", (jlong)thisAddress);
+#else
+    tokenObtained("token");
+#endif
 }
