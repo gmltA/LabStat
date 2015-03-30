@@ -1,9 +1,10 @@
 #include "synchandler.h"
+
 #include <QDebug>
+#include <QtConcurrent>
 
 SyncHandler::SyncHandler(QObject *parent) : QObject(parent)
 {
-
 }
 
 SyncHandler& SyncHandler::getInstance()
@@ -19,6 +20,8 @@ void SyncHandler::sync(IDataStore* processor)
         qDebug() << "Trying to sync data with NULL processor";
         return;
     }
+
+    QtConcurrent::run(processor, &IDataStore::init);
 }
 
 void SyncHandler::sync(IDataStore::Origin origin)

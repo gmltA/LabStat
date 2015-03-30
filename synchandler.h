@@ -12,8 +12,6 @@ class SyncHandler : public QObject
     public:
         static SyncHandler& getInstance();
 
-        void sync(IDataStore::Origin origin = IDataStore::OriginAny);
-
         void registerProcessor(IDataStore* processor);
         void unregisterProcessor(IDataStore* processor);
 
@@ -30,6 +28,7 @@ class SyncHandler : public QObject
     signals:
 
     public slots:
+        void sync(IDataStore::Origin origin = IDataStore::OriginAny);
 };
 
 #endif // SYNCHANDLER_H

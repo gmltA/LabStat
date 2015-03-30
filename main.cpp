@@ -10,6 +10,7 @@
 #include "GoogleDrive/driveapi.h"
 #include "googleauthclient.h"
 #include "googledesktopauthclient.h"
+#include "synchandler.h"
 
 int main(int argc, char *argv[])
 {
@@ -69,7 +70,9 @@ int main(int argc, char *argv[])
 #endif
     GoogleDriveAPI* drive = new GoogleDriveAPI(authClient);
 
-    engine.rootContext()->setContextProperty("driveSync", drive);
+    SyncHandler::getInstance().registerProcessor(drive);
+
+    engine.rootContext()->setContextProperty("sync", &SyncHandler::getInstance());
     engine.load(QUrl("qrc:/QML/main.qml"));
 
     return app.exec();
