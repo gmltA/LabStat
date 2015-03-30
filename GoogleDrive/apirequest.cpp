@@ -28,6 +28,8 @@ InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
     requestData += QString(metadata + "\n\n").toLatin1();
 
     // file content (excluded for folders)
+    // @todo: extract fileType property
+    if (_file->getMimeType() != "application/vnd.google-apps.folder")
     {
         requestData += QString("--" + requestBoundary + "\n").toLatin1();
         requestData += QString("Content-Type: %1\n\n").arg(_file->getMimeType()).toLatin1();
@@ -84,9 +86,8 @@ UserInfoRequest::UserInfoRequest()
     result = new UserInfoRequestResult();
 }
 
-
 ListFilesRequest::ListFilesRequest()
-    : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files?q=mimeType+%3D+%27application%2Fvnd.google-apps.folder%27+and+title+%3D+%27LabStat%27"), "GET")
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files?q=mimeType+%3D+%27application%2Fvnd.google-apps.folder%27+and+title+%3D+%27LabStat%27+and+trashed+%3D+false"), "GET")
 {
     result = new ListFilesRequestResult();
 }
