@@ -1,6 +1,7 @@
 #include "driveapi.h"
 
 #include <QBuffer>
+#include <QEventLoop>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrl>
@@ -21,11 +22,44 @@ GoogleDriveAPI::~GoogleDriveAPI()
     network->deleteLater();
 }
 
+void GoogleDriveAPI::init()
+{
+    if (!isFolderCreated())
+        createFolder();
+    else
+        qDebug() << "exsists";
+
+    qDebug() << "done";
+}
+
+bool GoogleDriveAPI::isFolderCreated()
+{
+    QEventLoop* loop = new QEventLoop();
+    ListFilesRequest* request = new ListFilesRequest();
+    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
+    sendRequest(request);
+    loop->exec();
+
+    return !(static_cast<ListFilesRequestResult*>(request->getResultPointer())->isEmpty);
+}
+
+void GoogleDriveAPI::createFolder()
+{
+    DriveFile* file = new DriveFile("LabStat", "root", "application/vnd.google-apps.folder");
+    QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
+
+    QEventLoop* loop = new QEventLoop();
+    InsertFileRequest* request = new InsertFileRequest(url, file);
+    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
+    sendRequest(request);
+    loop->exec();
+}
+
 void GoogleDriveAPI::test()
 {
     ListFilesRequest* request = new ListFilesRequest();
 
-    connect(static_cast<ListFilesRequestResult*>(request->getResultPointer()), &ListFilesRequestResult::emptyResult, [](){qDebug() << "empty";});
+    connect(this, &GoogleDriveAPI::workDone, [](){qDebug() << "empty";});
     sendRequest(request);
 }
 
@@ -65,6 +99,7 @@ QString GoogleDriveAPI::getToken() const
 
 void GoogleDriveAPI::setToken(const QString& value)
 {
+    qDebug() << "token set " << value;
     token = value;
     emit authRecovered();
 }
@@ -93,4 +128,5 @@ void GoogleDriveAPI::onRequestFinished()
 
     GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
     result->handleReply(reply);
+    emit workDone();
 }

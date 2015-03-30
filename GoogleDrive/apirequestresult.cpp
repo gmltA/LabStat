@@ -12,8 +12,6 @@ void InsertFileRequestResult::handleReply(QNetworkReply* reply)
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject fileObject = jsonDoc.object();
     file->setId(fileObject["id"].toString());
-
-    qDebug() << file->getId();
 }
 
 DriveFile* InsertFileRequestResult::getFile() const
@@ -43,6 +41,5 @@ void ListFilesRequestResult::handleReply(QNetworkReply* reply)
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject fileObject = jsonDoc.object();
-    if (fileObject["items"].toArray().isEmpty())
-        emit emptyResult();
+    isEmpty = fileObject["items"].toArray().isEmpty();
 }

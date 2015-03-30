@@ -19,6 +19,11 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
         QString getToken() const override;
 
+        void init() override final;
+
+        void createFolder();
+        bool isFolderCreated();
+
     private:
         bool checkAuth(QNetworkReply* reply);
 
@@ -30,6 +35,8 @@ class GoogleDriveAPI : public QObject, public IDataStore
     signals:
         void authRequired();
         void authRecovered();
+
+        void workDone();
 
     public slots:
         void test() override;

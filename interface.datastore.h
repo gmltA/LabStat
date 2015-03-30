@@ -17,6 +17,8 @@ class IDataStore
         IDataStore(Origin _origin) : origin(_origin) {}
         virtual ~IDataStore() {}
 
+        virtual void init() = 0;
+
         virtual void createFile() = 0;
         virtual void test() = 0;
 

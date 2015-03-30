@@ -52,14 +52,12 @@ class InsertFileRequestResult : public GoogleAPIRequestResult
 
 class ListFilesRequestResult : public GoogleAPIRequestResult
 {
-        Q_OBJECT
     public:
         ListFilesRequestResult() : GoogleAPIRequestResult() {}
 
         void handleReply(QNetworkReply* reply) override;
 
-    signals:
-        void emptyResult();
+        bool isEmpty;
 };
 
 Q_DECLARE_METATYPE(GoogleAPIRequestResult*)
