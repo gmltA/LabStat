@@ -41,7 +41,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
     public slots:
         void test() override;
         void createFile() override;
-        void sendRequest(GoogleAPIRequest* request);
+        void sendRequest(GoogleAPIRequest* request, QNetworkAccessManager* manager = nullptr);
 
         void setToken(const QString& value) override;
 

@@ -26,18 +26,19 @@ void GoogleDriveAPI::init()
 {
     if (!isFolderCreated())
         createFolder();
-    else
-        qDebug() << "exsists";
 
     qDebug() << "done";
 }
 
 bool GoogleDriveAPI::isFolderCreated()
 {
+    QNetworkAccessManager* mgr = new QNetworkAccessManager();
+
     QEventLoop* loop = new QEventLoop();
     ListFilesRequest* request = new ListFilesRequest();
     connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    sendRequest(request);
+    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
+    sendRequest(request, mgr);
     loop->exec();
 
     return !(static_cast<ListFilesRequestResult*>(request->getResultPointer())->isEmpty);
@@ -45,13 +46,16 @@ bool GoogleDriveAPI::isFolderCreated()
 
 void GoogleDriveAPI::createFolder()
 {
+    QNetworkAccessManager* mgr = new QNetworkAccessManager();
+
     DriveFile* file = new DriveFile("LabStat", "root", "application/vnd.google-apps.folder");
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
 
     QEventLoop* loop = new QEventLoop();
     InsertFileRequest* request = new InsertFileRequest(url, file);
     connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    sendRequest(request);
+    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
+    sendRequest(request, mgr);
     loop->exec();
 }
 
@@ -73,23 +77,27 @@ void GoogleDriveAPI::createFile()
     sendRequest(request);
 }
 
-void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request)
+void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request, QNetworkAccessManager* manager)
 {
+    if (!manager)
+        manager = network;
+
     request->setToken(token);
 
-    //todo: delete buffer later
     QByteArray array = request->getRequestData();
-    QBuffer* buffer = new QBuffer;
+    QBuffer* buffer = new QBuffer();
     buffer->setData(array);
 
-    QNetworkReply* reply = network->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
-    request->getResultPointer()->setCallback([this, request](){
-        this->sendRequest(request);
+    QNetworkReply* reply = manager->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
+    request->getResultPointer()->setCallback([=](){
+        //todo: manager is in different thread!
+        this->sendRequest(request, manager);
     });
 
     reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request->getResultPointer()));
 
     connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onRequestFinished);
+    connect(reply, &QNetworkRequest::finished, buffer, &QBuffer::deleteLater);
 }
 
 QString GoogleDriveAPI::getToken() const
