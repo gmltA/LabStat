@@ -54,6 +54,7 @@ class ListFilesRequest : public GoogleAPIRequest
 {
     public:
         ListFilesRequest();
+        ListFilesRequest(QString searchQuery);
 };
 
 

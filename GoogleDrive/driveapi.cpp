@@ -35,7 +35,7 @@ bool GoogleDriveAPI::isFolderCreated()
     QNetworkAccessManager* mgr = new QNetworkAccessManager();
 
     QEventLoop* loop = new QEventLoop();
-    ListFilesRequest* request = new ListFilesRequest();
+    ListFilesRequest* request = new ListFilesRequest("mimeType = 'application/vnd.google-apps.folder' and trashed = false and title = 'LabStat'");
     connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
     connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
     sendRequest(request, mgr);
@@ -97,7 +97,7 @@ void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request, QNetworkAccessManage
     reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request->getResultPointer()));
 
     connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onRequestFinished);
-    connect(reply, &QNetworkRequest::finished, buffer, &QBuffer::deleteLater);
+    connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
 }
 
 QString GoogleDriveAPI::getToken() const

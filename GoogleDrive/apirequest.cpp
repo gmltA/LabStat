@@ -87,7 +87,16 @@ UserInfoRequest::UserInfoRequest()
 }
 
 ListFilesRequest::ListFilesRequest()
-    : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files?q=mimeType+%3D+%27application%2Fvnd.google-apps.folder%27+and+title+%3D+%27LabStat%27+and+trashed+%3D+false"), "GET")
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files"), "GET")
 {
+    result = new ListFilesRequestResult();
+}
+
+ListFilesRequest::ListFilesRequest(QString searchQuery)
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files"), "GET")
+{
+    QString query = "?q=" + QUrl::toPercentEncoding(searchQuery);
+    setUrl(url().toString() + query);
+
     result = new ListFilesRequestResult();
 }
