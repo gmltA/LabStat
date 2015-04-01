@@ -4,6 +4,7 @@
 #include <QEventLoop>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QSettings>
 #include <QUrl>
 
 #include "googleauthclient.h"
@@ -16,6 +17,8 @@ GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName
 
     connect(this, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), this, SLOT(setToken(QString)));
+
+    loadFileTable();
 }
 
 GoogleDriveAPI::~GoogleDriveAPI()
@@ -150,4 +153,23 @@ void GoogleDriveAPI::onRequestFinished()
     GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
     result->handleReply(reply);
     emit workDone();
+}
+
+void GoogleDriveAPI::loadFileTable()
+{
+    QSettings settings;
+    QVariantHash storeHash = settings.value("DriveAPIFileTable").toHash();
+    for (auto iter = storeHash.begin(); iter != storeHash.end(); iter++)
+        fileTable[iter.key().toUInt()] = iter.value().toString();
+
+    qDebug() << "FileTable entries: " << fileTable.size();
+}
+
+void GoogleDriveAPI::storeFileTable()
+{
+    QSettings settings;
+    QVariantHash storeHash;
+    for (auto iter = fileTable.begin(); iter != fileTable.end(); iter++)
+        storeHash[QString::number(iter.key())] = iter.value();
+    settings.setValue("DriveAPIFileTable", storeHash);
 }

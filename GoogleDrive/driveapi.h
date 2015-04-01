@@ -25,11 +25,15 @@ class GoogleDriveAPI : public QObject, public IDataStore
         QVector<DriveFile> listFilesSync(DriveFile* templateFile);
         QVector<DriveFile> listFilesSync(QString searchQuery);
 
+        void loadFileTable();
+        void storeFileTable();
     private:
         bool checkAuth(QNetworkReply* reply);
 
         QNetworkAccessManager* network;
         QString token;
+
+        QHash<uint,QString> fileTable;
 
         DriveFile* appRootDir;
 
