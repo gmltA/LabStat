@@ -38,6 +38,18 @@ class UserInfoRequest : public GoogleAPIRequest
         UserInfoRequest();
 };
 
+class UpdateFileRequest : public GoogleAPIRequest
+{
+    public:
+        // todo: move URL into private methods of request
+        UpdateFileRequest(QUrl _requestUrl, DriveFile* _file);
+
+        UpdateFileRequestResult* getResultPointer() const;
+
+    private:
+        const QString requestBoundary = "ls_delim_boundary";
+};
+
 class InsertFileRequest : public GoogleAPIRequest
 {
     public:

@@ -19,6 +19,11 @@ DriveFile* InsertFileRequestResult::getFile() const
     return file;
 }
 
+DriveFile* UpdateFileRequestResult::getFile() const
+{
+    return file;
+}
+
 void UserInfoRequestResult::handleReply(QNetworkReply* reply)
 {
     QString replyData = reply->readAll();
@@ -42,4 +47,10 @@ void ListFilesRequestResult::handleReply(QNetworkReply* reply)
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject fileObject = jsonDoc.object();
     isEmpty = fileObject["items"].toArray().isEmpty();
+}
+
+void UpdateFileRequestResult::handleReply(QNetworkReply* reply)
+{
+    QString jsonData = reply->readAll();
+    qDebug() << jsonData;
 }

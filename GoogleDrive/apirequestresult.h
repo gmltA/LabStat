@@ -50,6 +50,19 @@ class InsertFileRequestResult : public GoogleAPIRequestResult
         DriveFile* file;
 };
 
+class UpdateFileRequestResult : public GoogleAPIRequestResult
+{
+    public:
+        UpdateFileRequestResult(DriveFile* _file) : GoogleAPIRequestResult(), file(_file) {}
+
+        void handleReply(QNetworkReply* reply) override;
+
+        DriveFile* getFile() const;
+
+    private:
+        DriveFile* file;
+};
+
 class ListFilesRequestResult : public GoogleAPIRequestResult
 {
     public:

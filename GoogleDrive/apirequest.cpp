@@ -43,6 +43,39 @@ InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
     result = new InsertFileRequestResult(_file);
 }
 
+UpdateFileRequest::UpdateFileRequest(QUrl _requestUrl, DriveFile* _file)
+    : GoogleAPIRequest(_requestUrl, "PUT")
+{
+    QString metadata = QString("{"
+                                   "\"title\": \"%1\","
+                                   "\"parents\": ["
+                                   "{ \"id\": \"%2\"}"
+                                   "],"
+                                   "\"mimeType\": \"%3\""
+                                   "}").arg(_file->getTitle()).arg(_file->getParentId(), _file->getMimeType());
+
+    setRawHeader("Content-Type", QString("multipart/related; boundary=\"%1\"").arg(requestBoundary).toLatin1());
+
+    requestData = QString("--" + requestBoundary + "\n").toLatin1();
+    requestData += QString("Content-Type: application/json; charset=UTF-8\n\n").toLatin1();
+    requestData += QString(metadata + "\n\n").toLatin1();
+
+    // file content (excluded for folders)
+    // @todo: extract fileType property
+    if (_file->getMimeType() != "application/vnd.google-apps.folder")
+    {
+        requestData += QString("--" + requestBoundary + "\n").toLatin1();
+        requestData += QString("Content-Type: %1\n\n").arg(_file->getMimeType()).toLatin1();
+        requestData += "Asdasd";
+    }
+    requestData += QString("\n--" + requestBoundary + "--").toLatin1();
+
+
+    setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
+
+    result = new UpdateFileRequestResult(_file);
+}
+
 GoogleAPIRequest::~GoogleAPIRequest()
 {
     //todo: uncomment later
@@ -95,8 +128,11 @@ ListFilesRequest::ListFilesRequest()
 ListFilesRequest::ListFilesRequest(QString searchQuery)
     : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files"), "GET")
 {
-    QString query = "?q=" + QUrl::toPercentEncoding(searchQuery);
-    setUrl(url().toString() + query);
+    if (!searchQuery.isEmpty())
+    {
+        QString query = "?q=" + QUrl::toPercentEncoding(searchQuery);
+        setUrl(url().toString() + query);
+    }
 
     result = new ListFilesRequestResult();
 }
