@@ -4,12 +4,15 @@
 #include "../interface.dataitem.h"
 
 #include <QJsonObject>
+#include <datasheet.h>
+
 class DriveFile : public IDataItem
 {
         Q_INTERFACES(IDataItem)
 
     public:
         DriveFile() {}
+        DriveFile(DataSheet* dataSheet);
         DriveFile(QJsonObject object);
         DriveFile(QString _title, QString _parentId, QString _mimeType);
         DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType);

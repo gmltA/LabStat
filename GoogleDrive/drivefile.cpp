@@ -1,5 +1,10 @@
 #include "drivefile.h"
 
+DriveFile::DriveFile(DataSheet* dataSheet)
+    : IDataItem(dataSheet->getTitle())
+{
+}
+
 DriveFile::DriveFile(QJsonObject object)
     : IDataItem(object["id"].toString(), object["title"].toString())
 {
