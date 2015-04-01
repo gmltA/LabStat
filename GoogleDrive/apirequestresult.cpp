@@ -11,6 +11,7 @@ void InsertFileRequestResult::handleReply(QNetworkReply* reply)
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
     QJsonObject fileObject = jsonDoc.object();
+
     file->setId(fileObject["id"].toString());
 }
 
@@ -40,13 +41,24 @@ void GoogleAPIRequestResult::setCallback(const std::function<void ()>& value)
     callback = value;
 }
 
+ListFilesRequestResult::~ListFilesRequestResult()
+{
+}
+
 void ListFilesRequestResult::handleReply(QNetworkReply* reply)
 {
-    QString jsonData = reply->readAll();
+    QString replyData = reply->readAll();
 
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
-    QJsonObject fileObject = jsonDoc.object();
-    isEmpty = fileObject["items"].toArray().isEmpty();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
+    QJsonObject jsonResult = jsonDoc.object();
+
+    for (auto item: jsonResult["items"].toArray())
+        fileList.push_back(DriveFile(item.toObject()));
+}
+
+QVector<DriveFile> ListFilesRequestResult::getFileList() const
+{
+    return fileList;
 }
 
 void UpdateFileRequestResult::handleReply(QNetworkReply* reply)

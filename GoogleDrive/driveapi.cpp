@@ -8,10 +8,11 @@
 
 #include "googleauthclient.h"
 
-GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QObject* parent)
+GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject* parent)
     : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authClient)
 {
     network = new QNetworkAccessManager();
+    appRootDir = new DriveFile(_rootFolderName, "root", "application/vnd.google-apps.folder");
 
     connect(this, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), this, SLOT(setToken(QString)));
@@ -24,31 +25,41 @@ GoogleDriveAPI::~GoogleDriveAPI()
 
 void GoogleDriveAPI::init()
 {
-    if (!isFolderCreated())
-        createFolder();
-
-    qDebug() << "done";
+    auto list = listFilesSync(appRootDir);
+    if (!list.isEmpty())
+        appRootDir->fill(list.first());
+    else
+        createFileSync(appRootDir);
 }
 
-bool GoogleDriveAPI::isFolderCreated()
+QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
+{
+    if (!templateFile)
+        return QVector<DriveFile>();
+
+    return listFilesSync(templateFile->buildSearchQuery());
+}
+
+QVector<DriveFile> GoogleDriveAPI::listFilesSync(QString searchQuery)
 {
     QNetworkAccessManager* mgr = new QNetworkAccessManager();
 
+    ListFilesRequest* request = new ListFilesRequest(searchQuery);
+
     QEventLoop* loop = new QEventLoop();
-    ListFilesRequest* request = new ListFilesRequest("mimeType = 'application/vnd.google-apps.folder' and trashed = false and title = 'LabStat'");
     connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
     connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
     sendRequest(request, mgr);
     loop->exec();
 
-    return !(static_cast<ListFilesRequestResult*>(request->getResultPointer())->isEmpty);
+    ListFilesRequestResult* result = static_cast<ListFilesRequestResult*>(request->getResultPointer());
+    return result->getFileList();
 }
 
-void GoogleDriveAPI::createFolder()
+void GoogleDriveAPI::createFileSync(DriveFile* file)
 {
     QNetworkAccessManager* mgr = new QNetworkAccessManager();
 
-    DriveFile* file = new DriveFile("LabStat", "root", "application/vnd.google-apps.folder");
     QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
 
     QEventLoop* loop = new QEventLoop();
@@ -57,6 +68,8 @@ void GoogleDriveAPI::createFolder()
     connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
     sendRequest(request, mgr);
     loop->exec();
+
+    //return file;
 }
 
 void GoogleDriveAPI::test()

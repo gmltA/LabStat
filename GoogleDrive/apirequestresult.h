@@ -67,10 +67,14 @@ class ListFilesRequestResult : public GoogleAPIRequestResult
 {
     public:
         ListFilesRequestResult() : GoogleAPIRequestResult() {}
+        ~ListFilesRequestResult();
 
         void handleReply(QNetworkReply* reply) override;
 
-        bool isEmpty;
+        QVector<DriveFile> getFileList() const;
+
+    private:
+        QVector<DriveFile> fileList;
 };
 
 Q_DECLARE_METATYPE(GoogleAPIRequestResult*)

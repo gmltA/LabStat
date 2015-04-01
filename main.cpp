@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 #else
     authClient = new GoogleDesktopAuthClient();
 #endif
-    GoogleDriveAPI* drive = new GoogleDriveAPI(authClient);
+    GoogleDriveAPI* drive = new GoogleDriveAPI(authClient, "LabStat");
 
     SyncHandler::getInstance().registerProcessor(drive);
 

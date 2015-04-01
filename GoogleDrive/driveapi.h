@@ -14,21 +14,24 @@ class GoogleDriveAPI : public QObject, public IDataStore
         Q_INTERFACES(IDataStore)
 
     public:
-        GoogleDriveAPI(IAuthClient* _authClient, QObject *parent = 0);
+        GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject *parent = 0);
         ~GoogleDriveAPI();
 
         QString getToken() const override;
 
         void init() override final;
 
-        void createFolder();
-        bool isFolderCreated();
+        void createFileSync(DriveFile* file);
+        QVector<DriveFile> listFilesSync(DriveFile* templateFile);
+        QVector<DriveFile> listFilesSync(QString searchQuery);
 
     private:
         bool checkAuth(QNetworkReply* reply);
 
         QNetworkAccessManager* network;
         QString token;
+
+        DriveFile* appRootDir;
 
         IAuthClient* authClient;
 
