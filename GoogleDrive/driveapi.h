@@ -21,9 +21,13 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
         void init() override final;
 
+        void syncFile(DataSheet* dataFile);
+
         void createFileSync(DriveFile* file);
         QVector<DriveFile> listFilesSync(DriveFile* templateFile);
         QVector<DriveFile> listFilesSync(QString searchQuery);
+
+        void updateFileSync(DriveFile* file);
 
         void loadFileTable();
         void storeFileTable();

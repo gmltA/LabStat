@@ -35,6 +35,29 @@ void GoogleDriveAPI::init()
         createFileSync(appRootDir);
 }
 
+void GoogleDriveAPI::syncFile(DataSheet* dataFile)
+{
+    DriveFile* file = new DriveFile(dataFile);
+    file->setMimeType("text/plain");
+    file->setParentId(appRootDir->getId());
+
+    if (fileTable.contains(dataFile->getId()))
+    {
+        //check modify date
+        file->setId(fileTable[dataFile->getId()]);
+        updateFileSync(file);
+    }
+    else
+    {
+        createFileSync(file);
+        fileTable[dataFile->getId()] = file->getId();
+
+        storeFileTable();
+    }
+
+    delete file;
+}
+
 QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
 {
     if (!templateFile)
@@ -67,6 +90,20 @@ void GoogleDriveAPI::createFileSync(DriveFile* file)
 
     QEventLoop* loop = new QEventLoop();
     InsertFileRequest* request = new InsertFileRequest(url, file);
+    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
+    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
+    sendRequest(request, mgr);
+    loop->exec();
+
+    //return file;
+}
+
+void GoogleDriveAPI::updateFileSync(DriveFile* file)
+{
+    QNetworkAccessManager* mgr = new QNetworkAccessManager();
+
+    QEventLoop* loop = new QEventLoop();
+    UpdateFileRequest* request = new UpdateFileRequest("https://www.googleapis.com/upload/drive/v2/files/" + file->getId() + "?uploadType=multipart", file);
     connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
     connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
     sendRequest(request, mgr);
