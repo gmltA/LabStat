@@ -37,6 +37,12 @@ QString DataSheet::getTitle() const
         return QString("%1").arg(groupId);
 }
 
+QString DataSheet::toString() const
+{
+    // NIY
+    return "a \t b \t c \nd \t e \t n";
+}
+
 uint DataSheet::getGroupId() const
 {
     return groupId;

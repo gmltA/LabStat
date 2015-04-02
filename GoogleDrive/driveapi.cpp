@@ -38,7 +38,6 @@ void GoogleDriveAPI::init()
 void GoogleDriveAPI::syncFile(DataSheet* dataFile)
 {
     DriveFile* file = new DriveFile(dataFile);
-    file->setMimeType("text/plain");
     file->setParentId(appRootDir->getId());
 
     if (fileTable.contains(dataFile->getId()))

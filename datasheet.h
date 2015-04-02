@@ -30,6 +30,8 @@ class DataSheet : public QObject
 
         QString getTitle() const;
 
+        QString toString() const;
+
     private:
         uint id;
         uint groupId;

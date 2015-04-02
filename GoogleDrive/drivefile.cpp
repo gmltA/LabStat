@@ -1,7 +1,8 @@
 #include "drivefile.h"
+#include <QDebug>
 
 DriveFile::DriveFile(DataSheet* dataSheet)
-    : IDataItem(dataSheet->getTitle())
+    : IDataItem(dataSheet->getTitle()), content(dataSheet->toString()), mimeType("text/tsv")
 {
 }
 
@@ -63,4 +64,14 @@ QString DriveFile::buildSearchQuery()
     return QString("mimeType = '%1' and trashed = false and title = '%3'")
                             .arg(getMimeType())
                             .arg(getTitle());
+}
+
+QString DriveFile::getContent() const
+{
+    return content;
+}
+
+void DriveFile::setContent(const QString& value)
+{
+    content = value;
 }

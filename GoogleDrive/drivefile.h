@@ -29,9 +29,14 @@ class DriveFile : public IDataItem
 
         QString buildSearchQuery();
 
+        QString getContent() const;
+        void setContent(const QString& value);
+
     protected:
         QString parentId;
         QString mimeType;
+
+        QString content;
 };
 
 Q_DECLARE_METATYPE(DriveFile)

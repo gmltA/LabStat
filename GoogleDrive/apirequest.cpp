@@ -66,7 +66,7 @@ UpdateFileRequest::UpdateFileRequest(QUrl _requestUrl, DriveFile* _file)
     {
         requestData += QString("--" + requestBoundary + "\n").toLatin1();
         requestData += QString("Content-Type: %1\n\n").arg(_file->getMimeType()).toLatin1();
-        requestData += "Asdasd";
+        requestData += _file->getContent();
     }
     requestData += QString("\n--" + requestBoundary + "--").toLatin1();
 
