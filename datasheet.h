@@ -22,6 +22,9 @@ class DataSheet : public QObject
         uint getId() const;
         void setId(const uint& value);
 
+        uint getGroupId() const;
+        void setGroupId(const uint& value);
+
         Subject getSubject() const;
         void setSubject(const Subject& value);
 
@@ -29,6 +32,7 @@ class DataSheet : public QObject
 
     private:
         uint id;
+        uint groupId;
         Subject subject;
 
         static const char* subjectString(DataSheet::Subject subject);

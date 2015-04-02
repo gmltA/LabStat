@@ -1,7 +1,7 @@
 #include "datasheet.h"
 #include <QMetaEnum>
 
-DataSheet::DataSheet(QObject *parent) : QObject(parent), id(0), subject(Subject::None)
+DataSheet::DataSheet(QObject *parent) : QObject(parent), id(0), groupId(0), subject(Subject::None)
 {
 }
 
@@ -32,9 +32,19 @@ void DataSheet::setSubject(const Subject& value)
 QString DataSheet::getTitle() const
 {
     if (subject != Subject::None)
-        return QString("%1-%2").arg(id).arg(DataSheet::subjectString(subject));
+        return QString("%1-%2").arg(groupId).arg(DataSheet::subjectString(subject));
     else
-        return QString("%1").arg(id);
+        return QString("%1").arg(groupId);
+}
+
+uint DataSheet::getGroupId() const
+{
+    return groupId;
+}
+
+void DataSheet::setGroupId(const uint& value)
+{
+    groupId = value;
 }
 
 const char* DataSheet::subjectString(DataSheet::Subject subject)
