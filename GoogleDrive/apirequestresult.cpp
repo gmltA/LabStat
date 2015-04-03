@@ -65,4 +65,15 @@ void UpdateFileRequestResult::handleReply(QNetworkReply* reply)
 {
     QString jsonData = reply->readAll();
     qDebug() << jsonData;
+
+void GetFileRequestResult::handleReply(QNetworkReply* reply)
+{
+    QString replyData = reply->readAll();
+    qDebug() << replyData;
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
+    QJsonObject fileObject = jsonDoc.object();
+
+    QDateTime date = QDateTime::fromString(fileObject["modifiedDate"].toString(), Qt::ISODate);
+    file->setModifiedDate(date);
 }

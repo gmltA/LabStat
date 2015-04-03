@@ -3,6 +3,7 @@
 
 #include "../interface.dataitem.h"
 
+#include <QDateTime>
 #include <QJsonObject>
 #include <datasheet.h>
 
@@ -32,9 +33,13 @@ class DriveFile : public IDataItem
         QString getContent() const;
         void setContent(const QString& value);
 
+        QDateTime getModifiedDate() const;
+        void setModifiedDate(const QDateTime& value);
+
     protected:
         QString parentId;
         QString mimeType;
+        QDateTime modifiedDate;
 
         QString content;
 };

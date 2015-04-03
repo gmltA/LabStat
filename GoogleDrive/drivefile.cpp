@@ -75,3 +75,13 @@ void DriveFile::setContent(const QString& value)
 {
     content = value;
 }
+
+QDateTime DriveFile::getModifiedDate() const
+{
+    return modifiedDate;
+}
+
+void DriveFile::setModifiedDate(const QDateTime& value)
+{
+    modifiedDate = value;
+}

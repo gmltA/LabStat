@@ -44,7 +44,7 @@ void GoogleDriveAPI::syncFile(DataSheet* dataFile)
     {
         //check modify date
         file->setId(fileTable[dataFile->getId()]);
-        updateFileSync(file);
+        getFileSync(file);
     }
     else
     {
@@ -55,6 +55,21 @@ void GoogleDriveAPI::syncFile(DataSheet* dataFile)
     }
 
     delete file;
+}
+
+void GoogleDriveAPI::getFileSync(DriveFile* file)
+{
+    QNetworkAccessManager* mgr = new QNetworkAccessManager();
+
+    GetFileRequest* request = new GetFileRequest(file);
+
+    QEventLoop* loop = new QEventLoop();
+    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
+    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
+    sendRequest(request, mgr);
+    loop->exec();
+
+    GetFileRequestResult* result = static_cast<GetFileRequestResult*>(request->getResultPointer());
 }
 
 QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
