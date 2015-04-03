@@ -3,9 +3,22 @@
 
 #include "../interface.dataitem.h"
 
+#include <QDataStream>
 #include <QDateTime>
 #include <QJsonObject>
 #include <datasheet.h>
+
+struct DriveFileInfo
+{
+        QString id;
+        QDateTime modifiedDate;
+
+        friend QDataStream & operator<< (QDataStream &, const DriveFileInfo &);
+        friend QDataStream& operator>> (QDataStream &, DriveFileInfo &);
+
+};
+
+Q_DECLARE_METATYPE(DriveFileInfo)
 
 class DriveFile : public IDataItem
 {

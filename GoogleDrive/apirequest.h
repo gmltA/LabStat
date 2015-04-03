@@ -62,6 +62,12 @@ class InsertFileRequest : public GoogleAPIRequest
         const QString requestBoundary = "ls_delim_boundary";
 };
 
+class GetFileRequest : public GoogleAPIRequest
+{
+    public:
+        GetFileRequest(DriveFile* _file);
+};
+
 class ListFilesRequest : public GoogleAPIRequest
 {
     public:

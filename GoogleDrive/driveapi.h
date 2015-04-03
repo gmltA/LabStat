@@ -38,7 +38,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
         QNetworkAccessManager* network;
         QString token;
 
-        QHash<uint,QString> fileTable;
+        QHash<uint,DriveFileInfo> fileTable;
 
         DriveFile* appRootDir;
 

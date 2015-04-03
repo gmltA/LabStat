@@ -12,6 +12,9 @@
 GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject* parent)
     : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authClient)
 {
+    qRegisterMetaType<DriveFileInfo>("DriveFileInfo");
+    qRegisterMetaTypeStreamOperators<DriveFileInfo>("DriveFileInfo");
+
     network = new QNetworkAccessManager();
     appRootDir = new DriveFile(_rootFolderName, "root", "application/vnd.google-apps.folder");
 
@@ -43,13 +46,17 @@ void GoogleDriveAPI::syncFile(DataSheet* dataFile)
     if (fileTable.contains(dataFile->getId()))
     {
         //check modify date
-        file->setId(fileTable[dataFile->getId()]);
+        file->setId(fileTable[dataFile->getId()].id);
         getFileSync(file);
     }
     else
     {
         createFileSync(file);
-        fileTable[dataFile->getId()] = file->getId();
+        DriveFileInfo fileInfo;
+        fileInfo.id = file->getId();
+        fileInfo.modifiedDate = QDateTime::currentDateTime();
+
+        fileTable[dataFile->getId()] = fileInfo;
 
         storeFileTable();
     }
@@ -211,7 +218,10 @@ void GoogleDriveAPI::loadFileTable()
     QSettings settings;
     QVariantHash storeHash = settings.value("DriveAPIFileTable").toHash();
     for (auto iter = storeHash.begin(); iter != storeHash.end(); iter++)
-        fileTable[iter.key().toUInt()] = iter.value().toString();
+    {
+        fileTable[iter.key().toUInt()] = iter.value().value<DriveFileInfo>();
+        qDebug() << fileTable[iter.key().toUInt()].id  << " " << fileTable[iter.key().toUInt()].modifiedDate;
+    }
 
     qDebug() << "FileTable entries: " << fileTable.size();
 }
@@ -221,6 +231,6 @@ void GoogleDriveAPI::storeFileTable()
     QSettings settings;
     QVariantHash storeHash;
     for (auto iter = fileTable.begin(); iter != fileTable.end(); iter++)
-        storeHash[QString::number(iter.key())] = iter.value();
+        storeHash[QString::number(iter.key())] = QVariant::fromValue<DriveFileInfo>(iter.value());
     settings.setValue("DriveAPIFileTable", storeHash);
 }

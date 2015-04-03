@@ -1,6 +1,19 @@
 #include "drivefile.h"
 #include <QDebug>
 
+QDataStream& operator<<(QDataStream &out, const DriveFileInfo &obj)
+{
+    out << obj.id << obj.modifiedDate;
+    return out;
+}
+
+QDataStream& operator>>(QDataStream &in, DriveFileInfo &obj)
+{
+    in >> obj.id;
+    in >> obj.modifiedDate;
+    return in;
+}
+
 DriveFile::DriveFile(DataSheet* dataSheet)
     : IDataItem(dataSheet->getTitle()), content(dataSheet->toString()), mimeType("text/tsv")
 {

@@ -136,3 +136,9 @@ ListFilesRequest::ListFilesRequest(QString searchQuery)
 
     result = new ListFilesRequestResult();
 }
+
+GetFileRequest::GetFileRequest(DriveFile* _file)
+    : GoogleAPIRequest("https://www.googleapis.com/drive/v2/files/"+_file->getId(), "GET")
+{
+    result = new GetFileRequestResult(_file);
+}
