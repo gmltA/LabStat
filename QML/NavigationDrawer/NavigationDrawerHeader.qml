@@ -6,6 +6,7 @@ Rectangle {
 
     property alias mainText: mainTextItem.text
     property alias secondaryText: secondaryTextItem.text
+    property alias buttonIcon: icon.text
     property alias buttonArea: area
 
     height: 56 * dp
@@ -63,6 +64,7 @@ Rectangle {
 
             anchors.right: parent.right
             Text {
+                id: icon
                 anchors.centerIn: parent
                 text: ""
                 font.pointSize: 14
