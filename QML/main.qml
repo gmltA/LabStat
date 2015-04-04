@@ -88,7 +88,7 @@ ApplicationWindow {
                     secondaryText: "Just a text"
 
                     buttonArea.onClicked: {
-                        sync.sync()
+                        drawer.togglePage();
                     }
                 }
                 Column {

@@ -72,7 +72,6 @@ int main(int argc, char *argv[])
 
     SyncHandler::getInstance().registerProcessor(drive);
 
-    engine.rootContext()->setContextProperty("sync", &SyncHandler::getInstance());
     engine.load(QUrl("qrc:/QML/main.qml"));
 
     return app.exec();
