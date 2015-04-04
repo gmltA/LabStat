@@ -62,6 +62,16 @@ ApplicationWindow {
 
         position: Qt.LeftEdge
 
+        function togglePage()
+        {
+            menuPage.visible = !menuPage.visible;
+            syncPage.visible = !syncPage.visible;
+            if (syncPage.visible)
+                header.buttonIcon = "";
+            else
+                header.buttonIcon = "";
+        }
+
         Flickable {
             anchors.fill: parent
             contentHeight: drawerMenu.height
@@ -73,6 +83,7 @@ ApplicationWindow {
                 anchors.right: parent.right
 
                 NavigationDrawerHeader {
+                    id: header
                     mainText: "Alex gmlt.A"
                     secondaryText: "Just a text"
 
@@ -80,33 +91,50 @@ ApplicationWindow {
                         sync.sync()
                     }
                 }
+                Column {
+                    id: menuPage
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                NavigationDrawerDivider {
-                }
+                    NavigationDrawerDivider {
+                    }
 
-                NavigationDrawerListItem {
-                    icon: ""
-                    caption: "Groups"
+                    NavigationDrawerListItem {
+                        id: groupList
+                        icon: ""
+                        caption: "Groups"
+
+                        NavigationDrawerItem {
+                            icon: ""
+                            caption: "250501"
+                        }
+                    }
+
                     NavigationDrawerItem {
                         icon: ""
-                        caption: "250501"
+                        caption: "Test"
+                    }
+
+                    NavigationDrawerDivider {
+                    }
+
+                    NavigationDrawerItem {
+                        icon: ""
+                        caption: "Settings"
+                    }
+                    NavigationDrawerItem {
+                        icon: ""
+                        caption: "Help"
                     }
                 }
-                NavigationDrawerItem {
-                    icon: ""
-                    caption: "Test"
-                }
+                Column {
+                    id: syncPage
+                    visible: false
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                NavigationDrawerDivider {
-                }
-
-                NavigationDrawerItem {
-                    icon: ""
-                    caption: "Settings"
-                }
-                NavigationDrawerItem {
-                    icon: ""
-                    caption: "Help"
+                    NavigationDrawerDivider {
+                    }
                 }
             }
         }
