@@ -1,6 +1,8 @@
 #ifndef IDATASTORE_H
 #define IDATASTORE_H
 
+#include "datasheet.h"
+
 #include <QString>
 #include <QObject>
 
@@ -18,6 +20,7 @@ class IDataStore
         virtual ~IDataStore() {}
 
         virtual void init() = 0;
+        virtual void syncFile(DataSheet* dataFile) = 0;
 
         virtual void createFile() = 0;
         virtual void test() = 0;
