@@ -29,6 +29,9 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
         void updateFileSync(DriveFile* file);
 
+        template<class T = GoogleAPIRequestResult>
+        T* sendSyncRequest(GoogleAPIRequest* request);
+
         void loadFileTable();
         void storeFileTable();
     private:
