@@ -3,6 +3,7 @@ import QtQuick.Controls.Styles 1.2
 
 import QtQuick.Controls 1.2
 import "../QML/NavigationDrawer"
+import SyncHandler 1.0
 
 ApplicationWindow {
     title: "Navigation Drawer"
@@ -76,6 +77,22 @@ ApplicationWindow {
             anchors.fill: parent
             contentHeight: drawerMenu.height
             contentWidth: parent.width
+
+            Connections {
+                target: SyncHandler
+                onProcessorAdded: {
+                    var component = Qt.createComponent("NavigationDrawer/NavigationDrawerItem.qml");
+                    var listItem = component.createObject(syncPage);
+
+                    listItem.icon = processorData['online'] === 1 ? "" : "";
+                    listItem.caption = processorData['title'];
+
+                    var processorId = processorData['id'];
+                    listItem.clicked.connect(function(){
+                        SyncHandler.sync(processorId);
+                    });
+                }
+            }
 
             Column {
                 id: drawerMenu

@@ -57,10 +57,13 @@ int main(int argc, char *argv[])
     // now calculate the dp ratio
     qreal dp = dpi / 160.f;
 
+    SyncHandler::init();
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
+
+    engine.load(QUrl("qrc:/QML/main.qml"));
 
     IAuthClient* authClient;
 #if defined(Q_OS_ANDROID)
@@ -70,9 +73,8 @@ int main(int argc, char *argv[])
 #endif
     GoogleDriveAPI* drive = new GoogleDriveAPI(authClient, "LabStat");
 
-    SyncHandler::getInstance().registerProcessor(drive);
 
-    engine.load(QUrl("qrc:/QML/main.qml"));
+    SyncHandler::getInstance()->registerProcessor(drive);
 
     return app.exec();
 }
