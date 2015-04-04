@@ -1,16 +1,28 @@
 #include "synchandler.h"
 
 #include <QDebug>
+#include <QtQml>
 #include <QtConcurrent>
 
-SyncHandler::SyncHandler(QObject *parent) : QObject(parent)
+SyncHandler* SyncHandler::instance = nullptr;
+
+void SyncHandler::init()
 {
+    qmlRegisterSingletonType<SyncHandler>("SyncHandler", 1, 0, "SyncHandler", &SyncHandler::qmlInstance);
 }
 
-SyncHandler& SyncHandler::getInstance()
+SyncHandler* SyncHandler::getInstance()
 {
-    static SyncHandler instance;
+    if (!instance)
+        instance = new SyncHandler();
+
     return instance;
+}
+
+void SyncHandler::sync(int processorIndex)
+{
+    IDataStore* processor = syncProcessors.at(processorIndex);
+    sync(processor);
 }
 
 void SyncHandler::sync(IDataStore* processor)
@@ -39,14 +51,15 @@ void SyncHandler::registerProcessor(IDataStore* processor)
 {
     //todo: check if we have this processor in ollection already
     syncProcessors.push_back(processor);
+
+    QVariantMap processorData;
+    processorData["id"] = syncProcessors.indexOf(processor);
+    processorData["title"] = "Processor";
+    processorData["online"] = processor->getOrigin() == IDataStore::OriginOnline ? 1 : 0;
+    emit processorAdded(processorData);
 }
 
 void SyncHandler::unregisterProcessor(IDataStore* processor)
 {
     syncProcessors.removeOne(processor);
-}
-
-SyncHandler::~SyncHandler()
-{
-
 }
