@@ -68,7 +68,7 @@ QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
 QVector<DriveFile> GoogleDriveAPI::listFilesSync(QString searchQuery)
 {
     ListFilesRequest* request = new ListFilesRequest(searchQuery);
-    ListFilesRequestResult* result = sendSyncRequest<ListFilesRequestResult>(request);
+    ListFilesRequestResult* result = sendSyncRequest<ListFilesRequestResult*>(request);
 
     return result->getFileList();
 }
@@ -104,7 +104,7 @@ void GoogleDriveAPI::createFile()
 }
 
 template<class T>
-T* GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
+T GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
 {
     QNetworkAccessManager* mgr = new QNetworkAccessManager();
 
@@ -114,7 +114,7 @@ T* GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
     sendRequest(request, mgr);
     loop->exec();
 
-    return static_cast<T*>(request->getResultPointer());
+    return static_cast<T>(request->getResultPointer());
 }
 
 void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request, QNetworkAccessManager* manager)

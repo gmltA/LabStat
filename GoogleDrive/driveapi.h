@@ -21,7 +21,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
         void init() override final;
 
-        void syncFile(DataSheet* dataFile);
+        void syncFile(DataSheet* dataFile) override final;
 
         void createFileSync(DriveFile* file);
         QVector<DriveFile> listFilesSync(DriveFile* templateFile);
@@ -29,8 +29,8 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
         void updateFileSync(DriveFile* file);
 
-        template<class T = GoogleAPIRequestResult>
-        T* sendSyncRequest(GoogleAPIRequest* request);
+        template<class T = GoogleAPIRequestResult*>
+        T sendSyncRequest(GoogleAPIRequest* request);
 
         void loadFileTable();
         void storeFileTable();
