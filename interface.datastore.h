@@ -33,6 +33,9 @@ class IDataStore
     public slots:
         virtual void setToken(const QString& value) = 0;
 
+    signals:
+        virtual void syncDone() = 0;
+
     private:
         Origin origin;
 };

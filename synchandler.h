@@ -4,6 +4,7 @@
 #include "interface.datastore.h"
 
 #include <QObject>
+#include <QSignalMapper>
 #include <QVariantMap>
 #include <QVector>
 
@@ -39,13 +40,14 @@ class SyncHandler : public QObject
         }
 
     private:
-        SyncHandler() : QObject() {}
+        SyncHandler();
         ~SyncHandler() {}
 
         void sync(IDataStore* processor);
 
         static SyncHandler* instance;
         QVector<IDataStore*> syncProcessors;
+        QSignalMapper* signalMapper;
 
     signals:
         void processorAdded(QVariantMap processorData);

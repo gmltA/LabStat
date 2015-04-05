@@ -6,6 +6,12 @@
 
 SyncHandler* SyncHandler::instance = nullptr;
 
+SyncHandler::SyncHandler() : QObject()
+{
+    signalMapper = new QSignalMapper();
+    connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(syncStopped(int)));
+}
+
 void SyncHandler::init()
 {
     qmlRegisterSingletonType<SyncHandler>("SyncHandler", 1, 0, "SyncHandler", &SyncHandler::qmlInstance);
@@ -33,8 +39,10 @@ void SyncHandler::sync(IDataStore* processor)
         return;
     }
 
+    connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
+
     QtConcurrent::run(processor, &IDataStore::init);
-    emit syncStopped(syncProcessors.indexOf(processor));
+    //emit syncStopped(syncProcessors.indexOf(processor));
 }
 
 void SyncHandler::sync(IDataStore::Origin origin)
@@ -52,6 +60,8 @@ void SyncHandler::registerProcessor(IDataStore* processor)
 {
     //todo: check if we have this processor in ollection already
     syncProcessors.push_back(processor);
+
+    signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));
 
     QVariantMap processorData;
     processorData["id"] = syncProcessors.indexOf(processor);

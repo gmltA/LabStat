@@ -51,6 +51,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
         void authRecovered();
 
         void workDone();
+        void syncDone() override;
 
     public slots:
         void test() override;
