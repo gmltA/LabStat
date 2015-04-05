@@ -95,6 +95,11 @@ Item {
             name: "syncing"
 
             PropertyChanges {
+                target: item;
+                enabled: false
+            }
+
+            PropertyChanges {
                 target: iconAnim;
                 running: true
             }
