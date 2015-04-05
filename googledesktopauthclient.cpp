@@ -8,17 +8,12 @@
 
 GoogleDesktopAuthClient::GoogleDesktopAuthClient(QObject *parent) : QObject(parent)
 {
-    connect(this, &GoogleDesktopAuthClient::tokenObtained, this, &GoogleDesktopAuthClient::onTokenObtained);
+    connect(this, &GoogleDesktopAuthClient::tokenObtained, this, &GoogleDesktopAuthClient::authCompleted);
 }
 
 GoogleDesktopAuthClient::~GoogleDesktopAuthClient()
 {
 
-}
-
-void GoogleDesktopAuthClient::onTokenObtained(QString token)
-{
-    emit authCompleted(token);
 }
 
 void GoogleDesktopAuthClient::refreshToken()

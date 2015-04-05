@@ -8,10 +8,9 @@
 
 #include <QDebug>
 
-void GoogleAuthClient::onTokenObtained(QString token)
+GoogleAuthClient::GoogleAuthClient(QObject* parent): QObject(parent)
 {
-    // Why? Multithreading, that's why!
-    emit authCompleted(token);
+    connect(this, &GoogleAuthClient::tokenObtained, this, &GoogleAuthClient::authCompleted);
 }
 
 #if defined(Q_OS_ANDROID)
