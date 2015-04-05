@@ -6,16 +6,19 @@ import "../QML/NavigationDrawer"
 import SyncHandler 1.0
 
 ApplicationWindow {
-    title: "Navigation Drawer"
+    title: "LabStat"
     id: mainWindow
-    width: 320
-    height: 480
+    width: 360
+    height: 640
     visible: true
 
     // for QMLScene debug only!
     readonly property real dp: mainWindow.width / 320
 
     FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
+
+    PopupDialog {
+    }
 
     Rectangle {
         anchors.top: parent.top
@@ -76,7 +79,7 @@ ApplicationWindow {
                 target: SyncHandler
                 onProcessorAdded: {
                     var component = Qt.createComponent("NavigationDrawer/NavigationDrawerSyncItem.qml");
-                    var listItem = component.createObject(syncPage);
+                    var listItem = component.createObject(syncProcessors);
 
                     //listItem.icon = processorData['online'] === 1 ? "" : "";
                     listItem.caption = processorData['title'];
@@ -130,6 +133,7 @@ ApplicationWindow {
                         icon: ""
                         caption: "Settings"
                     }
+
                     NavigationDrawerItem {
                         icon: ""
                         caption: "Help"
@@ -140,6 +144,20 @@ ApplicationWindow {
                     visible: false
                     anchors.left: parent.left
                     anchors.right: parent.right
+
+                    Column {
+                        id: syncProcessors
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+
+                    NavigationDrawerDivider {
+                    }
+
+                    NavigationDrawerItem {
+                        icon: ""
+                        caption: "Add sync processor"
+                    }
                 }
             }
         }
