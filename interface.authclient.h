@@ -14,9 +14,6 @@ class IAuthClient
 
     public slots:
         virtual void processAuth() = 0;
-
-    private slots:
-        virtual void onTokenObtained(QString token) = 0;
 };
 
 Q_DECLARE_INTERFACE(IAuthClient, "IAuthClient")

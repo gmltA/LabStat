@@ -10,10 +10,7 @@ class GoogleAuthClient : public QObject, public IAuthClient
         Q_INTERFACES(IAuthClient)
 
     public:
-        GoogleAuthClient(QObject *parent = 0) : QObject(parent)
-        {
-            connect(this, &GoogleAuthClient::tokenObtained, this, &GoogleAuthClient::onTokenObtained);
-        }
+        GoogleAuthClient(QObject *parent = 0);
 
         ~GoogleAuthClient() {}
 
@@ -24,9 +21,6 @@ class GoogleAuthClient : public QObject, public IAuthClient
 
     public slots:
         void processAuth() override final;
-
-    private slots:
-        void onTokenObtained(QString token) override final;
 };
 
 #endif // GOOGLEAUTHCLIENT_H

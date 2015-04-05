@@ -3,18 +3,22 @@ import QtQuick.Controls.Styles 1.2
 
 import QtQuick.Controls 1.2
 import "../QML/NavigationDrawer"
+import SyncHandler 1.0
 
 ApplicationWindow {
-    title: "Navigation Drawer"
+    title: "LabStat"
     id: mainWindow
-    width: 320
-    height: 480
+    width: 360
+    height: 640
     visible: true
 
     // for QMLScene debug only!
     readonly property real dp: mainWindow.width / 320
 
     FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
+
+    PopupDialog {
+    }
 
     Rectangle {
         anchors.top: parent.top
@@ -38,18 +42,12 @@ ApplicationWindow {
             color: "white"
         }
 
-        Rectangle {
-            height: 4 * dp
-            width: parent.width
-            z: 1
-            anchors.bottomMargin: -4*dp
-            anchors.bottom: parent.bottom
-            gradient: Gradient{
-                GradientStop { position: 1; color: "#00000000"}
-                GradientStop { position: 0; color: "#2c000000"}
-            }
+        MaterialShadow {
+            anchors.fill: parent
+            z : -10
+            depth : 2
+            asynchronous: true
         }
-
     }
 
     NavigationDrawer {
@@ -62,10 +60,32 @@ ApplicationWindow {
 
         position: Qt.LeftEdge
 
+        function togglePage()
+        {
+            menuPage.visible = !menuPage.visible;
+            syncPage.visible = !syncPage.visible;
+            if (syncPage.visible)
+                header.buttonIcon = "";
+            else
+                header.buttonIcon = "";
+        }
+
         Flickable {
             anchors.fill: parent
             contentHeight: drawerMenu.height
             contentWidth: parent.width
+
+            Connections {
+                target: SyncHandler
+                onProcessorAdded: {
+                    var component = Qt.createComponent("NavigationDrawer/NavigationDrawerSyncItem.qml");
+                    var listItem = component.createObject(syncProcessors);
+
+                    //listItem.icon = processorData['online'] === 1 ? "" : "";
+                    listItem.caption = processorData['title'];
+                    listItem.processorId = processorData['id'];
+                }
+            }
 
             Column {
                 id: drawerMenu
@@ -73,40 +93,71 @@ ApplicationWindow {
                 anchors.right: parent.right
 
                 NavigationDrawerHeader {
+                    id: header
                     mainText: "Alex gmlt.A"
                     secondaryText: "Just a text"
 
                     buttonArea.onClicked: {
-                        sync.sync()
+                        drawer.togglePage();
                     }
                 }
 
                 NavigationDrawerDivider {
                 }
 
-                NavigationDrawerListItem {
-                    icon: ""
-                    caption: "Groups"
+                Column {
+                    id: menuPage
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    NavigationDrawerListItem {
+                        id: groupList
+                        icon: ""
+                        caption: "Groups"
+
+                        NavigationDrawerItem {
+                            icon: ""
+                            caption: "250501"
+                        }
+                    }
+
                     NavigationDrawerItem {
                         icon: ""
-                        caption: "250501"
+                        caption: "Test"
+                    }
+
+                    NavigationDrawerDivider {
+                    }
+
+                    NavigationDrawerItem {
+                        icon: ""
+                        caption: "Settings"
+                    }
+
+                    NavigationDrawerItem {
+                        icon: ""
+                        caption: "Help"
                     }
                 }
-                NavigationDrawerItem {
-                    icon: ""
-                    caption: "Test"
-                }
+                Column {
+                    id: syncPage
+                    visible: false
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                NavigationDrawerDivider {
-                }
+                    Column {
+                        id: syncProcessors
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
 
-                NavigationDrawerItem {
-                    icon: ""
-                    caption: "Settings"
-                }
-                NavigationDrawerItem {
-                    icon: ""
-                    caption: "Help"
+                    NavigationDrawerDivider {
+                    }
+
+                    NavigationDrawerItem {
+                        icon: ""
+                        caption: "Add sync processor"
+                    }
                 }
             }
         }

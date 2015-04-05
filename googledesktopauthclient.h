@@ -22,9 +22,6 @@ class GoogleDesktopAuthClient : public QObject, public IAuthClient
 
     public slots:
         void processAuth() override final;
-
-    private slots:
-        void onTokenObtained(QString token) override final;
 };
 
 #endif // GOOGLEDESKTOPAUTHCLIENT_H

@@ -21,7 +21,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
         void init() override final;
 
-        void syncFile(DataSheet* dataFile);
+        void syncFile(DataSheet* dataFile) override final;
 
         void createFileSync(DriveFile* file);
         void getFileSync(DriveFile* file);
@@ -29,6 +29,9 @@ class GoogleDriveAPI : public QObject, public IDataStore
         QVector<DriveFile> listFilesSync(QString searchQuery);
 
         void updateFileSync(DriveFile* file);
+
+        template<class T = GoogleAPIRequestResult*>
+        T sendSyncRequest(GoogleAPIRequest* request);
 
         void loadFileTable();
         void storeFileTable();
@@ -49,6 +52,7 @@ class GoogleDriveAPI : public QObject, public IDataStore
         void authRecovered();
 
         void workDone();
+        void syncDone() override;
 
     public slots:
         void test() override;

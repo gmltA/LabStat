@@ -6,7 +6,7 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QJsonObject>
-#include <datasheet.h>
+#include "../datasheet.h"
 
 struct DriveFileInfo
 {

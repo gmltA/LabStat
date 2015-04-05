@@ -7,7 +7,7 @@
 #include <QSettings>
 #include <QUrl>
 
-#include "googleauthclient.h"
+#include "../googleauthclient.h"
 
 GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject* parent)
     : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authClient)
@@ -36,6 +36,7 @@ void GoogleDriveAPI::init()
         appRootDir->fill(list.first());
     else
         createFileSync(appRootDir);
+    emit syncDone();
 }
 
 void GoogleDriveAPI::syncFile(DataSheet* dataFile)
@@ -89,48 +90,22 @@ QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
 
 QVector<DriveFile> GoogleDriveAPI::listFilesSync(QString searchQuery)
 {
-    QNetworkAccessManager* mgr = new QNetworkAccessManager();
-
     ListFilesRequest* request = new ListFilesRequest(searchQuery);
+    ListFilesRequestResult* result = sendSyncRequest<ListFilesRequestResult*>(request);
 
-    QEventLoop* loop = new QEventLoop();
-    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
-    sendRequest(request, mgr);
-    loop->exec();
-
-    ListFilesRequestResult* result = static_cast<ListFilesRequestResult*>(request->getResultPointer());
     return result->getFileList();
 }
 
 void GoogleDriveAPI::createFileSync(DriveFile* file)
 {
-    QNetworkAccessManager* mgr = new QNetworkAccessManager();
-
-    QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
-
-    QEventLoop* loop = new QEventLoop();
-    InsertFileRequest* request = new InsertFileRequest(url, file);
-    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
-    sendRequest(request, mgr);
-    loop->exec();
-
-    //return file;
+    InsertFileRequest* request = new InsertFileRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true"), file);
+    sendSyncRequest(request);
 }
 
 void GoogleDriveAPI::updateFileSync(DriveFile* file)
 {
-    QNetworkAccessManager* mgr = new QNetworkAccessManager();
-
-    QEventLoop* loop = new QEventLoop();
     UpdateFileRequest* request = new UpdateFileRequest("https://www.googleapis.com/upload/drive/v2/files/" + file->getId() + "?uploadType=multipart", file);
-    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
-    sendRequest(request, mgr);
-    loop->exec();
-
-    //return file;
+    sendSyncRequest(request);
 }
 
 void GoogleDriveAPI::test()
@@ -149,6 +124,20 @@ void GoogleDriveAPI::createFile()
     InsertFileRequest* request = new InsertFileRequest(url, file);
 
     sendRequest(request);
+}
+
+template<class T>
+T GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
+{
+    QNetworkAccessManager* mgr = new QNetworkAccessManager();
+
+    QEventLoop* loop = new QEventLoop();
+    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
+    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
+    sendRequest(request, mgr);
+    loop->exec();
+
+    return static_cast<T>(request->getResultPointer());
 }
 
 void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request, QNetworkAccessManager* manager)
