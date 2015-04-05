@@ -33,6 +33,7 @@ void GoogleDriveAPI::init()
         appRootDir->fill(list.first());
     else
         createFileSync(appRootDir);
+    emit syncDone();
 }
 
 void GoogleDriveAPI::syncFile(DataSheet* dataFile)
