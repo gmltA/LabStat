@@ -39,18 +39,12 @@ ApplicationWindow {
             color: "white"
         }
 
-        Rectangle {
-            height: 4 * dp
-            width: parent.width
-            z: 1
-            anchors.bottomMargin: -4*dp
-            anchors.bottom: parent.bottom
-            gradient: Gradient{
-                GradientStop { position: 1; color: "#00000000"}
-                GradientStop { position: 0; color: "#2c000000"}
-            }
+        MaterialShadow {
+            anchors.fill: parent
+            z : -10
+            depth : 2
+            asynchronous: true
         }
-
     }
 
     NavigationDrawer {

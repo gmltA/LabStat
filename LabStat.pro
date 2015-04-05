@@ -30,11 +30,12 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerListItem.qml \
     QML/main.qml \
     QML/MenuBackIcon.qml \
-    QML/SoftShadow.qml \
     QML/NavigationDrawer/NavigationDrawerSubheader.qml \
     QML/NavigationDrawer/NavigationDrawerDivider.qml \
     QML/NavigationDrawer/NavigationDrawerHeader.qml \
-    QML/NavigationDrawer/NavigationDrawerSyncItem.qml
+    QML/NavigationDrawer/NavigationDrawerSyncItem.qml \
+    QML/Shadow.qml \
+    QML/MaterialShadow.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

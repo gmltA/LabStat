@@ -9,7 +9,6 @@ Item {
 
     function syncStopped(stoppedProcessorId)
     {
-        // bug: double-call from one processor
         if (stoppedProcessorId === processorId)
             state = "";
     }
