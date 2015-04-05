@@ -81,16 +81,12 @@ ApplicationWindow {
             Connections {
                 target: SyncHandler
                 onProcessorAdded: {
-                    var component = Qt.createComponent("NavigationDrawer/NavigationDrawerItem.qml");
+                    var component = Qt.createComponent("NavigationDrawer/NavigationDrawerSyncItem.qml");
                     var listItem = component.createObject(syncPage);
 
-                    listItem.icon = processorData['online'] === 1 ? "" : "";
+                    //listItem.icon = processorData['online'] === 1 ? "" : "";
                     listItem.caption = processorData['title'];
-
-                    var processorId = processorData['id'];
-                    listItem.clicked.connect(function(){
-                        SyncHandler.sync(processorId);
-                    });
+                    listItem.processorId = processorData['id'];
                 }
             }
 
@@ -108,13 +104,14 @@ ApplicationWindow {
                         drawer.togglePage();
                     }
                 }
+
+                NavigationDrawerDivider {
+                }
+
                 Column {
                     id: menuPage
                     anchors.left: parent.left
                     anchors.right: parent.right
-
-                    NavigationDrawerDivider {
-                    }
 
                     NavigationDrawerListItem {
                         id: groupList
@@ -149,9 +146,6 @@ ApplicationWindow {
                     visible: false
                     anchors.left: parent.left
                     anchors.right: parent.right
-
-                    NavigationDrawerDivider {
-                    }
                 }
             }
         }

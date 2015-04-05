@@ -34,6 +34,7 @@ void SyncHandler::sync(IDataStore* processor)
     }
 
     QtConcurrent::run(processor, &IDataStore::init);
+    emit syncStopped(syncProcessors.indexOf(processor));
 }
 
 void SyncHandler::sync(IDataStore::Origin origin)

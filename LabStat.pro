@@ -33,7 +33,8 @@ DISTFILES += \
     QML/SoftShadow.qml \
     QML/NavigationDrawer/NavigationDrawerSubheader.qml \
     QML/NavigationDrawer/NavigationDrawerDivider.qml \
-    QML/NavigationDrawer/NavigationDrawerHeader.qml
+    QML/NavigationDrawer/NavigationDrawerHeader.qml \
+    QML/NavigationDrawer/NavigationDrawerSyncItem.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

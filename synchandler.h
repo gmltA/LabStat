@@ -49,6 +49,7 @@ class SyncHandler : public QObject
 
     signals:
         void processorAdded(QVariantMap processorData);
+        void syncStopped(int processorId);
 
 };
 
