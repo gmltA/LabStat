@@ -65,6 +65,7 @@ void UpdateFileRequestResult::handleReply(QNetworkReply* reply)
 {
     QString jsonData = reply->readAll();
     qDebug() << jsonData;
+}
 
 void GetFileRequestResult::handleReply(QNetworkReply* reply)
 {
