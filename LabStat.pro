@@ -35,7 +35,8 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerHeader.qml \
     QML/NavigationDrawer/NavigationDrawerSyncItem.qml \
     QML/Shadow.qml \
-    QML/MaterialShadow.qml
+    QML/MaterialShadow.qml \
+    QML/PopupDialog.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \
