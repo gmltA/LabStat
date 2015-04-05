@@ -40,9 +40,7 @@ void SyncHandler::sync(IDataStore* processor)
     }
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
-
     QtConcurrent::run(processor, &IDataStore::init);
-    //emit syncStopped(syncProcessors.indexOf(processor));
 }
 
 void SyncHandler::sync(IDataStore::Origin origin)
@@ -58,7 +56,7 @@ void SyncHandler::sync(IDataStore::Origin origin)
 
 void SyncHandler::registerProcessor(IDataStore* processor)
 {
-    //todo: check if we have this processor in ollection already
+    //todo: check if we have this processor in collection already
     syncProcessors.push_back(processor);
 
     signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));

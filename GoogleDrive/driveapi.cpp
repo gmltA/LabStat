@@ -7,7 +7,7 @@
 #include <QSettings>
 #include <QUrl>
 
-#include "googleauthclient.h"
+#include "../googleauthclient.h"
 
 GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject* parent)
     : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authClient)
