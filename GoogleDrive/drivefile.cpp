@@ -15,7 +15,7 @@ QDataStream& operator>>(QDataStream &in, DriveFileInfo &obj)
 }
 
 DriveFile::DriveFile(DataSheet* dataSheet)
-    : IDataItem(dataSheet->getTitle()), content(dataSheet->toString()), mimeType("text/tsv")
+    : IDataItem(dataSheet->getTitle()), mimeType("text/tsv"), content(dataSheet->toString())
 {
 }
 

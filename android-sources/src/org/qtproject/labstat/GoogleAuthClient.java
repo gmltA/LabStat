@@ -57,7 +57,7 @@ public class GoogleAuthClient extends org.qtproject.qt5.android.bindings.QtActiv
                 String token = null;
 
                 try {
-                    token = GoogleAuthUtil.getToken(getApplicationContext(), mAccountName, "oauth2:https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email");
+                    token = GoogleAuthUtil.getToken(getApplicationContext(), mAccountName, "oauth2:https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email https://spreadsheets.google.com/feeds");
                 } catch (IOException transientEx) {
                     // Network or server error, try later
                     Log.e(TAG, transientEx.toString());
