@@ -15,7 +15,6 @@ struct DriveFileInfo
 
         friend QDataStream & operator<< (QDataStream &, const DriveFileInfo &);
         friend QDataStream& operator>> (QDataStream &, DriveFileInfo &);
-
 };
 
 Q_DECLARE_METATYPE(DriveFileInfo)

@@ -13,20 +13,9 @@ class GoogleAPIRequestResult : public QObject
         Q_OBJECT
     public:
         GoogleAPIRequestResult(QObject* parent = 0) : QObject(parent) {}
-        GoogleAPIRequestResult(const GoogleAPIRequestResult &other) : QObject(other.parent())
-        {
-            Q_UNUSED(other)
-        }
         ~GoogleAPIRequestResult() {}
 
         virtual void handleReply(QNetworkReply* reply) = 0;
-
-        std::function<void ()> getCallback() const;
-        void setCallback(const std::function<void ()>& value);
-
-    private:
-        // Best thing that came to my mind after 3 days of brainstorm, think about rewriting it later
-        std::function<void ()> callback;
 };
 
 class UserInfoRequestResult : public GoogleAPIRequestResult
@@ -89,7 +78,5 @@ class ListFilesRequestResult : public GoogleAPIRequestResult
     private:
         QVector<DriveFile> fileList;
 };
-
-Q_DECLARE_METATYPE(GoogleAPIRequestResult*)
 
 #endif // GOOGLEAPIREQUESTRESULT_H
