@@ -97,29 +97,30 @@ void GoogleDriveAPI::updateFileSync(DriveFile* file)
     sendSyncRequest(request);
 }
 
-void GoogleDriveAPI::test()
-{
-}
-
 template<class T>
 T GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
 {
-    request->setToken(token);
+    QNetworkReply* reply;
+    do
+    {
+        request->setToken(token);
+        QNetworkAccessManager* manager = new QNetworkAccessManager();
+        QEventLoop* loop = new QEventLoop();
 
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-    QEventLoop* loop = new QEventLoop();
+        QBuffer* buffer = new QBuffer();
+        buffer->setData(request->getRequestData());
 
-    QByteArray array = request->getRequestData();
-    QBuffer* buffer = new QBuffer();
-    buffer->setData(array);
+        reply = manager->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
 
-    QNetworkReply* reply = manager->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
+        connect(reply, &QNetworkReply::finished, loop, &QEventLoop::quit);
+        connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
+        connect(reply, &QNetworkReply::finished, manager, &QNetworkAccessManager::deleteLater);
 
-    connect(reply, &QNetworkReply::finished, loop, &QEventLoop::quit);
-    connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
-    connect(reply, &QNetworkReply::finished, manager, &QNetworkAccessManager::deleteLater);
-
-    loop->exec();
+        loop->exec();
+    }
+    // todo: add condition when auth fail multiple times
+    while (!checkAuth(reply));
+    request->getResultPointer()->handleReply(reply);
 
     return static_cast<T>(request->getResultPointer());
 }
@@ -140,27 +141,15 @@ bool GoogleDriveAPI::checkAuth(QNetworkReply* reply)
 {
     if (reply->error() == QNetworkReply::AuthenticationRequiredError)
     {
+        QEventLoop* loop = new QEventLoop();
+        connect(this, &GoogleDriveAPI::authRecovered, loop, &QEventLoop::quit);
         emit authRequired();
 
-        GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
-        connect(this, &GoogleDriveAPI::authRecovered, [=](){
-            auto callbackFunction = result->getCallback();
-            callbackFunction();
-        });
+        loop->exec();
         return false;
     }
-    return true;
-}
-
-void GoogleDriveAPI::onRequestFinished()
-{
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if (!checkAuth(reply))
-        return;
-
-    GoogleAPIRequestResult* result = reply->property("result").value<GoogleAPIRequestResult*>();
-    result->handleReply(reply);
-    emit workDone();
+    else
+        return true;
 }
 
 void GoogleDriveAPI::loadFileTable()

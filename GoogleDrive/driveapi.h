@@ -50,15 +50,10 @@ class GoogleDriveAPI : public QObject, public IDataStore
         void authRequired();
         void authRecovered();
 
-        void workDone();
         void syncDone() override;
 
     public slots:
-        void test() override;
-
         void setToken(const QString& value) override;
-
-        void onRequestFinished();
 };
 
 #endif // GOOGLEDRIVEAPI_H
