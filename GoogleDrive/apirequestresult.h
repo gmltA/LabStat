@@ -90,6 +90,4 @@ class ListFilesRequestResult : public GoogleAPIRequestResult
         QVector<DriveFile> fileList;
 };
 
-Q_DECLARE_METATYPE(GoogleAPIRequestResult*)
-
 #endif // GOOGLEAPIREQUESTRESULT_H
