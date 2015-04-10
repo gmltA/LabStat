@@ -15,7 +15,6 @@ GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName
     qRegisterMetaType<DriveFileInfo>("DriveFileInfo");
     qRegisterMetaTypeStreamOperators<DriveFileInfo>("DriveFileInfo");
 
-    network = new QNetworkAccessManager();
     appRootDir = new DriveFile(_rootFolderName, "root", "application/vnd.google-apps.folder");
 
     connect(this, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
@@ -26,7 +25,6 @@ GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName
 
 GoogleDriveAPI::~GoogleDriveAPI()
 {
-    network->deleteLater();
 }
 
 void GoogleDriveAPI::init()
@@ -67,17 +65,8 @@ void GoogleDriveAPI::syncFile(DataSheet* dataFile)
 
 void GoogleDriveAPI::getFileSync(DriveFile* file)
 {
-    QNetworkAccessManager* mgr = new QNetworkAccessManager();
-
     GetFileRequest* request = new GetFileRequest(file);
-
-    QEventLoop* loop = new QEventLoop();
-    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
-    sendRequest(request, mgr);
-    loop->exec();
-
-    GetFileRequestResult* result = static_cast<GetFileRequestResult*>(request->getResultPointer());
+    //GetFileRequestResult* result = sendSyncRequest<GetFileRequestResult*>(request);
 }
 
 QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
@@ -110,57 +99,29 @@ void GoogleDriveAPI::updateFileSync(DriveFile* file)
 
 void GoogleDriveAPI::test()
 {
-    ListFilesRequest* request = new ListFilesRequest();
-
-    connect(this, &GoogleDriveAPI::workDone, [](){qDebug() << "empty";});
-    sendRequest(request);
-}
-
-void GoogleDriveAPI::createFile()
-{
-    DriveFile* file = new DriveFile("Test", "root", "text/plain");
-
-    QUrl url("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true");
-    InsertFileRequest* request = new InsertFileRequest(url, file);
-
-    sendRequest(request);
 }
 
 template<class T>
 T GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
 {
-    QNetworkAccessManager* mgr = new QNetworkAccessManager();
-
-    QEventLoop* loop = new QEventLoop();
-    connect(this, &GoogleDriveAPI::workDone, loop, &QEventLoop::quit);
-    connect(this, &GoogleDriveAPI::workDone, mgr, &QNetworkAccessManager::deleteLater);
-    sendRequest(request, mgr);
-    loop->exec();
-
-    return static_cast<T>(request->getResultPointer());
-}
-
-void GoogleDriveAPI::sendRequest(GoogleAPIRequest* request, QNetworkAccessManager* manager)
-{
-    if (!manager)
-        manager = network;
-
     request->setToken(token);
+
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    QEventLoop* loop = new QEventLoop();
 
     QByteArray array = request->getRequestData();
     QBuffer* buffer = new QBuffer();
     buffer->setData(array);
 
     QNetworkReply* reply = manager->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
-    request->getResultPointer()->setCallback([=](){
-        //todo: manager is in different thread!
-        this->sendRequest(request, manager);
-    });
 
-    reply->setProperty("result", QVariant::fromValue<GoogleAPIRequestResult*>(request->getResultPointer()));
-
-    connect(reply, &QNetworkReply::finished, this, &GoogleDriveAPI::onRequestFinished);
+    connect(reply, &QNetworkReply::finished, loop, &QEventLoop::quit);
     connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
+    connect(reply, &QNetworkReply::finished, manager, &QNetworkAccessManager::deleteLater);
+
+    loop->exec();
+
+    return static_cast<T>(request->getResultPointer());
 }
 
 QString GoogleDriveAPI::getToken() const

@@ -22,7 +22,6 @@ class IDataStore
         virtual void init() = 0;
         virtual void syncFile(DataSheet* dataFile) = 0;
 
-        virtual void createFile() = 0;
         virtual void test() = 0;
 
         virtual QString getToken() const = 0;

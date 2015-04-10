@@ -38,7 +38,6 @@ class GoogleDriveAPI : public QObject, public IDataStore
     private:
         bool checkAuth(QNetworkReply* reply);
 
-        QNetworkAccessManager* network;
         QString token;
 
         QHash<uint,DriveFileInfo> fileTable;
@@ -56,8 +55,6 @@ class GoogleDriveAPI : public QObject, public IDataStore
 
     public slots:
         void test() override;
-        void createFile() override;
-        void sendRequest(GoogleAPIRequest* request, QNetworkAccessManager* manager = nullptr);
 
         void setToken(const QString& value) override;
 
