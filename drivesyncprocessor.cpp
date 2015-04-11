@@ -1,7 +1,7 @@
 #include "drivesyncprocessor.h"
 
 DriveSyncProcessor::DriveSyncProcessor(GoogleDriveAPI* drive, QObject *parent)
-    : QObject(parent), IDataStore(Origin::OriginOnline), driveService(drive)
+    : QObject(parent), IDataStore(Origin::OriginOnline, "Google Drive"), driveService(drive)
 {
 
 }
