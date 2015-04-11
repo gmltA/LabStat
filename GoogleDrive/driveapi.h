@@ -4,6 +4,10 @@
 #include "apirequest.h"
 #include <QNetworkReply>
 
+#define VERBOSE(message) \
+    if (verboseOutput) \
+        qDebug() << message;
+
 class GoogleDriveAPI : public QObject
 {
         Q_OBJECT
@@ -25,12 +29,16 @@ class GoogleDriveAPI : public QObject
 
         QNetworkReply* sendRequest(GoogleAPIRequest request);
 
+        bool getVerboseOutput() const;
+        void setVerboseOutput(bool value);
+
     private:
         bool checkAuth(QNetworkReply* reply);
 
         QString token;
         DriveFile* appRootDir;
 
+        bool verboseOutput;
 
     signals:
         void authRequired();

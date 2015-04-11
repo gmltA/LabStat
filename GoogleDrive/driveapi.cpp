@@ -24,8 +24,8 @@ void GoogleDriveAPI::init()
     auto list = listFiles(appRootDir);
     if (!list.isEmpty())
     {
+        VERBOSE("folder found")
         appRootDir->fill(list.first());
-        qDebug() << "folder found";
     }
     else
         createFile(appRootDir);
@@ -35,7 +35,7 @@ void GoogleDriveAPI::getFile(DriveFile* file)
 {
     QNetworkReply* reply = sendRequest(GetFileRequest(file));
     QString replyData = reply->readAll();
-    qDebug() << replyData;
+    VERBOSE(replyData)
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
     QJsonObject fileObject = jsonDoc.object();
@@ -71,10 +71,10 @@ QVector<DriveFile> GoogleDriveAPI::listFiles(QString searchQuery)
 bool GoogleDriveAPI::createFile(DriveFile* file)
 {
     QNetworkReply* reply = sendRequest(InsertFileRequest(file));
-    QString jsonData = reply->readAll();
-    qDebug() << jsonData;
+    QString replyData = reply->readAll();
+    VERBOSE(replyData)
 
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData.toUtf8());
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
     QJsonObject fileObject = jsonDoc.object();
     if (fileObject.contains("id"))
     {
@@ -87,7 +87,7 @@ bool GoogleDriveAPI::createFile(DriveFile* file)
 bool GoogleDriveAPI::updateFile(DriveFile* file)
 {
     QNetworkReply* reply = sendRequest(UpdateFileRequest(file));
-    qDebug() << reply->readAll();
+    VERBOSE(reply->readAll())
     return true;
 }
 
@@ -124,7 +124,7 @@ QString GoogleDriveAPI::getToken() const
 
 void GoogleDriveAPI::setToken(const QString& value)
 {
-    qDebug() << "token set " << value;
+    VERBOSE("token set " + value)
     token = value;
     emit authRecovered();
 }
