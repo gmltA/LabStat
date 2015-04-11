@@ -77,7 +77,7 @@ ApplicationWindow {
 
             Connections {
                 target: SyncHandler
-                onProcessorAdded: {
+                onProcessorAddCalled: {
                     var component = Qt.createComponent("NavigationDrawer/NavigationDrawerSyncItem.qml");
                     var listItem = component.createObject(syncProcessors);
 
@@ -155,6 +155,7 @@ ApplicationWindow {
                     }
 
                     NavigationDrawerItem {
+                        id: addProcessorItem
                         icon: ""
                         caption: "Add sync processor"
                     }

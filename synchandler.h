@@ -43,12 +43,14 @@ class SyncHandler : public QObject
         ~SyncHandler() {}
 
         void sync(IDataStore* processor);
+        QVariantMap buildProcessorData(IDataStore* processor);
 
         static SyncHandler* instance;
         QVector<IDataStore*> syncProcessors;
         QSignalMapper* signalMapper;
 
     signals:
+        void processorAddCalled(QVariantMap processorData);
         void processorAdded(QVariantMap processorData);
         void syncStopped(int processorId);
 

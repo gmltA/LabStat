@@ -7,28 +7,42 @@ Item {
     property alias caption: item.caption
     property int processorId
 
-    function syncStopped(stoppedProcessorId)
-    {
+    function processorAdded(processorData) {
+        if (processorId === -1) {
+            if (processorData['result']) {
+                processorId = processorData['id']
+                state = ""
+            } else
+                root.destroy()
+        }
+    }
+
+    function syncStopped(stoppedProcessorId) {
         if (stoppedProcessorId === processorId)
-            state = "";
+            state = ""
     }
 
     height: 48 * dp
     anchors.left: parent.left
     anchors.right: parent.right
 
+    state: "inactive"
+
     Connections {
         target: item
         onClicked: {
-            SyncHandler.sync(processorId);
-            state = "syncing";
+            SyncHandler.sync(processorId)
+            state = "syncing"
         }
     }
 
     Connections {
         target: SyncHandler
         onSyncStopped: {
-            syncStopped(processorId);
+            syncStopped(processorId)
+        }
+        onProcessorAdded: {
+            processorAdded(processorData)
         }
     }
 
@@ -46,15 +60,22 @@ Item {
             alwaysRunToEnd: true
             loops: Animation.Infinite
 
-            NumberAnimation { from: 0; to: 360; duration: 500; easing.type: Easing.InOutQuad }
-            PauseAnimation { duration: 250 }
+            NumberAnimation {
+                from: 0
+                to: 360
+                duration: 500
+                easing.type: Easing.InOutQuad
+            }
+            PauseAnimation {
+                duration: 250
+            }
         }
 
         rightIconItem.states: [
             State {
                 name: "hidden"
                 PropertyChanges {
-                    target: item.rightIconItem;
+                    target: item.rightIconItem
                     visible: false
                     font.pointSize: 1
                 }
@@ -62,21 +83,23 @@ Item {
             State {
                 name: "visible"
                 PropertyChanges {
-                    target: item.rightIconItem;
+                    target: item.rightIconItem
                     visible: true
                 }
             }
         ]
         rightIconItem.transitions: [
             Transition {
-                from: "hidden"; to: "visible";
+                from: "hidden"
+                to: "visible"
                 NumberAnimation {
                     properties: "font.pointSize"
                     easing.type: Easing.InOutQuad
                 }
             },
             Transition {
-                from: "visible"; to: "hidden";
+                from: "visible"
+                to: "hidden"
                 PropertyAnimation {
                     properties: "visible"
                     easing.type: Easing.InOutQuad
@@ -91,15 +114,29 @@ Item {
 
     states: [
         State {
+            name: "inactive"
+
+            PropertyChanges {
+                target: item
+                enabled: false
+                rightIcon: ""
+            }
+
+            PropertyChanges {
+                target: item.rightIconItem
+                state: "visible"
+            }
+        },
+        State {
             name: "syncing"
 
             PropertyChanges {
-                target: item;
+                target: item
                 enabled: false
             }
 
             PropertyChanges {
-                target: iconAnim;
+                target: iconAnim
                 running: true
             }
 
@@ -110,4 +147,3 @@ Item {
         }
     ]
 }
-
