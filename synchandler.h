@@ -38,7 +38,6 @@ class SyncHandler : public QObject
 
             return SyncHandler::getInstance();
         }
-
     private:
         SyncHandler();
         ~SyncHandler() {}
@@ -52,6 +51,9 @@ class SyncHandler : public QObject
     signals:
         void processorAdded(QVariantMap processorData);
         void syncStopped(int processorId);
+
+    private slots:
+        void checkProcessorInit(bool success);
 
 };
 

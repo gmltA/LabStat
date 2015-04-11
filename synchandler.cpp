@@ -40,7 +40,7 @@ void SyncHandler::sync(IDataStore* processor)
     }
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
-    QtConcurrent::run(processor, &IDataStore::init);
+    //QtConcurrent::run(processor, &IDataStore::init);
 }
 
 void SyncHandler::sync(IDataStore::Origin origin)
@@ -56,16 +56,27 @@ void SyncHandler::sync(IDataStore::Origin origin)
 
 void SyncHandler::registerProcessor(IDataStore* processor)
 {
-    //todo: check if we have this processor in collection already
-    syncProcessors.push_back(processor);
+    connect(dynamic_cast<QObject*>(processor), SIGNAL(initFinished(bool)), this, SLOT(checkProcessorInit(bool)));
+    processor->init();
+}
 
-    signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));
+void SyncHandler::checkProcessorInit(bool success)
+{
+    if (success)
+    {
+        IDataStore* processor = qobject_cast<IDataStore*>(sender());
 
-    QVariantMap processorData;
-    processorData["id"] = syncProcessors.indexOf(processor);
-    processorData["title"] = "Processor";
-    processorData["online"] = processor->getOrigin() == IDataStore::OriginOnline ? 1 : 0;
-    emit processorAdded(processorData);
+        //todo: check if we have this processor in collection already
+        syncProcessors.push_back(processor);
+
+        signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));
+
+        QVariantMap processorData;
+        processorData["id"] = syncProcessors.indexOf(processor);
+        processorData["title"] = processor->getTitle();
+        processorData["online"] = processor->getOrigin() == IDataStore::OriginOnline ? 1 : 0;
+        emit processorAdded(processorData);
+    }
 }
 
 void SyncHandler::unregisterProcessor(IDataStore* processor)
