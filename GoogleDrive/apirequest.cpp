@@ -10,8 +10,8 @@ GoogleAPIRequest::GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArra
     setAttribute(QNetworkRequest::CustomVerbAttribute, _verb);
 }
 
-InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
-    : GoogleAPIRequest(_requestUrl, "POST")
+InsertFileRequest::InsertFileRequest(DriveFile* _file)
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true"), "POST")
 {
     QString metadata = QString("{"
                                    "\"title\": \"%1\","
@@ -43,8 +43,8 @@ InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
     result = new InsertFileRequestResult(_file);
 }
 
-UpdateFileRequest::UpdateFileRequest(QUrl _requestUrl, DriveFile* _file)
-    : GoogleAPIRequest(_requestUrl, "PUT")
+UpdateFileRequest::UpdateFileRequest(DriveFile* _file)
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files/" + _file->getId() + "?uploadType=multipart"), "PUT")
 {
     QString metadata = QString("{"
                                    "\"title\": \"%1\","

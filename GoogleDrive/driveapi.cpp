@@ -51,13 +51,13 @@ QVector<DriveFile> GoogleDriveAPI::listFiles(QString searchQuery)
 
 void GoogleDriveAPI::createFile(DriveFile* file)
 {
-    InsertFileRequest* request = new InsertFileRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true"), file);
+    InsertFileRequest* request = new InsertFileRequest(file);
     sendRequest(request);
 }
 
 void GoogleDriveAPI::updateFile(DriveFile* file)
 {
-    UpdateFileRequest* request = new UpdateFileRequest("https://www.googleapis.com/upload/drive/v2/files/" + file->getId() + "?uploadType=multipart", file);
+    UpdateFileRequest* request = new UpdateFileRequest(file);
     sendRequest(request);
 }
 

@@ -41,9 +41,7 @@ class UserInfoRequest : public GoogleAPIRequest
 class UpdateFileRequest : public GoogleAPIRequest
 {
     public:
-        // todo: move URL into private methods of request
-        UpdateFileRequest(QUrl _requestUrl, DriveFile* _file);
-
+        UpdateFileRequest(DriveFile* _file);
         UpdateFileRequestResult* getResultPointer() const;
 
     private:
@@ -53,9 +51,7 @@ class UpdateFileRequest : public GoogleAPIRequest
 class InsertFileRequest : public GoogleAPIRequest
 {
     public:
-        // todo: move URL into private methods of request
-        InsertFileRequest(QUrl _requestUrl, DriveFile* _file);
-
+        InsertFileRequest(DriveFile* _file);
         InsertFileRequestResult* getResultPointer() const;
 
     private:

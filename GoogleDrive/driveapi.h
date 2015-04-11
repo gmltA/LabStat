@@ -17,11 +17,11 @@ class GoogleDriveAPI : public QObject
         void init();
 
         void createFile(DriveFile* file);
+        void updateFile(DriveFile* file);
         void getFile(DriveFile* file);
+
         QVector<DriveFile> listFiles(DriveFile* templateFile);
         QVector<DriveFile> listFiles(QString searchQuery);
-
-        void updateFile(DriveFile* file);
 
         template<class T = GoogleAPIRequestResult*>
         T sendRequest(GoogleAPIRequest* request);
@@ -30,7 +30,6 @@ class GoogleDriveAPI : public QObject
         bool checkAuth(QNetworkReply* reply);
 
         QString token;
-
         DriveFile* appRootDir;
 
     signals:
