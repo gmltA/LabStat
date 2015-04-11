@@ -10,8 +10,8 @@ GoogleAPIRequest::GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArra
     setAttribute(QNetworkRequest::CustomVerbAttribute, _verb);
 }
 
-InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
-    : GoogleAPIRequest(_requestUrl, "POST")
+InsertFileRequest::InsertFileRequest(DriveFile* _file)
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true"), "POST")
 {
     QString metadata = QString("{"
                                    "\"title\": \"%1\","
@@ -39,12 +39,10 @@ InsertFileRequest::InsertFileRequest(QUrl _requestUrl, DriveFile* _file)
 
 
     setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
-
-    result = new InsertFileRequestResult(_file);
 }
 
-UpdateFileRequest::UpdateFileRequest(QUrl _requestUrl, DriveFile* _file)
-    : GoogleAPIRequest(_requestUrl, "PUT")
+UpdateFileRequest::UpdateFileRequest(DriveFile* _file)
+    : GoogleAPIRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files/" + _file->getId() + "?uploadType=multipart"), "PUT")
 {
     QString metadata = QString("{"
                                    "\"title\": \"%1\","
@@ -72,14 +70,6 @@ UpdateFileRequest::UpdateFileRequest(QUrl _requestUrl, DriveFile* _file)
 
 
     setRawHeader("Content-Length", QString::number(requestData.size()).toLatin1());
-
-    result = new UpdateFileRequestResult(_file);
-}
-
-GoogleAPIRequest::~GoogleAPIRequest()
-{
-    //todo: uncomment later
-    //delete result;
 }
 
 QByteArray GoogleAPIRequest::getRequestData() const
@@ -90,11 +80,6 @@ QByteArray GoogleAPIRequest::getRequestData() const
 void GoogleAPIRequest::setRequestData(const QByteArray& value)
 {
     requestData = value;
-}
-
-GoogleAPIRequestResult* GoogleAPIRequest::getResultPointer() const
-{
-    return result;
 }
 
 QString GoogleAPIRequest::getToken() const
@@ -108,21 +93,14 @@ void GoogleAPIRequest::setToken(const QString& value)
     setRawHeader("Authorization", QString("Bearer %1").arg(token).toLatin1());
 }
 
-InsertFileRequestResult* InsertFileRequest::getResultPointer() const
-{
-    return static_cast<InsertFileRequestResult*>(GoogleAPIRequest::getResultPointer());
-}
-
 UserInfoRequest::UserInfoRequest()
     : GoogleAPIRequest(QUrl("https://www.googleapis.com/oauth2/v2/userinfo"), "GET")
 {
-    result = new UserInfoRequestResult();
 }
 
 ListFilesRequest::ListFilesRequest()
     : GoogleAPIRequest(QUrl("https://www.googleapis.com/drive/v2/files"), "GET")
 {
-    result = new ListFilesRequestResult();
 }
 
 ListFilesRequest::ListFilesRequest(QString searchQuery)
@@ -133,12 +111,9 @@ ListFilesRequest::ListFilesRequest(QString searchQuery)
         QString query = "?q=" + QUrl::toPercentEncoding(searchQuery);
         setUrl(url().toString() + query);
     }
-
-    result = new ListFilesRequestResult();
 }
 
 GetFileRequest::GetFileRequest(DriveFile* _file)
     : GoogleAPIRequest("https://www.googleapis.com/drive/v2/files/"+_file->getId(), "GET")
 {
-    result = new GetFileRequestResult(_file);
 }

@@ -1,59 +1,51 @@
 #ifndef GOOGLEDRIVEAPI_H
 #define GOOGLEDRIVEAPI_H
 
-#include "../interface.datastore.h"
-#include "../interface.authclient.h"
 #include "apirequest.h"
-#include <functional>
+#include <QNetworkReply>
 
-#include <QNetworkAccessManager>
+#define VERBOSE(message) \
+    if (verboseOutput) \
+        qDebug() << message;
 
-class GoogleDriveAPI : public QObject, public IDataStore
+class GoogleDriveAPI : public QObject
 {
         Q_OBJECT
-        Q_INTERFACES(IDataStore)
 
     public:
-        GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject *parent = 0);
+        GoogleDriveAPI(QString _rootFolderName, QObject *parent = 0);
         ~GoogleDriveAPI();
 
-        QString getToken() const override;
+        QString getToken() const;
 
-        void init() override final;
+        void init();
 
-        void syncFile(DataSheet* dataFile) override final;
+        bool createFile(DriveFile* file);
+        bool updateFile(DriveFile* file);
+        void getFile(DriveFile* file);
 
-        void createFileSync(DriveFile* file);
-        void getFileSync(DriveFile* file);
-        QVector<DriveFile> listFilesSync(DriveFile* templateFile);
-        QVector<DriveFile> listFilesSync(QString searchQuery);
+        QVector<DriveFile> listFiles(DriveFile* templateFile);
+        QVector<DriveFile> listFiles(QString searchQuery);
 
-        void updateFileSync(DriveFile* file);
+        QNetworkReply* sendRequest(GoogleAPIRequest request);
 
-        template<class T = GoogleAPIRequestResult*>
-        T sendSyncRequest(GoogleAPIRequest* request);
+        bool getVerboseOutput() const;
+        void setVerboseOutput(bool value);
 
-        void loadFileTable();
-        void storeFileTable();
     private:
         bool checkAuth(QNetworkReply* reply);
 
         QString token;
-
-        QHash<uint,DriveFileInfo> fileTable;
-
         DriveFile* appRootDir;
 
-        IAuthClient* authClient;
+        bool verboseOutput;
 
     signals:
         void authRequired();
         void authRecovered();
 
-        void syncDone() override;
-
     public slots:
-        void setToken(const QString& value) override;
+        void setToken(const QString& value);
 };
 
 #endif // GOOGLEDRIVEAPI_H

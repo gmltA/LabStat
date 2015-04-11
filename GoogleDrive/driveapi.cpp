@@ -2,25 +2,17 @@
 
 #include <QBuffer>
 #include <QEventLoop>
-#include <QNetworkReply>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QNetworkRequest>
-#include <QSettings>
-#include <QUrl>
 
-#include "../googleauthclient.h"
-
-GoogleDriveAPI::GoogleDriveAPI(IAuthClient* _authClient, QString _rootFolderName, QObject* parent)
-    : QObject(parent), IDataStore(IDataStore::OriginOnline), authClient(_authClient)
+GoogleDriveAPI::GoogleDriveAPI(QString _rootFolderName, QObject* parent)
+ : QObject(parent), verboseOutput(false)
 {
     qRegisterMetaType<DriveFileInfo>("DriveFileInfo");
     qRegisterMetaTypeStreamOperators<DriveFileInfo>("DriveFileInfo");
 
     appRootDir = new DriveFile(_rootFolderName, "root", "application/vnd.google-apps.folder");
-
-    connect(this, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
-    connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), this, SLOT(setToken(QString)));
-
-    loadFileTable();
 }
 
 GoogleDriveAPI::~GoogleDriveAPI()
@@ -29,88 +21,89 @@ GoogleDriveAPI::~GoogleDriveAPI()
 
 void GoogleDriveAPI::init()
 {
-    auto list = listFilesSync(appRootDir);
+    auto list = listFiles(appRootDir);
     if (!list.isEmpty())
+    {
+        VERBOSE("folder found")
         appRootDir->fill(list.first());
-    else
-        createFileSync(appRootDir);
-    emit syncDone();
-}
-
-void GoogleDriveAPI::syncFile(DataSheet* dataFile)
-{
-    DriveFile* file = new DriveFile(dataFile);
-    file->setParentId(appRootDir->getId());
-
-    if (fileTable.contains(dataFile->getId()))
-    {
-        //check modify date
-        file->setId(fileTable[dataFile->getId()].id);
-        getFileSync(file);
     }
     else
-    {
-        createFileSync(file);
-        DriveFileInfo fileInfo;
-        fileInfo.id = file->getId();
-        fileInfo.modifiedDate = QDateTime::currentDateTime();
-
-        fileTable[dataFile->getId()] = fileInfo;
-
-        storeFileTable();
-    }
-
-    delete file;
+        createFile(appRootDir);
 }
 
-void GoogleDriveAPI::getFileSync(DriveFile* file)
+void GoogleDriveAPI::getFile(DriveFile* file)
 {
-    GetFileRequest* request = new GetFileRequest(file);
-    //GetFileRequestResult* result = sendSyncRequest<GetFileRequestResult*>(request);
+    QNetworkReply* reply = sendRequest(GetFileRequest(file));
+    QString replyData = reply->readAll();
+    VERBOSE(replyData)
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
+    QJsonObject fileObject = jsonDoc.object();
+
+    QDateTime date = QDateTime::fromString(fileObject["modifiedDate"].toString(), Qt::ISODate);
+    file->setModifiedDate(date);
 }
 
-QVector<DriveFile> GoogleDriveAPI::listFilesSync(DriveFile* templateFile)
+QVector<DriveFile> GoogleDriveAPI::listFiles(DriveFile* templateFile)
 {
     if (!templateFile)
         return QVector<DriveFile>();
 
-    return listFilesSync(templateFile->buildSearchQuery());
+    return listFiles(templateFile->buildSearchQuery());
 }
 
-QVector<DriveFile> GoogleDriveAPI::listFilesSync(QString searchQuery)
+QVector<DriveFile> GoogleDriveAPI::listFiles(QString searchQuery)
 {
-    ListFilesRequest* request = new ListFilesRequest(searchQuery);
-    ListFilesRequestResult* result = sendSyncRequest<ListFilesRequestResult*>(request);
+    QVector<DriveFile> fileList;
 
-    return result->getFileList();
+    QNetworkReply* reply = sendRequest(ListFilesRequest(searchQuery));
+    QString replyData = reply->readAll();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
+    QJsonObject jsonResult = jsonDoc.object();
+
+    for (auto item: jsonResult["items"].toArray())
+        fileList.push_back(DriveFile(item.toObject()));
+
+    return fileList;
 }
 
-void GoogleDriveAPI::createFileSync(DriveFile* file)
+bool GoogleDriveAPI::createFile(DriveFile* file)
 {
-    InsertFileRequest* request = new InsertFileRequest(QUrl("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart&convert=true"), file);
-    sendSyncRequest(request);
+    QNetworkReply* reply = sendRequest(InsertFileRequest(file));
+    QString replyData = reply->readAll();
+    VERBOSE(replyData)
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(replyData.toUtf8());
+    QJsonObject fileObject = jsonDoc.object();
+    if (fileObject.contains("id"))
+    {
+        file->setId(fileObject["id"].toString());
+        return true;
+    }
+    return false;
 }
 
-void GoogleDriveAPI::updateFileSync(DriveFile* file)
+bool GoogleDriveAPI::updateFile(DriveFile* file)
 {
-    UpdateFileRequest* request = new UpdateFileRequest("https://www.googleapis.com/upload/drive/v2/files/" + file->getId() + "?uploadType=multipart", file);
-    sendSyncRequest(request);
+    QNetworkReply* reply = sendRequest(UpdateFileRequest(file));
+    VERBOSE(reply->readAll())
+    return true;
 }
 
-template<class T>
-T GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
+QNetworkReply* GoogleDriveAPI::sendRequest(GoogleAPIRequest request)
 {
     QNetworkReply* reply;
     do
     {
-        request->setToken(token);
+        request.setToken(token);
         QNetworkAccessManager* manager = new QNetworkAccessManager();
         QEventLoop* loop = new QEventLoop();
 
         QBuffer* buffer = new QBuffer();
-        buffer->setData(request->getRequestData());
+        buffer->setData(request.getRequestData());
 
-        reply = manager->sendCustomRequest(*request, request->attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
+        reply = manager->sendCustomRequest(request, request.attribute(QNetworkRequest::CustomVerbAttribute).toByteArray(), buffer);
 
         connect(reply, &QNetworkReply::finished, loop, &QEventLoop::quit);
         connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
@@ -120,9 +113,8 @@ T GoogleDriveAPI::sendSyncRequest(GoogleAPIRequest* request)
     }
     // todo: add condition when auth fail multiple times
     while (!checkAuth(reply));
-    request->getResultPointer()->handleReply(reply);
 
-    return static_cast<T>(request->getResultPointer());
+    return reply;
 }
 
 QString GoogleDriveAPI::getToken() const
@@ -132,7 +124,7 @@ QString GoogleDriveAPI::getToken() const
 
 void GoogleDriveAPI::setToken(const QString& value)
 {
-    qDebug() << "token set " << value;
+    VERBOSE("token set " + value)
     token = value;
     emit authRecovered();
 }
@@ -151,25 +143,12 @@ bool GoogleDriveAPI::checkAuth(QNetworkReply* reply)
     else
         return true;
 }
-
-void GoogleDriveAPI::loadFileTable()
+bool GoogleDriveAPI::getVerboseOutput() const
 {
-    QSettings settings;
-    QVariantHash storeHash = settings.value("DriveAPIFileTable").toHash();
-    for (auto iter = storeHash.begin(); iter != storeHash.end(); iter++)
-    {
-        fileTable[iter.key().toUInt()] = iter.value().value<DriveFileInfo>();
-        qDebug() << fileTable[iter.key().toUInt()].id  << " " << fileTable[iter.key().toUInt()].modifiedDate;
-    }
-
-    qDebug() << "FileTable entries: " << fileTable.size();
+    return verboseOutput;
 }
 
-void GoogleDriveAPI::storeFileTable()
+void GoogleDriveAPI::setVerboseOutput(bool value)
 {
-    QSettings settings;
-    QVariantHash storeHash;
-    for (auto iter = fileTable.begin(); iter != fileTable.end(); iter++)
-        storeHash[QString::number(iter.key())] = QVariant::fromValue<DriveFileInfo>(iter.value());
-    settings.setValue("DriveAPIFileTable", storeHash);
+    verboseOutput = value;
 }

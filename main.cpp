@@ -8,10 +8,11 @@
 #endif
 
 #include "GoogleDrive/driveapi.h"
-#include "drivesyncprocessor.h"
 #include "googleauthclient.h"
 #include "googledesktopauthclient.h"
+
 #include "synchandler.h"
+#include "drivesyncprocessor.h"
 
 int main(int argc, char *argv[])
 {
@@ -72,9 +73,15 @@ int main(int argc, char *argv[])
 #else
     authClient = new GoogleDesktopAuthClient();
 #endif
-    DriveSyncProcessor* drive = new DriveSyncProcessor(new GoogleDriveAPI(authClient, "LabStat"));
+    GoogleDriveAPI* drive = new GoogleDriveAPI("LabStat");
+    drive->setVerboseOutput(true);
 
-    SyncHandler::getInstance()->registerProcessor(drive);
+    QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
+    QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
+    drive->init();
+
+    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive);
+    SyncHandler::getInstance()->registerProcessor(driveProcessor);
 
     return app.exec();
 }

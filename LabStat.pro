@@ -12,7 +12,6 @@ SOURCES += main.cpp \
     GoogleDrive/driveapi.cpp \
     GoogleDrive/drivefile.cpp \
     synchandler.cpp \
-    GoogleDrive/apirequestresult.cpp \
     googledesktopauthclient.cpp \
     datasheet.cpp \
     drivesyncprocessor.cpp
@@ -51,7 +50,6 @@ HEADERS += \
     interface.dataitem.h \
     GoogleDrive/drivefile.h \
     synchandler.h \
-    GoogleDrive/apirequestresult.h \
     interface.authclient.h \
     googledesktopauthclient.h \
     datasheet.h \
