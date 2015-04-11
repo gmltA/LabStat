@@ -2,7 +2,7 @@
 #define GOOGLEDRIVEAPI_H
 
 #include "apirequest.h"
-#include <functional>
+#include <QNetworkReply>
 
 class GoogleDriveAPI : public QObject
 {
@@ -16,21 +16,21 @@ class GoogleDriveAPI : public QObject
 
         void init();
 
-        void createFile(DriveFile* file);
-        void updateFile(DriveFile* file);
+        bool createFile(DriveFile* file);
+        bool updateFile(DriveFile* file);
         void getFile(DriveFile* file);
 
         QVector<DriveFile> listFiles(DriveFile* templateFile);
         QVector<DriveFile> listFiles(QString searchQuery);
 
-        template<class T = GoogleAPIRequestResult*>
-        T sendRequest(GoogleAPIRequest* request);
+        QNetworkReply* sendRequest(GoogleAPIRequest request);
 
     private:
         bool checkAuth(QNetworkReply* reply);
 
         QString token;
         DriveFile* appRootDir;
+
 
     signals:
         void authRequired();

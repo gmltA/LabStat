@@ -2,7 +2,6 @@
 #define GOOGLEAPIREQUEST_H
 
 #include "drivefile.h"
-#include "apirequestresult.h"
 
 #include <QNetworkRequest>
 #include <QObject>
@@ -12,18 +11,14 @@ class GoogleAPIRequest : public QNetworkRequest
 {
     public:
         GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArray _data = 0);
-        ~GoogleAPIRequest();
 
         QByteArray getRequestData() const;
         void setRequestData(const QByteArray& value);
-
-        GoogleAPIRequestResult* getResultPointer() const;
 
         QString getToken() const;
         void setToken(const QString& value);
 
     protected:
-        GoogleAPIRequestResult* result;
         QByteArray requestData;
         QString token;
 
@@ -42,7 +37,6 @@ class UpdateFileRequest : public GoogleAPIRequest
 {
     public:
         UpdateFileRequest(DriveFile* _file);
-        UpdateFileRequestResult* getResultPointer() const;
 
     private:
         const QString requestBoundary = "ls_delim_boundary";
@@ -52,7 +46,6 @@ class InsertFileRequest : public GoogleAPIRequest
 {
     public:
         InsertFileRequest(DriveFile* _file);
-        InsertFileRequestResult* getResultPointer() const;
 
     private:
         const QString requestBoundary = "ls_delim_boundary";

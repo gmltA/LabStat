@@ -71,7 +71,11 @@ int main(int argc, char *argv[])
 #else
     authClient = new GoogleDesktopAuthClient();
 #endif
-    //GoogleDriveAPI* drive = new GoogleDriveAPI("LabStat");
+    GoogleDriveAPI* drive = new GoogleDriveAPI("LabStat");
+
+    QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
+    QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
+    drive->init();
 
     //SyncHandler::getInstance()->registerProcessor(drive);
 
