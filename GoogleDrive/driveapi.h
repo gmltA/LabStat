@@ -18,7 +18,7 @@ class GoogleDriveAPI : public QObject
 
         QString getToken() const;
 
-        void init();
+        bool init();
 
         bool createFile(DriveFile* file);
         bool updateFile(DriveFile* file);

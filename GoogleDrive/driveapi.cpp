@@ -19,16 +19,18 @@ GoogleDriveAPI::~GoogleDriveAPI()
 {
 }
 
-void GoogleDriveAPI::init()
+bool GoogleDriveAPI::init()
 {
     auto list = listFiles(appRootDir);
     if (!list.isEmpty())
     {
         VERBOSE("folder found")
         appRootDir->fill(list.first());
+
+        return true;
     }
     else
-        createFile(appRootDir);
+        return createFile(appRootDir);
 }
 
 void GoogleDriveAPI::getFile(DriveFile* file)

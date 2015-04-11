@@ -26,6 +26,7 @@ class IDataStore
         void setOrigin(const Origin& value) { origin = value; }
 
     signals:
+        virtual void initFinished(bool success) = 0;
         virtual void syncDone() = 0;
 
     private:

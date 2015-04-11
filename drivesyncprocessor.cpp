@@ -13,7 +13,7 @@ DriveSyncProcessor::~DriveSyncProcessor()
 
 void DriveSyncProcessor::init()
 {
-
+    emit initFinished(driveService->init());
 }
 
 void DriveSyncProcessor::syncFile(DataSheet* dataFile)

@@ -78,7 +78,6 @@ int main(int argc, char *argv[])
 
     QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
-    drive->init();
 
     DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive);
     SyncHandler::getInstance()->registerProcessor(driveProcessor);

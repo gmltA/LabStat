@@ -9,6 +9,7 @@ class DriveSyncProcessor : public QObject, public IDataStore
 {
         Q_OBJECT
         Q_INTERFACES(IDataStore)
+
     public:
         DriveSyncProcessor(GoogleDriveAPI* drive, QObject *parent = 0);
         ~DriveSyncProcessor();
@@ -23,6 +24,7 @@ class DriveSyncProcessor : public QObject, public IDataStore
         GoogleDriveAPI* driveService;
 
     signals:
+        void initFinished(bool success) override final;
         void syncDone() override final;
 
     public slots:

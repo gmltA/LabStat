@@ -11,7 +11,6 @@ class GoogleAuthClient : public QObject, public IAuthClient
 
     public:
         GoogleAuthClient(QObject *parent = 0);
-
         ~GoogleAuthClient() {}
 
 
