@@ -22,13 +22,8 @@ class IDataStore
         virtual void init() = 0;
         virtual void syncFile(DataSheet* dataFile) = 0;
 
-        virtual QString getToken() const = 0;
-
         Origin getOrigin() const { return origin; }
         void setOrigin(const Origin& value) { origin = value; }
-
-    public slots:
-        virtual void setToken(const QString& value) = 0;
 
     signals:
         virtual void syncDone() = 0;

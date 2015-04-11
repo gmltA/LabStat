@@ -8,6 +8,7 @@
 #endif
 
 #include "GoogleDrive/driveapi.h"
+#include "drivesyncprocessor.h"
 #include "googleauthclient.h"
 #include "googledesktopauthclient.h"
 #include "synchandler.h"
@@ -71,8 +72,7 @@ int main(int argc, char *argv[])
 #else
     authClient = new GoogleDesktopAuthClient();
 #endif
-    GoogleDriveAPI* drive = new GoogleDriveAPI(authClient, "LabStat");
-
+    DriveSyncProcessor* drive = new DriveSyncProcessor(new GoogleDriveAPI(authClient, "LabStat"));
 
     SyncHandler::getInstance()->registerProcessor(drive);
 

@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     synchandler.cpp \
     GoogleDrive/apirequestresult.cpp \
     googledesktopauthclient.cpp \
-    datasheet.cpp
+    datasheet.cpp \
+    drivesyncprocessor.cpp
 
 RESOURCES += qml.qrc
 
@@ -53,4 +54,5 @@ HEADERS += \
     GoogleDrive/apirequestresult.h \
     interface.authclient.h \
     googledesktopauthclient.h \
-    datasheet.h
+    datasheet.h \
+    drivesyncprocessor.h
