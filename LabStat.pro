@@ -35,10 +35,18 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerDivider.qml \
     QML/NavigationDrawer/NavigationDrawerHeader.qml \
     QML/NavigationDrawer/NavigationDrawerSyncItem.qml \
-    QML/Shadow.qml \
-    QML/MaterialShadow.qml \
     QML/PopupDialog.qml \
-    QML/PopupDialogButton.qml
+    QML/PopupDialogButton.qml \
+    QML/QuickAndroid/InverseMouseArea.qml \
+    QML/QuickAndroid/MaterialShadow.qml \
+    QML/QuickAndroid/PopupArea.qml \
+    QML/QuickAndroid/AnimationLoader.qml \
+    QML/QuickAndroid/anim/ActivityEnter.qml \
+    QML/QuickAndroid/anim/ActivityExit.qml \
+    QML/QuickAndroid/anim/FastFadeIn.qml \
+    QML/QuickAndroid/anim/FastFadeOut.qml \
+    QML/QuickAndroid/anim/GrowFadeIn.qml \
+    QML/QuickAndroid/anim/ShrinkFadeOut.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

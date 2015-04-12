@@ -10,10 +10,19 @@
         <file>QML/NavigationDrawer/NavigationDrawerHeader.qml</file>
         <file>QML/NavigationDrawer/NavigationDrawerSubheader.qml</file>
         <file>QML/NavigationDrawer/NavigationDrawerSyncItem.qml</file>
-        <file>QML/Shadow.qml</file>
-        <file>QML/MaterialShadow.qml</file>
         <file>QML/PopupDialog.qml</file>
         <file>QML/PopupDialogButton.qml</file>
+        <file>QML/QuickAndroid/InverseMouseArea.qml</file>
+        <file>QML/QuickAndroid/MaterialShadow.qml</file>
+        <file>QML/QuickAndroid/PopupArea.qml</file>
+        <file>QML/QuickAndroid/AnimationLoader.qml</file>
+        <file>QML/QuickAndroid/anim/ActivityEnter.qml</file>
+        <file>QML/QuickAndroid/anim/ActivityExit.qml</file>
+        <file>QML/QuickAndroid/anim/FastFadeIn.qml</file>
+        <file>QML/QuickAndroid/anim/FastFadeOut.qml</file>
+        <file>QML/QuickAndroid/anim/GrowFadeIn.qml</file>
+        <file>QML/QuickAndroid/anim/ShrinkFadeOut.qml</file>
+        <file>QML/QuickAndroid/Shadow.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>
