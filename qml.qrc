@@ -13,6 +13,7 @@
         <file>QML/Shadow.qml</file>
         <file>QML/MaterialShadow.qml</file>
         <file>QML/PopupDialog.qml</file>
+        <file>QML/PopupDialogButton.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

@@ -73,37 +73,10 @@ Rectangle {
             layoutDirection: Qt.RightToLeft
             spacing: 8 * dp
 
-            Item {
-                anchors.verticalCenter: parent.verticalCenter
-                height: 36 * dp
-                width: childrenRect.width + 16 * dp
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    text: "Button"
-                    font.family: "Roboto"
-                    font.weight: Font.DemiBold
-                    font.pixelSize: 14
-                    color: "#212121"
-                    font.capitalization: Font.AllUppercase
-                }
+            PopupDialogButton {
             }
-            Item {
-                anchors.verticalCenter: parent.verticalCenter
-                height: 36 * dp
-                width: childrenRect.width + 16 * dp
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
 
-                    text: "Button"
-                    font.family: "Roboto"
-                    font.weight: Font.DemiBold
-                    font.pixelSize: 14
-                    color: "#212121"
-                    font.capitalization: Font.AllUppercase
-                }
+            PopupDialogButton {
             }
         }
     }
