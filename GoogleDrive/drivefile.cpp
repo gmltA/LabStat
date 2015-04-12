@@ -1,5 +1,6 @@
 #include "drivefile.h"
 #include <QDebug>
+#include <QRegularExpression>
 
 QDataStream& operator<<(QDataStream &out, const DriveFileInfo &obj)
 {
@@ -27,7 +28,8 @@ DriveFile::DriveFile(QJsonObject object)
 
 DriveFile::DriveFile(QDomNode node)
 {
-    id = node.firstChildElement("id").text();
+    QRegularExpression regex("(?<=full/)(.+)");
+    id = regex.match(node.firstChildElement("id").text()).captured(0);
     title = node.firstChildElement("title").text();
     mimeType = "application/vnd.google-apps.spreadsheet";
     modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
