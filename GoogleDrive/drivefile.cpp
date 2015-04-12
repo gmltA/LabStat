@@ -25,6 +25,14 @@ DriveFile::DriveFile(QJsonObject object)
 
 }
 
+DriveFile::DriveFile(QDomNode node)
+{
+    id = node.firstChildElement("id").text();
+    title = node.firstChildElement("title").text();
+
+    modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
+}
+
 DriveFile::DriveFile(QString _title, QString _parentId, QString _mimeType)
     : IDataItem(_title),
       parentId(_parentId), mimeType(_mimeType)

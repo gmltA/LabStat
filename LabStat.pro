@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick concurrent
+QT += qml quick concurrent xml
 
 android{
     QT += androidextras
@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     synchandler.cpp \
     googledesktopauthclient.cpp \
     datasheet.cpp \
-    drivesyncprocessor.cpp
+    drivesyncprocessor.cpp \
+    GoogleDrive/sheetsapirequest.cpp
 
 RESOURCES += qml.qrc
 
@@ -53,4 +54,5 @@ HEADERS += \
     interface.authclient.h \
     googledesktopauthclient.h \
     datasheet.h \
-    drivesyncprocessor.h
+    drivesyncprocessor.h \
+    GoogleDrive/sheetsapirequest.h
