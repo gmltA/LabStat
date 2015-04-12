@@ -14,7 +14,6 @@ Item {
         InverseMouseArea {
             anchors.fill: popup
             onPressed: {
-                console.log("Pressed")
                 popup.active = false;
             }
         }

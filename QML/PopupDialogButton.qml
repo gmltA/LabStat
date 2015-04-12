@@ -12,14 +12,13 @@ Item {
 
     Text {
         id: text
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.centerIn: parent
 
         text: "Button"
         font.family: "Roboto"
         font.weight: Font.DemiBold
         font.pixelSize: 14
-        color: "#212121"
+        color: "#00BCD4"
         font.capitalization: Font.AllUppercase
     }
 }

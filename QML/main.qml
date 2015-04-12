@@ -2,6 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls.Styles 1.2
 
 import QtQuick.Controls 1.2
+import "../QML/QuickAndroid"
 import "../QML/NavigationDrawer"
 import SyncHandler 1.0
 
@@ -24,7 +25,7 @@ ApplicationWindow {
         anchors.top: parent.top
         width: parent.width
         height: 48 * dp
-        color: "blue"
+        color: "#00BCD4"
 
         MenuBackIcon {
             anchors.left: parent.left
