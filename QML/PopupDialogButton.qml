@@ -15,8 +15,7 @@ Item {
         anchors.centerIn: parent
 
         text: "Button"
-        font.family: "Roboto"
-        font.weight: Font.DemiBold
+        font.family: "Roboto Medium"
         font.pixelSize: 14
         color: "#00BCD4"
         font.capitalization: Font.AllUppercase

@@ -41,11 +41,10 @@ PopupArea {
                     width: parent.width
 
                     font.family: "Roboto Medium"
-                    //font.weight: Font.DemiBold
                     font.pixelSize: 20
                     color: "#212121"
                     text: "Use Google's location service?"
-                    wrapMode: Text.Wrap
+                    wrapMode: Text.WordWrap
                 }
 
                 Text {
