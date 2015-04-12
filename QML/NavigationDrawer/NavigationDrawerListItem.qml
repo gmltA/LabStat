@@ -45,7 +45,7 @@ Item
         width: parent.width
         color: "#D9D9D9"
 
-        height: childrenRect.height
+        height: listItems.height
 
         Rectangle {
             height: 4 * dp
