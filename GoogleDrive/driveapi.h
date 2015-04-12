@@ -20,6 +20,7 @@ class GoogleDriveAPI : public QObject
         {
             public:
                 SheetsAPI(GoogleDriveAPI* _drive) : drive(_drive) {}
+                QVector<DriveFile> listFiles();
 
             private:
                 GoogleDriveAPI* drive;
@@ -42,6 +43,7 @@ class GoogleDriveAPI : public QObject
         void setVerboseOutput(bool value);
 
         SheetsAPI Sheets;
+
     private:
         bool checkAuth(QNetworkReply* reply);
 
