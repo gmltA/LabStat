@@ -7,7 +7,7 @@
 #include <QNetworkRequest>
 
 GoogleDriveAPI::GoogleDriveAPI(QString _rootFolderName, QObject* parent)
- : QObject(parent), verboseOutput(false)
+ : QObject(parent), verboseOutput(false), Sheets(this)
 {
     qRegisterMetaType<DriveFileInfo>("DriveFileInfo");
     qRegisterMetaTypeStreamOperators<DriveFileInfo>("DriveFileInfo");

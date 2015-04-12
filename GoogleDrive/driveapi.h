@@ -16,6 +16,15 @@ class GoogleDriveAPI : public QObject
         GoogleDriveAPI(QString _rootFolderName, QObject *parent = 0);
         ~GoogleDriveAPI();
 
+        class SheetsAPI
+        {
+            public:
+                SheetsAPI(GoogleDriveAPI* _drive) : drive(_drive) {}
+
+            private:
+                GoogleDriveAPI* drive;
+        };
+
         QString getToken() const;
 
         bool init();
@@ -32,6 +41,7 @@ class GoogleDriveAPI : public QObject
         bool getVerboseOutput() const;
         void setVerboseOutput(bool value);
 
+        SheetsAPI Sheets;
     private:
         bool checkAuth(QNetworkReply* reply);
 
