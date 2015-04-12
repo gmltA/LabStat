@@ -29,7 +29,7 @@ DriveFile::DriveFile(QDomNode node)
 {
     id = node.firstChildElement("id").text();
     title = node.firstChildElement("title").text();
-
+    mimeType = "application/vnd.google-apps.spreadsheet";
     modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
 }
 
