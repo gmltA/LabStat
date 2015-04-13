@@ -13,6 +13,7 @@ Item {
     Text {
         id: text
         anchors.centerIn: parent
+        maximumLineCount: 1
 
         text: "Button"
         font.family: "Roboto Medium"

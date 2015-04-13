@@ -10,7 +10,8 @@ PopupArea {
 
     anchors.centerIn: parent
     width: parent.width - 96 * dp
-    height: content.height + buttons.height + (8 + 16 + 24) * dp
+    height: content.implicitHeight + buttons.implicitHeight
+            + content.anchors.bottomMargin + content.anchors.topMargin + 8 * dp
 
     enabled: false
 
@@ -22,7 +23,9 @@ PopupArea {
 
         color: "white"
 
-        Rectangle {
+        Column {
+            id: content
+
             anchors {
                 top: parent.top
                 margins: 24 * dp
@@ -30,73 +33,59 @@ PopupArea {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            height: parent.height - (buttons.height + buttons.anchors.bottomMargin
-                                     + anchors.topMargin + anchors.bottomMargin)
-            width: parent.width - anchors.leftMargin * 2
+            width: parent.width - anchors.leftMargin - anchors.rightMargin
+            height: title.visible ? title.implicitHeight : 0 + body.implicitHeight + 8 * dp
+            spacing: 8 * dp
 
-            Column {
-                id: content
+            Text {
+                id: title
                 width: parent.width
-                height: title.visible ? title.implicitHeight : 0 + body.implicitHeight + 8 * dp
-                spacing: 8 * dp
 
-                Text {
-                    id: title
-                    width: parent.width
+                visible: text != ""
 
-                    visible: text != ""
+                font.family: "Roboto Medium"
+                font.pixelSize: 20
+                color: "#212121"
+                text: "Use Google's location service?"
+                wrapMode: Text.WordWrap
+            }
 
-                    font.family: "Roboto Medium"
-                    font.pixelSize: 20
-                    color: "#212121"
-                    text: "Use Google's location service?"
-                    wrapMode: Text.WordWrap
-                }
+            Text {
+                id: body
+                width: parent.width
 
-                Text {
-                    id: body
-                    width: parent.width
-
-                    font.family: "Roboto"
-                    font.pixelSize: 14
-                    lineHeight: 13 * dp
-                    lineHeightMode: Text.FixedHeight
-                    color: "#757575"
-                    text: "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running."
-                    wrapMode: Text.Wrap
-                }
+                font.family: "Roboto"
+                font.pixelSize: 14
+                lineHeight: 13 * dp
+                lineHeightMode: Text.FixedHeight
+                color: "#757575"
+                text: "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running."
+                wrapMode: Text.Wrap
             }
         }
 
-        Rectangle {
+        Row {
             id: buttons
+            anchors {
+                rightMargin: 16 * dp
+                leftMargin: 16 * dp
+                bottom: parent.bottom
+                bottomMargin: 8 * dp
+                horizontalCenter: parent.horizontalCenter
+            }
 
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8 * dp
-
-            width: parent.width
+            width: parent.width - anchors.rightMargin - anchors.leftMargin
             height: 48 * dp
 
-            Row {
-                anchors {
-                    rightMargin: 16 * dp
-                    leftMargin: 16 * dp
-                    horizontalCenter: parent.horizontalCenter
-                }
+            layoutDirection: Qt.RightToLeft
+            spacing: 8 * dp
 
-                width: parent.width - anchors.rightMargin - anchors.leftMargin
-                height: parent.height
+            PopupDialogButton {
+                caption: "AGREE"
+            }
 
-                layoutDirection: Qt.RightToLeft
-                spacing: 8 * dp
-
-                PopupDialogButton {
-                    caption: "AGREE"
-                }
-
-                PopupDialogButton {
-                    caption: "DISAGREE"
-                }
+            PopupDialogButton {
+                caption: "DISAGREE"
             }
         }
 
