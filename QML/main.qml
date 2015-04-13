@@ -55,7 +55,6 @@ ApplicationWindow {
         id: drawer
 
         color: "white"
-        //anchors.top: navigationBar.bottom
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 

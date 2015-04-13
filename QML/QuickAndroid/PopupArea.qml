@@ -4,7 +4,7 @@
  */
 import QtQuick 2.0
 
-Item {
+FocusScope {
     id : popup
     property bool active : false
     property var _mouseArea;
@@ -34,11 +34,10 @@ Item {
     }
 
     Keys.onReleased: {
-        if (event.key === Qt.Key_Back) {
+        if (event.key === Qt.Key_Back ||
+            event.key === Qt.Key_Escape) {
             popup.active = false;
             event.accepted = true;
         }
     }
-
-
 }
