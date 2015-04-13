@@ -4,6 +4,10 @@ import "../QML/QuickAndroid"
 
 PopupArea {
     id: popupDialog
+
+    property alias title: title.text
+    property alias body: body.text
+
     anchors.centerIn: parent
     width: parent.width - 96 * dp
     height: content.height + buttons.height + (8 + 16 + 24) * dp
@@ -33,12 +37,14 @@ PopupArea {
             Column {
                 id: content
                 width: parent.width
-                height: title.implicitHeight + body.implicitHeight + 8 * dp
+                height: title.visible ? title.implicitHeight : 0 + body.implicitHeight + 8 * dp
                 spacing: 8 * dp
 
                 Text {
                     id: title
                     width: parent.width
+
+                    visible: text != ""
 
                     font.family: "Roboto Medium"
                     font.pixelSize: 20
