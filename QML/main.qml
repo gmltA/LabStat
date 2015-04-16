@@ -16,39 +16,14 @@ ApplicationWindow {
     // for QMLScene debug only!
     readonly property real dp: mainWindow.width / 320
 
-    FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
-
-    PopupDialog {
+    FontLoader {
+        id: materialIcons
+        source: "qrc:/fonts/Material-Design-Icons.ttf"
     }
 
-    Rectangle {
-        anchors.top: parent.top
-        width: parent.width
-        height: 48 * dp
-        color: "#00BCD4"
-
-        MenuBackIcon {
-            anchors.left: parent.left
-            anchors.leftMargin: 16 * dp
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 72 * dp
-            anchors.verticalCenter: parent.verticalCenter
-
-            text: "Application"
-            font.pointSize: 20
-            color: "white"
-        }
-
-        MaterialShadow {
-            anchors.fill: parent
-            z : -10
-            depth : 2
-            asynchronous: true
-        }
+    ActionBar {
+        id: actionBar
+        z: 1
     }
 
     NavigationDrawer {
