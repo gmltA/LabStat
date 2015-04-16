@@ -1,5 +1,6 @@
-import QtQuick 2.1
-import QtQuick.Controls.Styles 1.2
+import QtQuick 2.4
+import QtQuick.Controls.Styles 1.3
+import QtQuick.Layouts 1.1
 
 import QtQuick.Controls 1.2
 import "../QML/QuickAndroid"
@@ -14,7 +15,7 @@ ApplicationWindow {
     visible: true
 
     // for QMLScene debug only!
-    readonly property real dp: mainWindow.width / 320
+    property real dp: mainWindow.width / 320
 
     FontLoader {
         id: materialIcons
@@ -35,14 +36,13 @@ ApplicationWindow {
 
         position: Qt.LeftEdge
 
-        function togglePage()
-        {
-            menuPage.visible = !menuPage.visible;
-            syncPage.visible = !syncPage.visible;
+        function togglePage() {
+            menuPage.visible = !menuPage.visible
+            syncPage.visible = !syncPage.visible
             if (syncPage.visible)
-                header.buttonIcon = "";
+                header.buttonIcon = ""
             else
-                header.buttonIcon = "";
+                header.buttonIcon = ""
         }
 
         Flickable {
@@ -53,12 +53,13 @@ ApplicationWindow {
             Connections {
                 target: SyncHandler
                 onProcessorAddCalled: {
-                    var component = Qt.createComponent("NavigationDrawer/NavigationDrawerSyncItem.qml");
-                    var listItem = component.createObject(syncProcessors);
+                    var component = Qt.createComponent(
+                                "NavigationDrawer/NavigationDrawerSyncItem.qml")
+                    var listItem = component.createObject(syncProcessors)
 
                     //listItem.icon = processorData['online'] === 1 ? "" : "";
-                    listItem.caption = processorData['title'];
-                    listItem.processorId = processorData['id'];
+                    listItem.caption = processorData['title']
+                    listItem.processorId = processorData['id']
                 }
             }
 
@@ -73,7 +74,7 @@ ApplicationWindow {
                     secondaryText: "Just a text"
 
                     buttonArea.onClicked: {
-                        drawer.togglePage();
+                        drawer.togglePage()
                     }
                 }
 
