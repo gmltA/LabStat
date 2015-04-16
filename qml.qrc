@@ -23,6 +23,8 @@
         <file>QML/QuickAndroid/anim/GrowFadeIn.qml</file>
         <file>QML/QuickAndroid/anim/ShrinkFadeOut.qml</file>
         <file>QML/QuickAndroid/Shadow.qml</file>
+        <file>QML/ActionBar.qml</file>
+        <file>QML/TabbedListView.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

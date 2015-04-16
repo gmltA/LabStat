@@ -46,7 +46,9 @@ DISTFILES += \
     QML/QuickAndroid/anim/FastFadeIn.qml \
     QML/QuickAndroid/anim/FastFadeOut.qml \
     QML/QuickAndroid/anim/GrowFadeIn.qml \
-    QML/QuickAndroid/anim/ShrinkFadeOut.qml
+    QML/QuickAndroid/anim/ShrinkFadeOut.qml \
+    QML/ActionBar.qml \
+    QML/TabbedListView.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \
