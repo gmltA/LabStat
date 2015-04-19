@@ -19,6 +19,7 @@ Rectangle {
                 anchors.fill: parent
                 model: contentModel
                 delegate: person
+                displayMarginBeginning: 48 * dp
             }
         }
     }
@@ -27,7 +28,7 @@ Rectangle {
         id: tabDelegate
         Item {
             id: wrapper
-            width: dateTabs.width
+            width: dateTabs.width / 3
             height: dateTabs.height
             state: wrapper.ListView.isCurrentItem ? "current" : ""
 
@@ -78,10 +79,11 @@ Rectangle {
             width: root.width
             height: 48 * dp
             Rectangle {
-                anchors.fill: parent
-                border.color: "black"
-                border.width: 1
-                color: Qt.rgba(0, 0, 0, 0)
+                anchors.bottom: parent.bottom
+
+                width: parent.width
+                height: 1 * dp
+                color: Qt.rgba(0, 0, 0, 0.57)
             }
             Text {
                 anchors.left: parent.left
@@ -99,25 +101,31 @@ Rectangle {
 
     Rectangle {
         id: tabContainer
-        width: parent.width
+
+        // BUG: should be parent.width, but this property assigns after element init
+        //      and this causes buggy tab highlight behaviour
+        width: mainWindow.width
         height: 48 * dp
+        z: 1
+
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
 
         ListView {
             id: dateTabs
             interactive: false
 
-            width: parent.width / 3
+            width: parent.width
             height: parent.height
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
+
             orientation: ListView.Horizontal
             highlightRangeMode: ItemView.StrictlyEnforceRange
             boundsBehavior: Flickable.StopAtBounds
             snapMode: ListView.SnapOneItem
             model: tabsModel
             delegate: tabDelegate
-            displayMarginBeginning: parent.width / 3
-            displayMarginEnd: parent.width / 3
+            preferredHighlightBegin: parent.width / 3
+            preferredHighlightEnd: (parent.width / 3) * 2
             Rectangle {
                 anchors.centerIn: parent
                 width: tabContainer.height
