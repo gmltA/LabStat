@@ -12,14 +12,34 @@ Rectangle {
     Component {
         id: pageDelegate
         Item {
+
+            property alias scrollStop: pupils.scrollStop
+            property alias scrollDiff: pupils.scrollDiff
             width: root.width
             height: content.height
 
             ListView {
+                id: pupils
+
+                property int scrollStop: 0
+                property int scrollDiff: 0
+
                 anchors.fill: parent
                 model: contentModel
                 delegate: person
                 displayMarginBeginning: 48 * dp
+                onContentYChanged: {
+                    scrollDiff = scrollStop - contentY
+                }
+
+                onMovementStarted: {
+                    scrollStop += scrollDiff
+                }
+
+                onMovementEnded: {
+                    scrollStop = contentY
+                    scrollDiff = Math.min(0, Math.max(-tabContainer.height, scrollDiff))
+                }
             }
         }
     }
@@ -34,7 +54,9 @@ Rectangle {
 
             Text {
                 id: title
+
                 anchors.centerIn: parent
+
                 text: itemName
                 font.pixelSize: 10 * dp
                 Behavior on font.pixelSize {
@@ -106,10 +128,15 @@ Rectangle {
         //      and this causes buggy tab highlight behaviour
         width: mainWindow.width
         height: 48 * dp
+        y: Math.min(0, Math.max(-height, content.currentItem.scrollDiff))
         z: 1
 
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        Behavior on y {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.OutCubic
+            }
+        }
 
         ListView {
             id: dateTabs
