@@ -87,6 +87,7 @@ class SpreadSheet : public DriveFile
         SpreadSheet(QDomNode node);
 
         QList<WorkSheet> getWorkSheets() const;
+        WorkSheet getWorkSheet(QString title) const;
         void setWorkSheets(const QList<WorkSheet>& value);
 
     private:

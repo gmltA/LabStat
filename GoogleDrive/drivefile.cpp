@@ -121,9 +121,23 @@ QList<WorkSheet> SpreadSheet::getWorkSheets() const
     return workSheets;
 }
 
+WorkSheet SpreadSheet::getWorkSheet(QString title) const
+{
+    for (auto sheet: workSheets)
+        if (sheet.getTitle() == title)
+            return sheet;
+
+    return WorkSheet();
+}
+
 void SpreadSheet::setWorkSheets(const QList<WorkSheet>& value)
 {
     workSheets = value;
+}
+
+WorkSheet::WorkSheet()
+{
+
 }
 
 WorkSheet::WorkSheet(QDomNode node)
