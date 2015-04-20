@@ -169,6 +169,21 @@ QList<SpreadSheet> GoogleDriveAPI::SheetsAPI::listFiles()
             fileList.push_back(SpreadSheet(files.item(i)));
     }
 
-
     return fileList;
+}
+
+QList<WorkSheet> GoogleDriveAPI::SheetsAPI::getWorkSheets(SpreadSheet file)
+{
+    QList<WorkSheet> workSheets;
+    QNetworkReply* reply = drive->sendRequest(Sheets::GetFileRequest(file));
+
+    QDomDocument doc;
+    if (doc.setContent(reply->readAll()))
+    {
+        QDomNodeList worksheets = doc.elementsByTagName("entry");
+        for (int i = 0; i < worksheets.size(); i++)
+            workSheets.push_back(WorkSheet(worksheets.item(i)));
+    }
+
+    return workSheets;
 }

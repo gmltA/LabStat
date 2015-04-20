@@ -5,3 +5,9 @@ Sheets::ListFilesRequest::ListFilesRequest()
 {
 
 }
+
+Sheets::GetFileRequest::GetFileRequest(SpreadSheet file)
+    : GoogleAPIRequest(QUrl("https://spreadsheets.google.com/feeds/worksheets/" + file.getId() + "/private/full"), "GET")
+{
+
+}
