@@ -115,3 +115,62 @@ SpreadSheet::SpreadSheet(QDomNode node)
     mimeType = "application/vnd.google-apps.spreadsheet";
     modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
 }
+
+QList<WorkSheet> SpreadSheet::getWorkSheets() const
+{
+    return workSheets;
+}
+
+void SpreadSheet::setWorkSheets(const QList<WorkSheet>& value)
+{
+    workSheets = value;
+}
+
+WorkSheet::WorkSheet(QDomNode node)
+{
+    QRegularExpression regex("(?<=full/)(.+)");
+    id = regex.match(node.firstChildElement("id").text()).captured(0);
+
+    title = node.firstChildElement("title").text();
+
+    QDomNodeList sheetNodes = node.childNodes();
+    for (int j = 0; j < sheetNodes.size(); j++)
+    {
+        if (sheetNodes.item(j).nodeName() == "link")
+        {
+            QDomElement element = sheetNodes.item(j).toElement();
+            if (element.attribute("rel") == "http://schemas.google.com/spreadsheets/2006#listfeed")
+                listFeedLink = element.attribute("href");
+        }
+    }
+}
+
+QString WorkSheet::getId() const
+{
+    return id;
+}
+
+void WorkSheet::setId(const QString& value)
+{
+    id = value;
+}
+
+QString WorkSheet::getTitle() const
+{
+    return title;
+}
+
+void WorkSheet::setTitle(const QString& value)
+{
+    title = value;
+}
+
+QString WorkSheet::getListFeedLink() const
+{
+    return listFeedLink;
+}
+
+void WorkSheet::setListFeedLink(const QString& value)
+{
+    listFeedLink = value;
+}

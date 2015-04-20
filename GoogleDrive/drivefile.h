@@ -58,11 +58,39 @@ class DriveFile : public IDataItem
         QString content;
 };
 
+class WorkSheet
+{
+    public:
+        WorkSheet();
+        WorkSheet(QString _id);
+        WorkSheet(QDomNode node);
+
+        QString getId() const;
+        void setId(const QString& value);
+
+        QString getTitle() const;
+        void setTitle(const QString& value);
+
+        QString getListFeedLink() const;
+        void setListFeedLink(const QString& value);
+
+    private:
+        QString id;
+        QString title;
+        QString listFeedLink;
+};
+
 class SpreadSheet : public DriveFile
 {
     public:
         SpreadSheet(QString _id);
         SpreadSheet(QDomNode node);
+
+        QList<WorkSheet> getWorkSheets() const;
+        void setWorkSheets(const QList<WorkSheet>& value);
+
+    private:
+        QList<WorkSheet> workSheets;
 };
 
 Q_DECLARE_METATYPE(DriveFile)
