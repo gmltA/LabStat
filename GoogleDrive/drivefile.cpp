@@ -35,7 +35,7 @@ DriveFile::DriveFile(QDomNode node)
     modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
 }
 
-DriveFile::DriveFile(QString _title, QString _parentId, QString _mimeType)
+DriveFile::DriveFile(QString _title, QString _mimeType, QString _parentId)
     : IDataItem(_title),
       parentId(_parentId), mimeType(_mimeType)
 {

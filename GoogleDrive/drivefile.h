@@ -29,7 +29,7 @@ class DriveFile : public IDataItem
         DriveFile(DataSheet* dataSheet);
         DriveFile(QJsonObject object);
         DriveFile(QDomNode node);
-        DriveFile(QString _title, QString _parentId, QString _mimeType);
+        DriveFile(QString _title, QString _mimeType, QString _parentId = "");
         DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType);
         DriveFile(const DriveFile &other);
         ~DriveFile() {}
