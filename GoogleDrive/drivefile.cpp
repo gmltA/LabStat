@@ -26,15 +26,6 @@ DriveFile::DriveFile(QJsonObject object)
 
 }
 
-DriveFile::DriveFile(QDomNode node)
-{
-    QRegularExpression regex("(?<=full/)(.+)");
-    id = regex.match(node.firstChildElement("id").text()).captured(0);
-    title = node.firstChildElement("title").text();
-    mimeType = "application/vnd.google-apps.spreadsheet";
-    modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
-}
-
 DriveFile::DriveFile(QString _title, QString _mimeType, QString _parentId)
     : IDataItem(_title),
       parentId(_parentId), mimeType(_mimeType)
@@ -107,4 +98,20 @@ QDateTime DriveFile::getModifiedDate() const
 void DriveFile::setModifiedDate(const QDateTime& value)
 {
     modifiedDate = value;
+}
+
+SpreadSheet::SpreadSheet(QString _id) :
+    DriveFile(_id, "application/vnd.google-apps.spreadsheet")
+{
+
+}
+
+SpreadSheet::SpreadSheet(QDomNode node)
+{
+    QRegularExpression regex("(?<=full/)(.+)");
+    id = regex.match(node.firstChildElement("id").text()).captured(0);
+
+    title = node.firstChildElement("title").text();
+    mimeType = "application/vnd.google-apps.spreadsheet";
+    modifiedDate = QDateTime::fromString(node.firstChildElement("updated").text(), Qt::ISODate);
 }

@@ -20,7 +20,7 @@ class GoogleDriveAPI : public QObject
         {
             public:
                 SheetsAPI(GoogleDriveAPI* _drive) : drive(_drive) {}
-                QVector<DriveFile> listFiles();
+                QList<SpreadSheet> listFiles();
 
             private:
                 GoogleDriveAPI* drive;

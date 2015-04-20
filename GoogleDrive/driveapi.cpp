@@ -156,21 +156,19 @@ void GoogleDriveAPI::setVerboseOutput(bool value)
     verboseOutput = value;
 }
 
-QVector<DriveFile> GoogleDriveAPI::SheetsAPI::listFiles()
+QList<SpreadSheet> GoogleDriveAPI::SheetsAPI::listFiles()
 {
-    QVector<DriveFile> fileList;
+    QList<SpreadSheet> fileList;
 
     QNetworkReply* reply = drive->sendRequest(Sheets::ListFilesRequest());
     QDomDocument doc;
-    if (!doc.setContent(reply->readAll()))
+    if (doc.setContent(reply->readAll()))
     {
-        qDebug() << "Can't set DomDocument content";
-        return fileList;
+        QDomNodeList files = doc.elementsByTagName("entry");
+        for (int i = 0; i < files.size(); i++)
+            fileList.push_back(SpreadSheet(files.item(i)));
     }
 
-    QDomNodeList files = doc.elementsByTagName("entry");
-    for (int i = 0; i < files.size(); i++)
-        fileList.push_back(DriveFile(files.item(i)));
 
     return fileList;
 }

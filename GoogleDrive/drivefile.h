@@ -28,7 +28,6 @@ class DriveFile : public IDataItem
         DriveFile() {}
         DriveFile(DataSheet* dataSheet);
         DriveFile(QJsonObject object);
-        DriveFile(QDomNode node);
         DriveFile(QString _title, QString _mimeType, QString _parentId = "");
         DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType);
         DriveFile(const DriveFile &other);
@@ -55,7 +54,15 @@ class DriveFile : public IDataItem
         QString mimeType;
         QDateTime modifiedDate;
 
+    private:
         QString content;
+};
+
+class SpreadSheet : public DriveFile
+{
+    public:
+        SpreadSheet(QString _id);
+        SpreadSheet(QDomNode node);
 };
 
 Q_DECLARE_METATYPE(DriveFile)
