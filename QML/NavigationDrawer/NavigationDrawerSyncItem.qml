@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import SyncHandler 1.0
+import SubjectHandler 1.0
 
 Item {
     id: root
@@ -31,13 +31,13 @@ Item {
     Connections {
         target: item
         onClicked: {
-            SyncHandler.sync(processorId)
+            SubjectHandler.sync(processorId)
             state = "syncing"
         }
     }
 
     Connections {
-        target: SyncHandler
+        target: SubjectHandler
         onSyncStopped: {
             syncStopped(processorId)
         }

@@ -1,10 +1,7 @@
 #include "synchandler.h"
 
 #include <QDebug>
-#include <QtQml>
 #include <QtConcurrent>
-
-SyncHandler* SyncHandler::instance = nullptr;
 
 SyncHandler::SyncHandler() : QObject()
 {
@@ -12,17 +9,10 @@ SyncHandler::SyncHandler() : QObject()
     connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(syncStopped(int)));
 }
 
-void SyncHandler::init()
+SyncHandler::~SyncHandler()
 {
-    qmlRegisterSingletonType<SyncHandler>("SyncHandler", 1, 0, "SyncHandler", &SyncHandler::qmlInstance);
-}
-
-SyncHandler* SyncHandler::getInstance()
-{
-    if (!instance)
-        instance = new SyncHandler();
-
-    return instance;
+    foreach(IDataStore* processor, syncProcessors)
+        dynamic_cast<QObject*>(processor)->deleteLater();
 }
 
 void SyncHandler::sync(int processorIndex)
@@ -40,7 +30,7 @@ void SyncHandler::sync(IDataStore* processor)
     }
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
-    //QtConcurrent::run(processor, &IDataStore::init);
+    QtConcurrent::run(processor, &IDataStore::init);
 }
 
 QVariantMap SyncHandler::buildProcessorData(IDataStore* processor)

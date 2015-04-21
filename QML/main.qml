@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import "../QML/QuickAndroid"
 import "../QML/NavigationDrawer"
-import SyncHandler 1.0
+import SubjectHandler 1.0
 
 ApplicationWindow {
     title: "LabStat"
@@ -51,7 +51,7 @@ ApplicationWindow {
             contentWidth: parent.width
 
             Connections {
-                target: SyncHandler
+                target: SubjectHandler
                 onProcessorAddCalled: {
                     var component = Qt.createComponent(
                                 "NavigationDrawer/NavigationDrawerSyncItem.qml")

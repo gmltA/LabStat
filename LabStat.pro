@@ -15,7 +15,9 @@ SOURCES += main.cpp \
     googledesktopauthclient.cpp \
     datasheet.cpp \
     drivesyncprocessor.cpp \
-    GoogleDrive/sheetsapirequest.cpp
+    GoogleDrive/sheetsapirequest.cpp \
+    subjectdata.cpp \
+    subjecthandler.cpp
 
 RESOURCES += qml.qrc
 
@@ -66,4 +68,6 @@ HEADERS += \
     googledesktopauthclient.h \
     datasheet.h \
     drivesyncprocessor.h \
-    GoogleDrive/sheetsapirequest.h
+    GoogleDrive/sheetsapirequest.h \
+    subjectdata.h \
+    subjecthandler.h

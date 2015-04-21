@@ -12,6 +12,7 @@
 #include "googledesktopauthclient.h"
 
 #include "synchandler.h"
+#include "subjecthandler.h"
 #include "drivesyncprocessor.h"
 
 int main(int argc, char *argv[])
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     // now calculate the dp ratio
     qreal dp = dpi / 160.f;
 
-    SyncHandler::init();
+    SubjectHandler::init();
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("dp", dp);
@@ -79,8 +80,11 @@ int main(int argc, char *argv[])
     QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
 
-    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive);
-    SyncHandler::getInstance()->registerProcessor(driveProcessor);
+    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
+
+    SubjectData* sub = new SubjectData("LSTest1");
+    SubjectHandler::getInstance()->addSubject(sub);
+    sub->getSyncHandler()->registerProcessor(driveProcessor);
 
     return app.exec();
 }
