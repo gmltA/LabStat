@@ -71,13 +71,13 @@ class WorkSheet
         QString getTitle() const;
         void setTitle(const QString& value);
 
-        QString getListFeedLink() const;
-        void setListFeedLink(const QString& value);
+        QString getListFeedURL() const;
+        void setListFeedURL(const QString& value);
 
     private:
         QString id;
         QString title;
-        QString listFeedLink;
+        QString listFeedURL;
 };
 
 class SpreadSheet : public DriveFile

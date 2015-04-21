@@ -154,7 +154,7 @@ WorkSheet::WorkSheet(QDomNode node)
         {
             QDomElement element = sheetNodes.item(j).toElement();
             if (element.attribute("rel") == "http://schemas.google.com/spreadsheets/2006#listfeed")
-                listFeedLink = element.attribute("href");
+                listFeedURL = element.attribute("href");
         }
     }
 }
@@ -179,12 +179,12 @@ void WorkSheet::setTitle(const QString& value)
     title = value;
 }
 
-QString WorkSheet::getListFeedLink() const
+QString WorkSheet::getListFeedURL() const
 {
-    return listFeedLink;
+    return listFeedURL;
 }
 
-void WorkSheet::setListFeedLink(const QString& value)
+void WorkSheet::setListFeedURL(const QString& value)
 {
-    listFeedLink = value;
+    listFeedURL = value;
 }
