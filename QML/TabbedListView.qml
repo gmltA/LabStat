@@ -203,4 +203,18 @@ Rectangle {
             dateTabs.currentIndex = currentIndex
         }
     }
+
+    states: [
+        State {
+            name: "hidden"
+            PropertyChanges {
+                target: root
+                visible: false
+            }
+            PropertyChanges {
+                target: tabContainer
+                y: -height
+            }
+        }
+    ]
 }
