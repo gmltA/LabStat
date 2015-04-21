@@ -47,6 +47,9 @@ class DataSheet : public QObject
         QStringList groups;
 
         static const char* subjectString(DataSheet::Subject subject);
+
+    signals:
+        void groupListChanged(QStringList groups);
 };
 
 #endif // DATASHEET_H

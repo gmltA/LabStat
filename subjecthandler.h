@@ -51,6 +51,8 @@ class SubjectHandler : public QObject
         void processorAdded(QVariantMap processorData);
         void syncStopped(int processorId);
 
+        void groupListChanged(QStringList groups);
+
     public slots:
 };
 

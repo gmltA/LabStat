@@ -44,6 +44,7 @@ QStringList DataSheet::getGroupList() const
 void DataSheet::setGroupList(const QStringList& value)
 {
     groups = value;
+    emit groupListChanged(groups);
 }
 
 QString DataSheet::getFileName() const
