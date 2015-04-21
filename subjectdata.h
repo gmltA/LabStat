@@ -16,6 +16,7 @@ class SubjectData : public QObject
         DataSheet* getDataSheet() const;
         SyncHandler* getSyncHandler() const;
 
+        Q_INVOKABLE void attachDrive(QString rootFolder = "LabStat");
         void disconnectAll();
 
     private:

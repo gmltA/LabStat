@@ -1,4 +1,10 @@
+#include "drivesyncprocessor.h"
 #include "subjectdata.h"
+
+#include "googledesktopauthclient.h"
+#include "googleauthclient.h"
+#include "interface.authclient.h"
+#include "GoogleDrive/driveapi.h"
 
 SubjectData::SubjectData(QString title, QObject *parent) : QObject(parent)
 {
@@ -20,6 +26,25 @@ DataSheet* SubjectData::getDataSheet() const
 SyncHandler* SubjectData::getSyncHandler() const
 {
     return syncHandler;
+}
+
+void SubjectData::attachDrive(QString rootFolder)
+{
+    IAuthClient* authClient;
+#if defined(Q_OS_ANDROID)
+    authClient = new GoogleAuthClient();
+#else
+    authClient = new GoogleDesktopAuthClient();
+#endif
+    GoogleDriveAPI* drive = new GoogleDriveAPI(rootFolder);
+    drive->setVerboseOutput(true);
+
+    QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
+    QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
+
+    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
+
+    syncHandler->registerProcessor(driveProcessor);
 }
 
 void SubjectData::disconnectAll()

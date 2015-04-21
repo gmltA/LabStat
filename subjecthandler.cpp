@@ -1,6 +1,6 @@
 #include "subjecthandler.h"
-#include <QDebug>
 #include <QtQml>
+#include <QtConcurrent>
 
 SubjectHandler* SubjectHandler::instance = nullptr;
 
@@ -49,6 +49,11 @@ void SubjectHandler::init()
 void SubjectHandler::sync(int processorIndex)
 {
     currentSubject->getSyncHandler()->sync(processorIndex);
+}
+
+void SubjectHandler::attachDrive(QString rootFolder)
+{
+    QtConcurrent::run(currentSubject, &SubjectData::attachDrive, rootFolder);
 }
 
 SubjectHandler* SubjectHandler::getInstance()

@@ -7,13 +7,7 @@
     #include <QtAndroidExtras>
 #endif
 
-#include "GoogleDrive/driveapi.h"
-#include "googleauthclient.h"
-#include "googledesktopauthclient.h"
-
-#include "synchandler.h"
 #include "subjecthandler.h"
-#include "drivesyncprocessor.h"
 
 int main(int argc, char *argv[])
 {
@@ -68,23 +62,8 @@ int main(int argc, char *argv[])
 
     engine.load(QUrl("qrc:/QML/main.qml"));
 
-    IAuthClient* authClient;
-#if defined(Q_OS_ANDROID)
-    authClient = new GoogleAuthClient();
-#else
-    authClient = new GoogleDesktopAuthClient();
-#endif
-    GoogleDriveAPI* drive = new GoogleDriveAPI("LabStat");
-    drive->setVerboseOutput(true);
-
-    QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
-    QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
-
-    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
-
     SubjectData* sub = new SubjectData("LSTest1");
     SubjectHandler::getInstance()->addSubject(sub);
-    sub->getSyncHandler()->registerProcessor(driveProcessor);
 
     return app.exec();
 }
