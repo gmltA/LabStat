@@ -1,9 +1,10 @@
+#include "subjectdata.h"
 #include "synchandler.h"
 
 #include <QDebug>
 #include <QtConcurrent>
 
-SyncHandler::SyncHandler() : QObject()
+SyncHandler::SyncHandler(QObject* parent) : QObject(parent)
 {
     signalMapper = new QSignalMapper();
     connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(syncStopped(int)));
@@ -30,7 +31,7 @@ void SyncHandler::sync(IDataStore* processor)
     }
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
-    QtConcurrent::run(processor, &IDataStore::init);
+    QtConcurrent::run(processor, &IDataStore::syncFile, dynamic_cast<SubjectData*>(parent())->getDataSheet());
 }
 
 QVariantMap SyncHandler::buildProcessorData(IDataStore* processor)

@@ -3,7 +3,7 @@
 SubjectData::SubjectData(QString title, QObject *parent) : QObject(parent)
 {
     dataSheet = new DataSheet(title);
-    syncHandler = new SyncHandler();
+    syncHandler = new SyncHandler(this);
 }
 
 SubjectData::~SubjectData()

@@ -13,7 +13,7 @@ class SyncHandler : public QObject
         Q_OBJECT
 
     public:
-        SyncHandler();
+        SyncHandler(QObject* parent);
         ~SyncHandler();
 
         void registerProcessor(IDataStore* processor);
