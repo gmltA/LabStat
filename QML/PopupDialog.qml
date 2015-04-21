@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import "../QML/QuickAndroid"
+import Material 0.1 as Material
 
 PopupArea {
     id: popupDialog
@@ -62,7 +63,6 @@ PopupArea {
                 text: "Use Google's location service?"
                 wrapMode: Text.WordWrap
             }
-
             Text {
                 id: body
                 width: parent.width
@@ -98,16 +98,16 @@ PopupArea {
             layoutDirection: Qt.RightToLeft
             spacing: 8 * dp
 
-            PopupDialogButton {
-                caption: "AGREE"
+            Material.Button {
+                text: positiveButtonText
                 onClicked: {
                     accepted()
                     close()
                 }
             }
 
-            PopupDialogButton {
-                caption: "DISAGREE"
+            Material.Button {
+                text: negativeButtonText
                 onClicked: {
                     rejected()
                     close()
