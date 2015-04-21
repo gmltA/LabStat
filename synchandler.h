@@ -13,7 +13,7 @@ class QJSEngine;
 
 /*
  * Pointer singleton here because QML requires object to be pointer.
- * Otherwise ASSERT'ation in on program exit happens.
+ * Otherwise ASSERT'ation on program exit happens.
  */
 
 class SyncHandler : public QObject

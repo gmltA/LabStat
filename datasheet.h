@@ -2,6 +2,7 @@
 #define DATASHEET_H
 
 #include <QObject>
+#include <QStringList>
 
 class DataSheet : public QObject
 {
@@ -16,8 +17,10 @@ class DataSheet : public QObject
             None
         };
 
-        explicit DataSheet(QObject *parent = 0);
+        explicit DataSheet(QString _fileName = "", QObject* parent = 0);
         ~DataSheet();
+
+        QString toString() const;
 
         uint getId() const;
         void setId(const uint& value);
@@ -28,14 +31,20 @@ class DataSheet : public QObject
         Subject getSubject() const;
         void setSubject(const Subject& value);
 
-        QString getTitle() const;
+        QStringList getGroupList() const;
+        void setGroupList(const QStringList& value);
 
-        QString toString() const;
+        QString getFileName() const;
+        void setFileName(const QString& value);
 
     private:
         uint id;
+        QString fileName;
+
         uint groupId;
         Subject subject;
+
+        QStringList groups;
 
         static const char* subjectString(DataSheet::Subject subject);
 };

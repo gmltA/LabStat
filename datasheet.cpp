@@ -1,7 +1,8 @@
 #include "datasheet.h"
 #include <QMetaEnum>
 
-DataSheet::DataSheet(QObject *parent) : QObject(parent), id(0), groupId(0), subject(Subject::None)
+DataSheet::DataSheet(QString _fileName, QObject *parent)
+    : QObject(parent), id(0), fileName(_fileName), groupId(0), subject(Subject::None)
 {
 }
 
@@ -29,18 +30,30 @@ void DataSheet::setSubject(const Subject& value)
     subject = value;
 }
 
-QString DataSheet::getTitle() const
-{
-    if (subject != Subject::None)
-        return QString("%1-%2").arg(groupId).arg(DataSheet::subjectString(subject));
-    else
-        return QString("%1").arg(groupId);
-}
-
 QString DataSheet::toString() const
 {
     // NIY
     return "a \t b \t c \nd \t e \t n";
+}
+
+QStringList DataSheet::getGroupList() const
+{
+    return groups;
+}
+
+void DataSheet::setGroupList(const QStringList& value)
+{
+    groups = value;
+}
+
+QString DataSheet::getFileName() const
+{
+    return fileName;
+}
+
+void DataSheet::setFileName(const QString& value)
+{
+    fileName = value;
 }
 
 uint DataSheet::getGroupId() const
