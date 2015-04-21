@@ -23,6 +23,19 @@ Item
         listItem.caption = title;
     }
 
+    function toogle()
+    {
+        if (state == "collapsed")
+            state = "";
+        else
+            state = "collapsed";
+    }
+
+    function isEmpty()
+    {
+        return listItems.children.length === 0
+    }
+
     NavigationDrawerItem
     {
         id: listHeader
@@ -31,21 +44,25 @@ Item
         captionItem.font.bold: true
 
         onClicked: {
-            if (parent.state == "collapsed")
-                parent.state = "";
-            else
-                parent.state = "collapsed";
-
+            toogle()
         }
     }
 
     Rectangle {
         id: listContainer
         anchors.top: listHeader.bottom
+
         width: parent.width
+        height: isEmpty() ? dummyItem.height : listItems.height
+
         color: "#D9D9D9"
 
-        height: listItems.height
+        NavigationDrawerItem {
+            id: dummyItem
+            icon: ""
+            caption: "No items"
+            visible: isEmpty()
+        }
 
         Rectangle {
             height: 4 * dp
