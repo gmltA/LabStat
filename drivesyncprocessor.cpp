@@ -1,14 +1,15 @@
 #include "drivesyncprocessor.h"
 
-DriveSyncProcessor::DriveSyncProcessor(GoogleDriveAPI* drive, QObject *parent)
+DriveSyncProcessor::DriveSyncProcessor(GoogleDriveAPI* drive, QString fileName, QObject *parent)
     : QObject(parent), IDataStore(Origin::OriginOnline, "Google Drive"), driveService(drive)
 {
-
+    data = new DataSheet(fileName);
 }
 
 DriveSyncProcessor::~DriveSyncProcessor()
 {
 
+    data->deleteLater();
 }
 
 void DriveSyncProcessor::init()
