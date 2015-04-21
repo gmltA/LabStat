@@ -22,7 +22,9 @@ class DriveSyncProcessor : public QObject, public IDataStore
 
     private:
         GoogleDriveAPI* driveService;
-        DataSheet* data;
+        SpreadSheet* sheet;
+
+        void fillSpreadSheet();
 
     signals:
         void initFinished(bool success) override final;
