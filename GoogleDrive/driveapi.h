@@ -22,6 +22,7 @@ class GoogleDriveAPI : public QObject
                 SheetsAPI(GoogleDriveAPI* _drive) : drive(_drive) {}
                 QList<SpreadSheet> listFiles();
                 QList<WorkSheet> getWorkSheets(SpreadSheet file);
+                QByteArray getListFeed(WorkSheet sheet);
 
             private:
                 GoogleDriveAPI* drive;

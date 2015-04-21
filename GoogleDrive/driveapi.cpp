@@ -187,3 +187,9 @@ QList<WorkSheet> GoogleDriveAPI::SheetsAPI::getWorkSheets(SpreadSheet file)
 
     return workSheets;
 }
+
+QByteArray GoogleDriveAPI::SheetsAPI::getListFeed(WorkSheet sheet)
+{
+    QNetworkReply* reply = drive->sendRequest(GoogleAPIRequest(sheet.getListFeedURL(), "GET"));
+    return reply->readAll();
+}
