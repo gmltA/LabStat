@@ -100,6 +100,12 @@ void DriveFile::setModifiedDate(const QDateTime& value)
     modifiedDate = value;
 }
 
+SpreadSheet::SpreadSheet() :
+    DriveFile(QString(), "application/vnd.google-apps.spreadsheet")
+{
+
+}
+
 SpreadSheet::SpreadSheet(QString _id) :
     DriveFile(_id, "application/vnd.google-apps.spreadsheet")
 {

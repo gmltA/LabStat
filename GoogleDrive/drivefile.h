@@ -83,6 +83,7 @@ class WorkSheet
 class SpreadSheet : public DriveFile
 {
     public:
+        SpreadSheet();
         SpreadSheet(QString _id);
         SpreadSheet(QDomNode node);
 
