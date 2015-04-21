@@ -26,6 +26,39 @@ ApplicationWindow {
         source: "qrc:/fonts/Material-Design-Icons.ttf"
     }
 
+    PopupDialog {
+        title: "Register new sync processor"
+        active: true
+        z: 6
+        RadioButton {
+            id: driveCheckBox
+            text: "Google Drive"
+        }
+        RadioButton {
+            id: sqlCheckBox
+            text: "SQLite storage"
+        }
+
+        TextInput {
+            id: text
+            visible: driveCheckBox.checked
+            focus: true
+            width: parent.width
+            height: 24 * dp
+            font.pixelSize: 14
+            maximumLength: 20
+            Rectangle {
+                anchors.bottom: parent.bottom
+                width: parent.width
+                height: 1 * dp
+                color: Qt.rgba(0, 0, 0, 0.57)
+            }
+        }
+        onAccepted: {
+            SubjectHandler.attachDrive(text.text)
+        }
+    }
+
     ActionBar {
         id: actionBar
         z: 1
@@ -148,9 +181,102 @@ ApplicationWindow {
                         id: addProcessorItem
                         icon: ""
                         caption: "Add sync processor"
+                        onClicked: {
+                            var p = addProcessorItem.parent
+                            while (p.parent)
+                                p = p.parent
+
+                            var dialog = dialogBuilder.createObject(p)
+                            //dialog.active = true
+                        }
                     }
                 }
             }
         }
+    }
+
+    ListModel {
+        id: testModel
+        ListElement {
+            itemName: "Test"
+        }
+        ListElement {
+            itemName: "Long item"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+    }
+
+    ListModel {
+        id: groupListModel
+        ListElement {
+            itemName: "Test"
+        }
+        ListElement {
+            itemName: "Test 1"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+        ListElement {
+            itemName: "Test 2"
+        }
+
+        ListElement {
+            itemName: "Test 2"
+        }
+    }
+
+    Text {
+        anchors.centerIn: parent
+        font.pointSize: 24
+        color: Qt.rgba(0, 0, 0, 0.1)
+        text: "Select group\nto display stats"
+        horizontalAlignment: Text.AlignHCenter
+        style: Text.Sunken
+        styleColor: "#AAAAAA"
+    }
+
+    TabbedListView {
+        id: stats
+        height: parent.height - actionBar.height
+        width: parent.width
+        anchors.top: actionBar.bottom
+
+        state: "hidden"
+
+        tabsModel: testModel
+        contentModel: groupListModel
     }
 }

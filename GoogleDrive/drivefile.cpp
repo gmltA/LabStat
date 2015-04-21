@@ -30,6 +30,8 @@ DriveFile::DriveFile(QString _title, QString _mimeType, QString _parentId)
     : IDataItem(_title),
       parentId(_parentId), mimeType(_mimeType)
 {
+    qDebug() << "parent is: " << _parentId;
+    qDebug() << "mime is: " << _mimeType;
 }
 
 DriveFile::DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType)
