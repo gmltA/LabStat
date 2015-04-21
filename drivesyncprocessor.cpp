@@ -34,7 +34,22 @@ void DriveSyncProcessor::init()
 
 void DriveSyncProcessor::syncFile(DataSheet* dataFile)
 {
+    WorkSheet other = sheet->getWorkSheet("Разное");
 
+    QByteArray workSheetData = driveService->Sheets.getListFeed(other);
+
+    QDomDocument doc;
+    QStringList groups;
+    if (doc.setContent(workSheetData))
+    {
+        QDomNodeList groupNodes = doc.elementsByTagName("gsx:группы");
+        for (int i = 0; i < groupNodes.size(); i++)
+            if (!groupNodes.item(i).toElement().text().isEmpty())
+                groups.push_back(groupNodes.item(i).toElement().text());
+
+        dataFile->setGroupList(groups);
+    }
+    emit syncDone();
 }
 
 GoogleDriveAPI* DriveSyncProcessor::getDriveService() const

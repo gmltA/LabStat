@@ -61,6 +61,12 @@ ApplicationWindow {
                     listItem.caption = processorData['title']
                     listItem.processorId = processorData['id']
                 }
+                onGroupListChanged: {
+                    for (var i = 0; i < groupList.data.length; i++)
+                        groupList.data[i].destroy()
+                    for (var i = 0; i < groups.length; i++)
+                        groupList.addItem("", groups[i])
+                }
             }
 
             Column {
