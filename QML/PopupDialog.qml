@@ -8,6 +8,19 @@ PopupArea {
     property alias title: title.text
     property alias body: body.text
 
+    default property alias data: dialogContent.data
+
+    property string negativeButtonText: "Cancel"
+    property string positiveButtonText: "Ok"
+
+    signal accepted()
+    signal rejected()
+
+    function close()
+    {
+        active = false
+    }
+
     anchors.centerIn: parent
     width: parent.width - 96 * dp
     height: content.implicitHeight + buttons.implicitHeight
@@ -62,6 +75,11 @@ PopupArea {
                 text: "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running."
                 wrapMode: Text.Wrap
             }
+            Column {
+                id: dialogContent
+                spacing: 16 * dp
+                width: parent.width
+            }
         }
 
         Row {
@@ -82,10 +100,18 @@ PopupArea {
 
             PopupDialogButton {
                 caption: "AGREE"
+                onClicked: {
+                    accepted()
+                    close()
+                }
             }
 
             PopupDialogButton {
                 caption: "DISAGREE"
+                onClicked: {
+                    rejected()
+                    close()
+                }
             }
         }
 

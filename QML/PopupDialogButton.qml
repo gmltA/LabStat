@@ -10,6 +10,8 @@ Item {
     height: 36 * dp
     width: text.width + 16 * dp
 
+    signal clicked()
+
     Text {
         id: text
         anchors.centerIn: parent
@@ -20,5 +22,13 @@ Item {
         font.pixelSize: 14
         color: "#00BCD4"
         font.capitalization: Font.AllUppercase
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onClicked: {
+            parent.clicked()
+        }
     }
 }
