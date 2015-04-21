@@ -13,6 +13,16 @@ Button {
     property alias rightIconItem: rightIcon
     property alias caption: captionItem.text
     property alias captionItem: captionItem
+    property var extraData
+
+    signal triggered(var extraData);
+
+    Connections {
+        target: root
+        onClicked: {
+            triggered(extraData)
+        }
+    }
 
     Text {
         id: leftIcon

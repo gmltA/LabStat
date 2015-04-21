@@ -15,12 +15,15 @@ Item
 
     state: "collapsed"
 
-    function addItem(icon, title)
+    function addItem(icon, title, extraData)
     {
         var component = Qt.createComponent("NavigationDrawerItem.qml");
         var listItem = component.createObject(listItems);
         listItem.icon = icon;
         listItem.caption = title;
+        listItem.extraData = extraData;
+
+        return listItem
     }
 
     function toogle()
