@@ -17,6 +17,10 @@ ApplicationWindow {
     // for QMLScene debug only!
     property real dp: mainWindow.width / 320
 
+    function groupItemClicked(groupId) {
+        console.log(groupId)
+    }
+
     FontLoader {
         id: materialIcons
         source: "qrc:/fonts/Material-Design-Icons.ttf"
@@ -64,8 +68,12 @@ ApplicationWindow {
                 onGroupListChanged: {
                     for (var i = 0; i < groupList.data.length; i++)
                         groupList.data[i].destroy()
-                    for (var i = 0; i < groups.length; i++)
-                        groupList.addItem("", groups[i])
+
+                    for (i = 0; i < groups.length; i++) {
+                        var groupItem = groupList.addItem("", groups[i],
+                                                          groups[i])
+                        groupItem.triggered.connect(groupItemClicked)
+                    }
                 }
             }
 
