@@ -18,7 +18,6 @@ ApplicationWindow {
     property real dp: mainWindow.width / 320
 
     function groupItemClicked(groupId) {
-        console.log(groupId)
     }
 
     FontLoader {

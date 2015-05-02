@@ -111,12 +111,13 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 10 * dp
                 anchors.verticalCenter: parent.verticalCenter
-                text: itemName
+                text: modelData
             }
             CheckBox {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 10 * dp
+
                 style: MaterialCheckBox {
                     color: "#00BCD4"
                     uncheckedColor: Qt.rgba(0, 0, 0, 0.57)

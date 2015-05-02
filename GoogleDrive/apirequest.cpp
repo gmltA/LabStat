@@ -1,7 +1,4 @@
 #include "apirequest.h"
-
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QDebug>
 
 GoogleAPIRequest::GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArray _data)

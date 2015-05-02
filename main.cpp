@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     qreal dp = dpi / 160.f;
 
     SubjectHandler::init();
+
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("dp", dp);
