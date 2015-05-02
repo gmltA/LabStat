@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import "../QML/QuickAndroid"
+import "."
 
 Rectangle {
     id: root
@@ -8,7 +9,7 @@ Rectangle {
     anchors.top: parent.top
     width: parent.width
     height: 48 * dp
-    color: "#00BCD4"
+    color: Theme.primaryColor
 
     MenuBackIcon {
         anchors.left: parent.left

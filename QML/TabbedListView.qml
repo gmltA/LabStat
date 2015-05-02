@@ -1,7 +1,9 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.1
 
 import "../QML/QuickAndroid"
+import "."
 
 Rectangle {
     id: root
@@ -26,7 +28,7 @@ Rectangle {
 
                 anchors.fill: parent
                 model: contentModel
-                delegate: person
+                delegate: personDelegate
                 displayMarginBeginning: 48 * dp
                 onContentYChanged: {
                     scrollDiff = scrollStop - contentY
@@ -73,6 +75,7 @@ Rectangle {
                     text: date
                     font.family: "Roboto Regular"
                     font.pixelSize: 15 * dp
+                    color: Theme.textColor
                 }
                 Text {
                     id: timeText
@@ -82,6 +85,7 @@ Rectangle {
                     text: time
                     font.family: "Roboto Condensed Light"
                     font.pixelSize: 12 * dp
+                    color: Theme.textColor
                 }
 
                 transform: Scale {
@@ -109,7 +113,7 @@ Rectangle {
                 anchors.bottom: highlight.top
 
                 text: group == 1 ? "1 подгруппа" : group == 2 ? "2 подгруппа" : "Группа целиком"
-                color: Qt.rgba(0, 0, 0, 0.54)
+                color: Theme.subTextColor
                 font.pixelSize: 12 * dp
                 font.family: "Roboto Condensed"
 
@@ -136,7 +140,7 @@ Rectangle {
                 id: highlight
                 anchors.bottom: parent.bottom
                 width: parent.width
-                color: "#00BCD4"
+                color: Theme.tabHighlightColor
 
                 Behavior on height {
                     NumberAnimation {
@@ -175,10 +179,10 @@ Rectangle {
     }
 
     Component {
-        id: person
+        id: personDelegate
         Item {
             width: root.width
-            height: 48 * dp
+            height: 72 * dp
             Rectangle {
                 anchors.bottom: parent.bottom
 
@@ -186,11 +190,29 @@ Rectangle {
                 height: 1 * dp
                 color: Qt.rgba(0, 0, 0, 0.57)
             }
-            Text {
+            ColumnLayout {
                 anchors.left: parent.left
-                anchors.leftMargin: 10 * dp
+                anchors.leftMargin: 16 * dp
                 anchors.verticalCenter: parent.verticalCenter
-                text: modelData
+
+                spacing: 8 * dp
+                Text {
+                    text: name
+                    font.family: "Roboto Medium"
+                    font.pixelSize: 14 * dp
+                    color: Theme.textColor
+
+                    Layout.alignment: Qt.AlignVCenter
+                }
+                Text {
+                    text: note
+                    font.family: "Roboto Regular"
+                    font.pixelSize: 12 * dp
+                    color: Theme.subTextColor
+                    visible: text != ""
+
+                    Layout.alignment: Qt.AlignVCenter
+                }
             }
             CheckBox {
                 anchors.verticalCenter: parent.verticalCenter
@@ -198,7 +220,7 @@ Rectangle {
                 anchors.rightMargin: 10 * dp
 
                 style: MaterialCheckBox {
-                    color: "#00BCD4"
+                    color: Theme.accentColor
                     uncheckedColor: Qt.rgba(0, 0, 0, 0.57)
                 }
             }

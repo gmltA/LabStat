@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import "../QML/QuickAndroid"
 import "../QML/NavigationDrawer"
+import "."
 import SubjectHandler 1.0
 
 ApplicationWindow {
@@ -13,6 +14,7 @@ ApplicationWindow {
     width: 360
     height: 640
     visible: true
+    color: Theme.backgroundColor
 
     // for QMLScene debug only!
     property real dp: mainWindow.width / 320
@@ -216,50 +218,40 @@ ApplicationWindow {
     ListModel {
         id: groupListModel
         ListElement {
-            itemName: "Test"
+            name: "Test"
+            note: "Asadasd"
         }
         ListElement {
-            itemName: "Test 1"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
         ListElement {
-            itemName: "Test 2"
-        }
-        ListElement {
-            itemName: "Test 2"
-        }
-        ListElement {
-            itemName: "Test 2"
-        }
-        ListElement {
-            itemName: "Test 2"
-        }
-        ListElement {
-            itemName: "Test 2"
-        }
-        ListElement {
-            itemName: "Test 2"
-        }
-
-        ListElement {
-            itemName: "Test 2"
+            name: "Test 1"
+            note: ""
         }
     }
 
