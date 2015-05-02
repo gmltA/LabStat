@@ -57,6 +57,16 @@ void DataSheet::setFileName(const QString& value)
     fileName = value;
 }
 
+QList<Student> DataSheet::getStudentList() const
+{
+    return students;
+}
+
+void DataSheet::setStudentList(const QList<Student>& value)
+{
+    students = value;
+}
+
 uint DataSheet::getGroupId() const
 {
     return groupId;

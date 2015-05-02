@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include "student.h"
 
 class DataSheet : public QObject
 {
@@ -37,6 +38,9 @@ class DataSheet : public QObject
         QString getFileName() const;
         void setFileName(const QString& value);
 
+        QList<Student> getStudentList() const;
+        void setStudentList(const QList<Student>& value);
+
     private:
         uint id;
         QString fileName;
@@ -45,6 +49,7 @@ class DataSheet : public QObject
         Subject subject;
 
         QStringList groups;
+        QList<Student> students;
 
         static const char* subjectString(DataSheet::Subject subject);
 

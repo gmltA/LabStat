@@ -4,7 +4,7 @@
 
 SubjectHandler* SubjectHandler::instance = nullptr;
 
-SubjectHandler::SubjectHandler() : QObject(), currentSubject(nullptr)
+SubjectHandler::SubjectHandler() : QObject(), currentSubject(nullptr), studentList(nullptr)
 {
 
 }
@@ -54,6 +54,21 @@ void SubjectHandler::sync(int processorIndex)
 void SubjectHandler::attachDrive(QString rootFolder)
 {
     QtConcurrent::run(currentSubject, &SubjectData::attachDrive, rootFolder);
+}
+
+void SubjectHandler::loadStudentsList(QString group)
+{
+    QList<Student> students = currentSubject->getDataSheet()->getStudentList();
+    if (studentList != nullptr)
+        studentList->deleteLater();
+
+    studentList = new StudentListModel();
+    foreach (Student person, students)
+    {
+        if (person.getGroup() == group)
+            studentList->addStudent(person);
+    }
+    emit studentListLoaded(studentList);
 }
 
 SubjectHandler* SubjectHandler::getInstance()
