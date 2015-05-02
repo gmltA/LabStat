@@ -32,7 +32,7 @@ class SubjectHandler : public QObject
 
         Q_INVOKABLE void sync(int processorIndex);
         Q_INVOKABLE void attachDrive(QString rootFolder = "LabStat");
-        Q_INVOKABLE void loadStudentsList(QString group);
+        Q_INVOKABLE void loadGroupData(QString group);
 
         SubjectData* getCurrentSubject() const;
         void setCurrentSubject(int id);
@@ -57,7 +57,7 @@ class SubjectHandler : public QObject
         void syncStopped(int processorId);
 
         void groupListChanged(QStringList groups);
-        void studentListLoaded(StudentListModel* students);
+        void groupDataLoaded(StudentListModel* students, TimeTableModel* timeTable);
 
     public slots:
 };

@@ -20,7 +20,7 @@ ApplicationWindow {
     property real dp: mainWindow.width / 320
 
     function groupItemClicked(groupId) {
-        SubjectHandler.loadStudentsList(groupId)
+        SubjectHandler.loadGroupData(groupId)
     }
 
     FontLoader {
@@ -86,7 +86,7 @@ ApplicationWindow {
                 groupItem.triggered.connect(groupItemClicked)
             }
         }
-        onStudentListLoaded: {
+        onGroupDataLoaded: {
             stats.contentModel = students
         }
     }

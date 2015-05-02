@@ -43,14 +43,14 @@ class StudentListModel : public QAbstractListModel
 {
     Q_OBJECT
     public:
-        enum AnimalRoles {
+        enum StudentDataRoles {
             NameRole = Qt::UserRole + 1,
             NoteRole
         };
 
         StudentListModel(QObject *parent = 0);
 
-        void addStudent(const Student& animal);
+        void addStudent(const Student& student);
 
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

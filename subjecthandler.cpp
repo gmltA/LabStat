@@ -56,7 +56,7 @@ void SubjectHandler::attachDrive(QString rootFolder)
     QtConcurrent::run(currentSubject, &SubjectData::attachDrive, rootFolder);
 }
 
-void SubjectHandler::loadStudentsList(QString group)
+void SubjectHandler::loadGroupData(QString group)
 {
     QList<Student> students = currentSubject->getDataSheet()->getStudentList();
     if (studentList != nullptr)
@@ -68,7 +68,7 @@ void SubjectHandler::loadStudentsList(QString group)
         if (person.getGroup() == group)
             studentList->addStudent(person);
     }
-    emit studentListLoaded(studentList);
+    emit groupDataLoaded(studentList, timeTable);
 }
 
 SubjectHandler* SubjectHandler::getInstance()
