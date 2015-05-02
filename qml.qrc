@@ -26,6 +26,9 @@
         <file>QML/ActionBar.qml</file>
         <file>QML/TabbedListView.qml</file>
         <file>QML/MaterialCheckBox.qml</file>
+        <file>QML/Palette.qml</file>
+        <file>QML/qmldir</file>
+        <file>QML/Theme.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

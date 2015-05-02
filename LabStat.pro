@@ -51,7 +51,10 @@ DISTFILES += \
     QML/QuickAndroid/anim/ShrinkFadeOut.qml \
     QML/ActionBar.qml \
     QML/TabbedListView.qml \
-    QML/MaterialCheckBox.qml
+    QML/MaterialCheckBox.qml \
+    QML/Palette.qml \
+    QML/qmldir \
+    QML/Theme.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \
