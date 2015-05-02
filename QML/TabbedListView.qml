@@ -38,7 +38,8 @@ Rectangle {
 
                 onMovementEnded: {
                     scrollStop = contentY
-                    scrollDiff = Math.min(0, Math.max(-tabContainer.height, scrollDiff))
+                    scrollDiff = Math.min(0, Math.max(-tabContainer.height,
+                                                      scrollDiff))
                 }
             }
         }
@@ -52,16 +53,81 @@ Rectangle {
             height: dateTabs.height
             state: wrapper.ListView.isCurrentItem ? "current" : ""
 
-            Text {
-                id: title
-
+            Row {
+                id: dateTime
                 anchors.centerIn: parent
+                height: parent.height
+                spacing: 5 * dp
 
-                text: itemName
-                font.pixelSize: 10 * dp
-                Behavior on font.pixelSize {
+                Behavior on anchors.verticalCenterOffset {
                     NumberAnimation {
                         duration: 100
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                Text {
+                    id: dateText
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: date
+                    font.family: "Roboto Regular"
+                    font.pixelSize: 15 * dp
+                }
+                Text {
+                    id: timeText
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 2 * dp
+
+                    text: time
+                    font.family: "Roboto Condensed Light"
+                    font.pixelSize: 12 * dp
+                }
+
+                transform: Scale {
+                    id: titleScale
+                    origin.x: width / 2
+                    origin.y: height / 2
+                    xScale: 0.6
+                    yScale: 0.6
+                    Behavior on xScale {
+                        NumberAnimation {
+                            duration: 100
+                        }
+                    }
+                    Behavior on yScale {
+                        NumberAnimation {
+                            duration: 100
+                        }
+                    }
+                }
+            }
+
+            Text {
+                id: groupText
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: highlight.top
+
+                text: group == 1 ? "1 подгруппа" : group == 2 ? "2 подгруппа" : "Группа целиком"
+                color: Qt.rgba(0, 0, 0, 0.54)
+                font.pixelSize: 12 * dp
+                font.family: "Roboto Condensed"
+
+                transform: Scale {
+                    id: groupScale
+                    origin.x: width / 2
+                    origin.y: 0
+                    xScale: 0
+                    yScale: 0
+                    Behavior on xScale {
+                        NumberAnimation {
+                            duration: 100
+                        }
+                    }
+                    Behavior on yScale {
+                        NumberAnimation {
+                            duration: 100
+                        }
                     }
                 }
             }
@@ -83,12 +149,25 @@ Rectangle {
                 State {
                     name: "current"
                     PropertyChanges {
-                        target: title
-                        font.pixelSize: 14 * dp
+                        target: dateTime
+                        anchors.verticalCenterOffset: -5 * dp
+                    }
+                    PropertyChanges {
+                        target: titleScale
+                        xScale: 1
+                        yScale: 1
                     }
                     PropertyChanges {
                         target: highlight
                         height: 4 * dp
+                    }
+                    PropertyChanges {
+                        target: dateText
+                    }
+                    PropertyChanges {
+                        target: groupScale
+                        xScale: 1
+                        yScale: 1
                     }
                 }
             ]

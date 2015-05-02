@@ -197,13 +197,19 @@ ApplicationWindow {
     ListModel {
         id: testModel
         ListElement {
-            itemName: "Test"
+            date: "12.04"
+            time: "13:25"
+            group: 0
         }
         ListElement {
-            itemName: "Long item"
+            date: "12.04"
+            time: "13:25"
+            group: 1
         }
         ListElement {
-            itemName: "Test 2"
+            date: "12.04"
+            time: "13:25"
+            group: 2
         }
     }
 
