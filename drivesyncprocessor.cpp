@@ -32,23 +32,43 @@ void DriveSyncProcessor::init()
     emit initFinished(false);
 }
 
+// todo: split code in 2 functions
 void DriveSyncProcessor::syncFile(DataSheet* dataFile)
 {
+    // buildGroupList
     WorkSheet other = sheet->getWorkSheet("Разное");
 
     QByteArray workSheetData = driveService->Sheets.getListFeed(other);
 
-    QDomDocument doc;
+    QDomDocument* doc = new QDomDocument();
     QStringList groups;
-    if (doc.setContent(workSheetData))
+    if (doc->setContent(workSheetData))
     {
-        QDomNodeList groupNodes = doc.elementsByTagName("gsx:группы");
+        QDomNodeList groupNodes = doc->elementsByTagName("gsx:группы");
         for (int i = 0; i < groupNodes.size(); i++)
             if (!groupNodes.item(i).toElement().text().isEmpty())
                 groups.push_back(groupNodes.item(i).toElement().text());
 
         dataFile->setGroupList(groups);
     }
+    delete doc;
+
+    // buildStudentList
+    WorkSheet students = sheet->getWorkSheet("Список студентов");
+
+    workSheetData = driveService->Sheets.getListFeed(students);
+
+    doc = new QDomDocument();
+    QList<Student> studentList;
+    if (doc->setContent(workSheetData))
+    {
+        QDomNodeList studentNodes = doc->elementsByTagName("entry");
+        for (int i = 0; i < studentNodes.size(); i++)
+            studentList.push_back(Student(studentNodes.item(i)));
+
+        dataFile->setStudentList(studentList);
+    }
+    delete doc;
     emit syncDone();
 }
 
