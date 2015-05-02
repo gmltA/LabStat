@@ -69,6 +69,55 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
         dataFile->setStudentList(studentList);
     }
     delete doc;
+
+    // buildSchedule
+    WorkSheet labs = sheet->getWorkSheet("Лабораторные работы");
+
+    workSheetData = driveService->Sheets.getListFeed(labs);
+
+    doc = new QDomDocument();
+    //todo: convert to date list
+    QList<QDate> dateList;
+    QList<TimetableEntry> timeTable;
+    if (doc->setContent(workSheetData))
+    {
+        // BUG: firstChildElement doesn't work
+        QDomNodeList dateNodes = doc->elementsByTagName("entry").at(0).childNodes();
+        QDomNodeList timeNodes = doc->elementsByTagName("entry").at(1).childNodes();
+        int timeIndex = 0;
+        for (int i = 0; i < dateNodes.size(); i++)
+        {
+            QDomElement dateElement = dateNodes.item(i).toElement();
+            if (dateElement.tagName().contains("gsx"))
+            {
+                dateList.push_back(QDate::fromString(dateElement.text(), "dd.MM.yyyy"));
+                if (dateList.count() > 1)
+                {
+                    while (timeNodes.item(timeIndex).toElement().tagName() != dateElement.tagName() && timeIndex < timeNodes.count())
+                    {
+                        QDomElement timeElement = timeNodes.item(timeIndex).toElement();
+                        if (timeElement.tagName().contains("gsx"))
+                            timeTable.append(TimetableEntry(dateList.at(dateList.count() - 2), QTime::fromString(timeElement.text(), "h:mm"), ""));
+                        timeIndex++;
+                    }
+                }
+                if (i + 1 == dateNodes.size())
+                {
+                    while (timeIndex < timeNodes.count())
+                    {
+                        QDomElement timeElement = timeNodes.item(timeIndex).toElement();
+                        if (timeElement.tagName().contains("gsx"))
+                            timeTable.append(TimetableEntry(dateList.last(), QTime::fromString(timeElement.text(), "h:mm"), ""));
+                        timeIndex++;
+                    }
+                }
+            }
+        }
+
+        dataFile->setTimeTable(timeTable);
+    }
+    delete doc;
+
     emit syncDone();
 }
 
