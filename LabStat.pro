@@ -50,7 +50,8 @@ DISTFILES += \
     QML/QuickAndroid/anim/GrowFadeIn.qml \
     QML/QuickAndroid/anim/ShrinkFadeOut.qml \
     QML/ActionBar.qml \
-    QML/TabbedListView.qml
+    QML/TabbedListView.qml \
+    QML/MaterialCheckBox.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

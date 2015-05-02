@@ -25,6 +25,7 @@
         <file>QML/QuickAndroid/Shadow.qml</file>
         <file>QML/ActionBar.qml</file>
         <file>QML/TabbedListView.qml</file>
+        <file>QML/MaterialCheckBox.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>
