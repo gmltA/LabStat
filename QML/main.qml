@@ -20,6 +20,7 @@ ApplicationWindow {
     property real dp: mainWindow.width / 320
 
     function groupItemClicked(groupId) {
+        SubjectHandler.loadStudentsList(groupId)
     }
 
     FontLoader {
@@ -27,36 +28,66 @@ ApplicationWindow {
         source: "qrc:/fonts/Material-Design-Icons.ttf"
     }
 
-    PopupDialog {
-        title: "Register new sync processor"
-        active: true
-        z: 6
-        RadioButton {
-            id: driveCheckBox
-            text: "Google Drive"
-        }
-        RadioButton {
-            id: sqlCheckBox
-            text: "SQLite storage"
-        }
+    Component {
+        id: dialogBuilder
 
-        TextInput {
-            id: text
-            visible: driveCheckBox.checked
-            focus: true
-            width: parent.width
-            height: 24 * dp
-            font.pixelSize: 14
-            maximumLength: 20
-            Rectangle {
-                anchors.bottom: parent.bottom
+        PopupDialog {
+            title: "Register new sync processor"
+            active: true
+            z: 6
+            RadioButton {
+                id: driveCheckBox
+                text: "Google Drive"
+            }
+            RadioButton {
+                id: sqlCheckBox
+                text: "SQLite storage"
+            }
+
+            TextInput {
+                id: text
+                visible: driveCheckBox.checked
+                focus: visible
                 width: parent.width
-                height: 1 * dp
-                color: Qt.rgba(0, 0, 0, 0.57)
+                height: 24 * dp
+                font.pixelSize: 14
+                maximumLength: 20
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    height: 1 * dp
+                    color: Qt.rgba(0, 0, 0, 0.57)
+                }
+            }
+            onAccepted: {
+                SubjectHandler.attachDrive(text.text)
             }
         }
-        onAccepted: {
-            SubjectHandler.attachDrive(text.text)
+    }
+
+    Connections {
+        target: SubjectHandler
+        onProcessorAddCalled: {
+            var component = Qt.createComponent(
+                        "NavigationDrawer/NavigationDrawerSyncItem.qml")
+            var listItem = component.createObject(syncProcessors)
+
+            //listItem.icon = processorData['online'] === 1 ? "" : "";
+            listItem.caption = processorData['title']
+            listItem.processorId = processorData['id']
+        }
+        onGroupListChanged: {
+            for (var i = 0; i < groupList.data.length; i++)
+                groupList.data[i].destroy()
+
+            for (i = 0; i < groups.length; i++) {
+                var groupItem = groupList.addItem("", groups[i],
+                                                  groups[i])
+                groupItem.triggered.connect(groupItemClicked)
+            }
+        }
+        onStudentListLoaded: {
+            stats.contentModel = students
         }
     }
 
@@ -87,29 +118,6 @@ ApplicationWindow {
             anchors.fill: parent
             contentHeight: drawerMenu.height
             contentWidth: parent.width
-
-            Connections {
-                target: SubjectHandler
-                onProcessorAddCalled: {
-                    var component = Qt.createComponent(
-                                "NavigationDrawer/NavigationDrawerSyncItem.qml")
-                    var listItem = component.createObject(syncProcessors)
-
-                    //listItem.icon = processorData['online'] === 1 ? "" : "";
-                    listItem.caption = processorData['title']
-                    listItem.processorId = processorData['id']
-                }
-                onGroupListChanged: {
-                    for (var i = 0; i < groupList.data.length; i++)
-                        groupList.data[i].destroy()
-
-                    for (i = 0; i < groups.length; i++) {
-                        var groupItem = groupList.addItem("", groups[i],
-                                                          groups[i])
-                        groupItem.triggered.connect(groupItemClicked)
-                    }
-                }
-            }
 
             Column {
                 id: drawerMenu
