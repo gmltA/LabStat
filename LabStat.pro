@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     drivesyncprocessor.cpp \
     GoogleDrive/sheetsapirequest.cpp \
     subjectdata.cpp \
-    subjecthandler.cpp
+    subjecthandler.cpp \
+    student.cpp
 
 RESOURCES += qml.qrc
 
@@ -74,4 +75,5 @@ HEADERS += \
     drivesyncprocessor.h \
     GoogleDrive/sheetsapirequest.h \
     subjectdata.h \
-    subjecthandler.h
+    subjecthandler.h \
+    student.h
