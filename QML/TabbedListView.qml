@@ -72,7 +72,7 @@ Rectangle {
                     id: dateText
                     anchors.verticalCenter: parent.verticalCenter
 
-                    text: date
+                    text: Qt.formatDateTime(date, "dd.MM")
                     font.family: "Roboto Regular"
                     font.pixelSize: 15 * dp
                     color: Theme.textColor
@@ -82,7 +82,7 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: 2 * dp
 
-                    text: time
+                    text: Qt.formatDateTime(time, "hh:mm")
                     font.family: "Roboto Condensed Light"
                     font.pixelSize: 12 * dp
                     color: Theme.textColor

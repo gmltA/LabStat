@@ -68,6 +68,12 @@ void SubjectHandler::loadGroupData(QString group)
         if (person.getGroup() == group)
             studentList->addStudent(person);
     }
+
+    TimeTableModel* timeTable = new TimeTableModel();
+    foreach (TimetableEntry timeTableEntry, currentSubject->getDataSheet()->getTimeTable())
+    {
+        timeTable->addEntry(timeTableEntry);
+    }
     emit groupDataLoaded(studentList, timeTable);
 }
 

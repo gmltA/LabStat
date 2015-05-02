@@ -67,6 +67,16 @@ void DataSheet::setStudentList(const QList<Student>& value)
     students = value;
 }
 
+QList<TimetableEntry> DataSheet::getTimeTable() const
+{
+    return timeTable;
+}
+
+void DataSheet::setTimeTable(const QList<TimetableEntry>& value)
+{
+    timeTable = value;
+}
+
 uint DataSheet::getGroupId() const
 {
     return groupId;
@@ -84,4 +94,44 @@ const char* DataSheet::subjectString(DataSheet::Subject subject)
     QMetaEnum metaEnum = mo.enumerator(index);
 
     return metaEnum.valueToKey(subject);
+}
+
+TimeTableModel::TimeTableModel(QObject* parent)
+    : QAbstractListModel(parent)
+{
+
+}
+
+void TimeTableModel::addEntry(const TimetableEntry& entry)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    timeTable << entry;
+    endInsertRows();
+}
+
+int TimeTableModel::rowCount(const QModelIndex & parent) const {
+    Q_UNUSED(parent);
+    return timeTable.count();
+}
+
+QVariant TimeTableModel::data(const QModelIndex & index, int role) const {
+    if (index.row() < 0 || index.row() >= timeTable.count())
+        return QVariant();
+
+    const TimetableEntry& entry = timeTable[index.row()];
+    if (role == DateRole)
+        return entry.dateTime.date();
+    else if (role == TimeRole)
+        return entry.dateTime.time();
+    else if (role == GroupRole)
+        return entry.group;
+    return QVariant();
+}
+
+QHash<int, QByteArray> TimeTableModel::roleNames() const {
+    QHash<int, QByteArray> roles;
+    roles[DateRole] = "date";
+    roles[TimeRole] = "time";
+    roles[GroupRole] = "group";
+    return roles;
 }

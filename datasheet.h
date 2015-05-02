@@ -1,9 +1,48 @@
 #ifndef DATASHEET_H
 #define DATASHEET_H
 
+#include <QDateTime>
 #include <QObject>
 #include <QStringList>
 #include "student.h"
+
+struct TimetableEntry
+{
+        TimetableEntry(QDate date, QTime time, QString _group, QString _subgroup = "")
+            : group(_group), subroup(_subgroup)
+        {
+            dateTime.setDate(date);
+            dateTime.setTime(time);
+        }
+
+        QDateTime dateTime;
+        QString group;
+        QString subroup;
+};
+
+class TimeTableModel : public QAbstractListModel
+{
+    Q_OBJECT
+    public:
+        enum TimeTableDataRoles {
+            DateRole = Qt::UserRole + 1,
+            TimeRole,
+            GroupRole
+        };
+
+        TimeTableModel(QObject *parent = 0);
+
+        void addEntry(const TimetableEntry& entry);
+
+        int rowCount(const QModelIndex & parent = QModelIndex()) const;
+        QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+
+    protected:
+        QHash<int, QByteArray> roleNames() const;
+
+    private:
+        QList<TimetableEntry> timeTable;
+};
 
 class DataSheet : public QObject
 {
@@ -41,6 +80,9 @@ class DataSheet : public QObject
         QList<Student> getStudentList() const;
         void setStudentList(const QList<Student>& value);
 
+        QList<TimetableEntry> getTimeTable() const;
+        void setTimeTable(const QList<TimetableEntry>& value);
+
     private:
         uint id;
         QString fileName;
@@ -50,6 +92,7 @@ class DataSheet : public QObject
 
         QStringList groups;
         QList<Student> students;
+        QList<TimetableEntry> timeTable;
 
         static const char* subjectString(DataSheet::Subject subject);
 
