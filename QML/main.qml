@@ -120,6 +120,8 @@ ApplicationWindow {
             contentHeight: drawerMenu.height
             contentWidth: parent.width
 
+            boundsBehavior: Flickable.StopAtBounds
+
             Column {
                 id: drawerMenu
                 anchors.left: parent.left
