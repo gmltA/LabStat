@@ -44,7 +44,8 @@ class StudentListModel : public QAbstractListModel
     public:
         enum StudentDataRoles {
             NameRole = Qt::UserRole + 1,
-            NoteRole
+            NoteRole,
+            SubGroupRole
         };
 
         StudentListModel(QObject *parent = 0);

@@ -55,6 +55,8 @@ Rectangle {
             height: dateTabs.height
             state: wrapper.ListView.isCurrentItem ? "current" : ""
 
+            property int subgroup: group
+
             Row {
                 id: dateTime
                 anchors.centerIn: parent
@@ -182,7 +184,17 @@ Rectangle {
         id: personDelegate
         Item {
             width: root.width
-            height: 72 * dp
+            height: {
+                if (dateTabs.currentItem)
+                {
+                    if (dateTabs.currentItem.subgroup == subgroup || dateTabs.currentItem.subgroup == 0)
+                        return 72 * dp
+                    else
+                        return 0
+                }
+            }
+
+            visible: height != 0
             Rectangle {
                 anchors.bottom: parent.bottom
 

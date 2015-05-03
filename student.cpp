@@ -97,16 +97,23 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
         return QVariant();
 
     const Student& student = students[index.row()];
-    if (role == NameRole)
-        return student.getName();
-    else if (role == NoteRole)
-        return student.getNote();
-    return QVariant();
+    switch (role)
+    {
+        case NameRole:
+            return student.getName();
+        case NoteRole:
+            return student.getNote();
+        case SubGroupRole:
+            return student.getSubgroup();
+        default:
+            return QVariant();
+    }
 }
 
 QHash<int, QByteArray> StudentListModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[NameRole] = "name";
     roles[NoteRole] = "note";
+    roles[SubGroupRole] = "subgroup";
     return roles;
 }

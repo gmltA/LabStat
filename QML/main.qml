@@ -149,11 +149,6 @@ ApplicationWindow {
                         id: groupList
                         icon: ""
                         caption: "Groups"
-
-                        NavigationDrawerItem {
-                            icon: ""
-                            caption: "250501"
-                        }
                     }
 
                     NavigationDrawerItem {
