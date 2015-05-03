@@ -75,15 +75,18 @@ class DataSheet : public QObject
 
         QStringList getGroupList() const;
         void setGroupList(const QStringList& value);
+        void buildGroupList(QByteArray rawData);
 
         QString getFileName() const;
         void setFileName(const QString& value);
 
         QList<Student> getStudentList() const;
         void setStudentList(const QList<Student>& value);
+        void buildStudentList(QByteArray rawData);
 
         QList<TimetableEntry> getTimeTable() const;
         void setTimeTable(const QList<TimetableEntry>& value);
+        void buildTimeTable(QByteArray rawData);
 
     private:
         uint id;

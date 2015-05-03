@@ -47,6 +47,21 @@ void DataSheet::setGroupList(const QStringList& value)
     emit groupListChanged(groups);
 }
 
+void DataSheet::buildGroupList(QByteArray rawData)
+{
+    QDomDocument doc;
+    QStringList groupList;
+    if (doc.setContent(rawData))
+    {
+        QDomNodeList groupNodes = doc.elementsByTagName("gsx:группы");
+        for (int i = 0; i < groupNodes.size(); i++)
+            if (!groupNodes.item(i).toElement().text().isEmpty())
+                groupList.push_back(groupNodes.item(i).toElement().text());
+
+        setGroupList(groupList);
+    }
+}
+
 QString DataSheet::getFileName() const
 {
     return fileName;
@@ -67,6 +82,20 @@ void DataSheet::setStudentList(const QList<Student>& value)
     students = value;
 }
 
+void DataSheet::buildStudentList(QByteArray rawData)
+{
+    QDomDocument doc;
+    QList<Student> studentList;
+    if (doc.setContent(rawData))
+    {
+        QDomNodeList studentNodes = doc.elementsByTagName("entry");
+        for (int i = 0; i < studentNodes.size(); i++)
+            studentList.push_back(Student(studentNodes.item(i)));
+
+        setStudentList(studentList);
+    }
+}
+
 QList<TimetableEntry> DataSheet::getTimeTable() const
 {
     return timeTable;
@@ -75,6 +104,53 @@ QList<TimetableEntry> DataSheet::getTimeTable() const
 void DataSheet::setTimeTable(const QList<TimetableEntry>& value)
 {
     timeTable = value;
+}
+
+void DataSheet::buildTimeTable(QByteArray rawData)
+{
+    QDomDocument doc;
+    QList<QDomElement> dateList;
+    QList<TimetableEntry> timeTable;
+
+    if (doc.setContent(rawData))
+    {
+        // BUG: firstChildElement doesn't work
+        QDomNodeList dateNodes = doc.elementsByTagName("entry").at(0).childNodes();
+        QDomNodeList timeNodes = doc.elementsByTagName("entry").at(1).childNodes();
+        QDomNodeList groupNodes = doc.elementsByTagName("entry").at(2).childNodes();
+
+        for (int i = 0; i < dateNodes.size(); i++)
+        {
+            QDomElement dateElement = dateNodes.item(i).toElement();
+            if (dateElement.tagName().contains("gsx"))
+                dateList.push_back(dateElement);
+        }
+
+        int dateIndex = 0;
+        int entryIndex  = 0;
+        for (int i = 0; i < timeNodes.size(); i++)
+        {
+            QDomElement timeElement = timeNodes.item(i).toElement();
+            if (timeElement.tagName().contains("gsx"))
+            {
+                if (dateList.count() - 1 > dateIndex && dateList[dateIndex + 1].tagName() == timeElement.tagName())
+                    ++dateIndex;
+
+                QStringList groupData;
+                for (int groupIndex = 0; groupIndex < groupNodes.size(); groupIndex++)
+                    if (groupNodes.item(groupIndex).toElement().tagName() == timeElement.tagName())
+                        groupData = groupNodes.item(groupIndex).toElement().text().split("-");
+
+                int group = groupData[0].toInt();
+                int subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();
+
+                timeTable.push_back(TimetableEntry(entryIndex++, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
+                                                   QTime::fromString(timeElement.text(), "h:mm"), group, subgroup));
+            }
+        }
+
+        setTimeTable(timeTable);
+    }
 }
 
 uint DataSheet::getGroupId() const
