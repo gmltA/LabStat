@@ -226,7 +226,16 @@ Rectangle {
                     Layout.alignment: Qt.AlignVCenter
                 }
             }
+            ComboBox {
+                id: box
+                height: 48 * dp
+                model: ["One", "Two", "Three"]
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: checkBox.left
+            }
+
             CheckBox {
+                id: checkBox
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 10 * dp
