@@ -313,6 +313,7 @@ Rectangle {
     states: [
         State {
             name: "hidden"
+            when: tabsModel.count === 0
             PropertyChanges {
                 target: root
                 visible: false
