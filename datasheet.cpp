@@ -2,7 +2,7 @@
 #include <QMetaEnum>
 
 DataSheet::DataSheet(QString _fileName, QObject *parent)
-    : QObject(parent), id(0), fileName(_fileName), groupId(0), subject(Subject::None)
+    : QObject(parent), id(0), fileName(_fileName)
 {
 }
 
@@ -18,16 +18,6 @@ uint DataSheet::getId() const
 void DataSheet::setId(const uint& value)
 {
     id = value;
-}
-
-DataSheet::Subject DataSheet::getSubject() const
-{
-    return subject;
-}
-
-void DataSheet::setSubject(const Subject& value)
-{
-    subject = value;
 }
 
 QString DataSheet::toString() const
@@ -151,25 +141,6 @@ void DataSheet::buildTimeTable(QByteArray rawData)
 
         setTimeTable(timeTable);
     }
-}
-
-uint DataSheet::getGroupId() const
-{
-    return groupId;
-}
-
-void DataSheet::setGroupId(const uint& value)
-{
-    groupId = value;
-}
-
-const char* DataSheet::subjectString(DataSheet::Subject subject)
-{
-    const QMetaObject &mo = DataSheet::staticMetaObject;
-    int index = mo.indexOfEnumerator("Subject");
-    QMetaEnum metaEnum = mo.enumerator(index);
-
-    return metaEnum.valueToKey(subject);
 }
 
 TimeTableModel::TimeTableModel(QObject* parent)
