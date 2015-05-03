@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.2
+import "../." // Singletons import
 
 Item
 {
@@ -39,12 +40,17 @@ Item
         return listItems.children.length === 0
     }
 
+    NavigationDrawerDivider {
+        id: topDivider
+    }
+
     NavigationDrawerItem
     {
         id: listHeader
         caption: "List"
         rightIcon: ""
-        captionItem.font.bold: true
+        color: Theme.primaryColor
+        iconColor: Theme.primaryColor
 
         onClicked: {
             toogle()
@@ -67,17 +73,6 @@ Item
             visible: isEmpty()
         }
 
-        Rectangle {
-            height: 4 * dp
-            width: parent.width
-            z: 1
-            transformOrigin: Item.TopLeft
-            gradient: Gradient{
-                GradientStop { position: 1; color: "#00000000"}
-                GradientStop { position: 0; color: "#2c000000"}
-            }
-        }
-
         Column {
             id: listItems
 
@@ -85,15 +80,8 @@ Item
             anchors.right: parent.right
         }
 
-        Rectangle {
-            height: 4 * dp
-            width: parent.width
-            z: 1
+        NavigationDrawerDivider {
             anchors.bottom: parent.bottom
-            gradient: Gradient {
-                GradientStop { position: 0; color: "#00000000"}
-                GradientStop { position: 1; color: "#2c000000"}
-            }
         }
 
         Behavior on height {
@@ -117,6 +105,11 @@ Item
         State {
             name: "collapsed"
             PropertyChanges {
+                target: topDivider
+                height: 0
+                opacity: 0
+            }
+            PropertyChanges {
                 target: listContainer
                 height: 0
                 opacity: 0
@@ -126,8 +119,9 @@ Item
                 rotation: -180
             }
             PropertyChanges {
-                target: listHeader.captionItem
-                font.bold: false
+                target: listHeader
+                color: Theme.textColor
+                iconColor: Theme.iconColor
             }
         }
     ]

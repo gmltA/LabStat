@@ -1,6 +1,7 @@
-import QtQuick 2.1
+import QtQuick 2.3
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.2
+import "../." // Singletons import
 
 Button {
     id: root
@@ -13,6 +14,8 @@ Button {
     property alias rightIconItem: rightIcon
     property alias caption: captionItem.text
     property alias captionItem: captionItem
+    property alias color: captionItem.color
+    property alias iconColor: leftIcon.color
     property var extraData
 
     signal triggered(var extraData);
@@ -33,7 +36,7 @@ Button {
         font.family: materialIcons.name
         font.pointSize: 28
 
-        color: Qt.rgba(0,0,0,0.87)
+        color: Theme.iconColor
         text: ""
     }
 
@@ -46,7 +49,7 @@ Button {
         font.pointSize: 14
         font.family: "Roboto Regular"
 
-        color: Qt.rgba(0,0,0,0.87)
+        color: Theme.textColor
         text: "Caption"
     }
 
@@ -59,7 +62,7 @@ Button {
         font.family: materialIcons.name
         font.pointSize: 28
 
-        color: Qt.rgba(0,0,0,0.87)
+        color: Theme.iconColor
         text: ""
     }
 

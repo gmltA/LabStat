@@ -15,19 +15,17 @@ Rectangle {
     color: "#84BAC4"
     Image {
         id: headerBG
-        height: parent.height
-        width: parent.width
+        anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         source: "qrc:/img/bg.jpg"
         verticalAlignment: Image.AlignVCenter
-        clip: true
     }
 
     Rectangle {
         height: parent.height
         width: parent.width
         anchors.verticalCenter: parent.verticalCenter
-        color: Qt.rgba(0,0,0,0)
+        color: "transparent"
 
         // todo: should we replace Layout with just Column or even simple Rectangle?
         ColumnLayout {
@@ -44,17 +42,16 @@ Rectangle {
                 text: "Main drawer title"
 
                 font.pointSize: 14
-                font.weight: Font.Black
+                font.family: "Roboto Medium"
                 color: "white"
-                //color: Qt.rgba(0,0,0,0.54)
             }
             Text {
                 id: secondaryTextItem
                 text: "Drawer subtitle"
 
                 font.pointSize: 14
+                font.family: "Roboto Regular"
                 color: "white"
-                //color: Qt.rgba(0,0,0,0.54)
             }
         }
         Rectangle {
