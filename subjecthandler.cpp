@@ -72,7 +72,8 @@ void SubjectHandler::loadGroupData(QString group)
     TimeTableModel* timeTable = new TimeTableModel();
     foreach (TimetableEntry timeTableEntry, currentSubject->getDataSheet()->getTimeTable())
     {
-        timeTable->addEntry(timeTableEntry);
+        if (group.toInt() == timeTableEntry.group)
+            timeTable->addEntry(timeTableEntry);
     }
     emit groupDataLoaded(studentList, timeTable);
 }
