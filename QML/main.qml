@@ -88,6 +88,7 @@ ApplicationWindow {
         }
         onGroupDataLoaded: {
             stats.contentModel = students
+            stats.tabsModel = timeTable
         }
     }
 
@@ -278,8 +279,6 @@ ApplicationWindow {
         height: parent.height - actionBar.height
         width: parent.width
         anchors.top: actionBar.bottom
-
-        state: "hidden"
 
         tabsModel: testModel
         contentModel: groupListModel
