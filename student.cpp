@@ -8,8 +8,8 @@ Student::Student(QDomNode studentNode)
     patronymic = nameData.size() < 3 ? "" : nameData[2];
 
     QStringList groupData = studentNode.firstChildElement("gsx:группа").text().split("-");
-    group = groupData[0];
-    subgroup = groupData.size() < 2 ? "" : groupData[1];
+    group = groupData[0].toInt();
+    subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();
 
     note = studentNode.firstChildElement("gsx:заметки").text();
 }
@@ -44,22 +44,22 @@ void Student::setPatronymic(const QString& value)
     patronymic = value;
 }
 
-QString Student::getGroup() const
+int Student::getGroup() const
 {
     return group;
 }
 
-void Student::setGroup(const QString& value)
+void Student::setGroup(const int& value)
 {
     group = value;
 }
 
-QString Student::getSubgroup() const
+int Student::getSubgroup() const
 {
     return subgroup;
 }
 
-void Student::setSubgroup(const QString& value)
+void Student::setSubgroup(const int& value)
 {
     subgroup = value;
 }

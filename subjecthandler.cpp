@@ -56,7 +56,7 @@ void SubjectHandler::attachDrive(QString rootFolder)
     QtConcurrent::run(currentSubject, &SubjectData::attachDrive, rootFolder);
 }
 
-void SubjectHandler::loadGroupData(QString group)
+void SubjectHandler::loadGroupData(int group)
 {
     QList<Student> students = currentSubject->getDataSheet()->getStudentList();
     if (studentList != nullptr)
@@ -72,7 +72,7 @@ void SubjectHandler::loadGroupData(QString group)
     TimeTableModel* timeTable = new TimeTableModel();
     foreach (TimetableEntry timeTableEntry, currentSubject->getDataSheet()->getTimeTable())
     {
-        if (group.toInt() == timeTableEntry.group)
+        if (group == timeTableEntry.group)
             timeTable->addEntry(timeTableEntry);
     }
     emit groupDataLoaded(studentList, timeTable);

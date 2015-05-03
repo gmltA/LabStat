@@ -18,11 +18,11 @@ class Student
         QString getPatronymic() const;
         void setPatronymic(const QString& value);
 
-        QString getGroup() const;
-        void setGroup(const QString& value);
+        int getGroup() const;
+        void setGroup(const int& value);
 
-        QString getSubgroup() const;
-        void setSubgroup(const QString& value);
+        int getSubgroup() const;
+        void setSubgroup(const int& value);
 
         QString getNote() const;
         void setNote(const QString& value);
@@ -34,9 +34,8 @@ class Student
 
         QString note;
 
-        // todo: convert to int or something
-        QString group;
-        QString subgroup;
+        int group;
+        int subgroup;
 };
 
 class StudentListModel : public QAbstractListModel

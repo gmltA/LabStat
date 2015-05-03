@@ -32,7 +32,7 @@ class SubjectHandler : public QObject
 
         Q_INVOKABLE void sync(int processorIndex);
         Q_INVOKABLE void attachDrive(QString rootFolder = "LabStat");
-        Q_INVOKABLE void loadGroupData(QString group);
+        Q_INVOKABLE void loadGroupData(int group);
 
         SubjectData* getCurrentSubject() const;
         void setCurrentSubject(int id);
