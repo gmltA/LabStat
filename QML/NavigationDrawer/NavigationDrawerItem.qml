@@ -10,8 +10,10 @@ Button {
     anchors.right: parent.right
 
     property alias icon: leftIcon.text
+    property alias secondaryAction: secondaryActionArea
     property alias rightIcon: rightIcon.text
     property alias rightIconItem: rightIcon
+
     property alias caption: captionItem.text
     property alias captionItem: captionItem
     property alias color: captionItem.color
@@ -53,17 +55,28 @@ Button {
         text: "Caption"
     }
 
-    Text {
-        id: rightIcon
+    Item {
+        height: root.height
+        width: height
         anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 16 * dp
 
-        font.family: materialIcons.name
-        font.pointSize: 28
+        Text {
+            id: rightIcon
+            anchors.centerIn: parent
 
-        color: Theme.iconColor
-        text: ""
+            font.family: materialIcons.name
+            font.pointSize: 28
+
+            color: Theme.iconColor
+            text: ""
+        }
+
+        MouseArea {
+            id: secondaryActionArea
+            anchors.fill: parent
+            enabled: false
+        }
     }
 
     style: ButtonStyle {

@@ -52,7 +52,8 @@ Item
         color: Theme.primaryColor
         iconColor: Theme.primaryColor
 
-        onClicked: {
+        secondaryAction.enabled: true
+        secondaryAction.onClicked: {
             toogle()
         }
     }
