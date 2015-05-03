@@ -8,16 +8,18 @@
 
 struct TimetableEntry
 {
-        TimetableEntry(QDate date, QTime time, QString _group, QString _subgroup = "")
-            : group(_group), subroup(_subgroup)
+        TimetableEntry(int _id, QDate date, QTime time, int _group, int _subgroup = 0)
+            : id(_id), group(_group), subroup(_subgroup)
         {
             dateTime.setDate(date);
             dateTime.setTime(time);
         }
 
+        int id;
+
         QDateTime dateTime;
-        QString group;
-        QString subroup;
+        int group;
+        int subroup;
 };
 
 class TimeTableModel : public QAbstractListModel
