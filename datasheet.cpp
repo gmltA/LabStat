@@ -171,7 +171,7 @@ QVariant TimeTableModel::data(const QModelIndex & index, int role) const {
     else if (role == TimeRole)
         return entry.dateTime.time();
     else if (role == GroupRole)
-        return entry.subroup;
+        return entry.subgroup;
     return QVariant();
 }
 

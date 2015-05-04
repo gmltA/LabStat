@@ -9,7 +9,7 @@
 struct TimetableEntry
 {
         TimetableEntry(int _id, QDate date, QTime time, int _group, int _subgroup = 0)
-            : id(_id), group(_group), subroup(_subgroup)
+            : id(_id), group(_group), subgroup(_subgroup)
         {
             dateTime.setDate(date);
             dateTime.setTime(time);
@@ -19,7 +19,7 @@ struct TimetableEntry
 
         QDateTime dateTime;
         int group;
-        int subroup;
+        int subgroup;
 };
 
 class TimeTableModel : public QAbstractListModel
