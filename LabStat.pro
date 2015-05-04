@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick concurrent xml
+QT += qml sql quick concurrent xml
 
 android{
     QT += androidextras

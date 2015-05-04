@@ -1,7 +1,8 @@
 #include "sqlitesyncprocessor.h"
 
 SQLiteSyncProcessor::SQLiteSyncProcessor(QObject *parent)
-    : QObject(parent), IDataStore(Origin::OriginOffline, "SQLite local")
+    : QObject(parent), IDataStore(Origin::OriginOffline, "SQLite local"),
+      db(QSqlDatabase::addDatabase("QSQLITE"))
 {
 
 }

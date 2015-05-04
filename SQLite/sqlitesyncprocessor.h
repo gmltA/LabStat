@@ -17,6 +17,7 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
         void syncFile(DataSheet* dataFile) override final;
 
     private:
+        QSqlDatabase db;
 
     signals:
         void initFinished(bool success) override final;
