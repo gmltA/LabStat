@@ -184,68 +184,146 @@ Rectangle {
     Component {
         id: personDelegate
         Item {
-            width: root.width
+            id: personDelegateElement
+
             height: {
-                if (dateTabs.currentItem)
-                {
-                    if (dateTabs.currentItem.subgroup == subgroup || dateTabs.currentItem.subgroup == 0)
-                        return 72 * dp
-                    else
-                        return 0
+                    //if (tabsModel.subGroupIdForIndex(ListView.view.pageId) == subgroup || tabsModel.subGroupIdForIndex(ListView.view.pageId) == 0)
+                        return personHeader.height + personStats.height
+                    //else
+                        //return 0
+            }
+            width: root.width
+
+            visible: height != 0
+
+            Item {
+                id: personHeader
+                anchors.top: parent.top
+
+                height: 72 * dp
+                width: parent.width
+
+                ColumnLayout {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 16 * dp
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    spacing: 8 * dp
+                    Text {
+                        text: name + " " + surname
+                        font.family: "Roboto Medium"
+                        font.pixelSize: 14 * dp
+                        color: Theme.textColor
+
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                    Text {
+                        text: note
+                        font.family: "Roboto Regular"
+                        font.pixelSize: 12 * dp
+                        color: Theme.subTextColor
+                        visible: text != ""
+
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                }
+
+                CheckBox {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10 * dp
+
+                    z: 1
+
+                    style: MaterialCheckBox {
+                        color: Theme.accentColor
+                        uncheckedColor: Theme.iconColor
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onPressAndHold: {
+                        if (personDelegateElement.state == "")
+                            personDelegateElement.state = "expanded"
+                    }
+
+                    onClicked: {
+                        personDelegateElement.state = personDelegateElement.state == "" ? "expanded" : ""
+                        /*
+                        if (personDelegateElement.state == "expanded")
+                            personDelegateElement.state = ""*/
+                    }
+                }
+            }
+            Item {
+                id: personStats
+                anchors.top: personHeader.bottom
+                width: parent.width
+                height: 0
+                clip: true
+
+                Behavior on height {
+                    NumberAnimation {
+                        easing.type: "InOutCubic"
+                        duration: 200
+                    }
+                }
+
+                Grid {
+                    id: statControls
+                    columns: 2
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.rightMargin: 16 * dp
+                    anchors.leftMargin: 16 * dp
+
+                    verticalItemAlignment : Grid.AlignVCenter
+                    Text {
+                        text: "Лабораторная #1"
+                        font.family: "Roboto Regular"
+                        font.pixelSize: 12 * dp
+                    }
+
+                    CheckBox {
+                        style: MaterialCheckBox {
+                            color: Theme.accentColor
+                            uncheckedColor: Theme.iconColor
+                        }
+                    }
+
+                    Text {
+                        text: "Лабораторная #2"
+                        font.family: "Roboto Regular"
+                        font.pixelSize: 12 * dp
+                    }
+
+                    CheckBox {
+                        style: MaterialCheckBox {
+                            color: Theme.accentColor
+                            uncheckedColor: Theme.iconColor
+                        }
+                    }
                 }
             }
 
-            visible: height != 0
             Rectangle {
                 anchors.bottom: parent.bottom
 
                 width: parent.width
                 height: 1 * dp
-                color: Qt.rgba(0, 0, 0, 0.57)
+                color: Theme.dividerColor
             }
-            ColumnLayout {
-                anchors.left: parent.left
-                anchors.leftMargin: 16 * dp
-                anchors.verticalCenter: parent.verticalCenter
 
-                spacing: 8 * dp
-                Text {
-                    text: name
-                    font.family: "Roboto Medium"
-                    font.pixelSize: 14 * dp
-                    color: Theme.textColor
-
-                    Layout.alignment: Qt.AlignVCenter
+            states: [
+                State {
+                    name: "expanded"
+                    PropertyChanges {
+                        target: personStats
+                        height: statControls.height
+                    }
                 }
-                Text {
-                    text: note
-                    font.family: "Roboto Regular"
-                    font.pixelSize: 12 * dp
-                    color: Theme.subTextColor
-                    visible: text != ""
-
-                    Layout.alignment: Qt.AlignVCenter
-                }
-            }
-            ComboBox {
-                id: box
-                height: 48 * dp
-                model: ["One", "Two", "Three"]
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: checkBox.left
-            }
-
-            CheckBox {
-                id: checkBox
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 10 * dp
-
-                style: MaterialCheckBox {
-                    color: Theme.accentColor
-                    uncheckedColor: Qt.rgba(0, 0, 0, 0.57)
-                }
-            }
+            ]
         }
     }
 

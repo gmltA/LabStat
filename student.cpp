@@ -101,6 +101,8 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
     {
         case NameRole:
             return student.getName();
+        case SurnameRole:
+            return student.getSurname();
         case NoteRole:
             return student.getNote();
         case SubGroupRole:
@@ -113,6 +115,7 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
 QHash<int, QByteArray> StudentListModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[NameRole] = "name";
+    roles[SurnameRole] = "surname";
     roles[NoteRole] = "note";
     roles[SubGroupRole] = "subgroup";
     return roles;
