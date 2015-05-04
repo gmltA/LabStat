@@ -57,6 +57,7 @@ void SyncHandler::sync(IDataStore::Origin origin)
 
 void SyncHandler::registerProcessor(IDataStore* processor)
 {
+    syncProcessors.push_back(processor);
     emit processorAddCalled(buildProcessorData(processor));
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(initFinished(bool)), this, SLOT(checkProcessorInit(bool)));
@@ -66,16 +67,18 @@ void SyncHandler::registerProcessor(IDataStore* processor)
 void SyncHandler::checkProcessorInit(bool success)
 {
     QVariantMap processorData;
+    IDataStore* processor = qobject_cast<IDataStore*>(sender());
+
     if (success)
     {
-        IDataStore* processor = qobject_cast<IDataStore*>(sender());
-
         //todo: check if we have this processor in collection already
-        syncProcessors.push_back(processor);
         processorData = buildProcessorData(processor);
 
         signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));
     }
+    else
+        unregisterProcessor(processor);
+
     processorData["result"] = success;
     emit processorAdded(processorData);
 }

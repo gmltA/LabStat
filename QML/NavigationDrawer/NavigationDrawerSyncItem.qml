@@ -8,9 +8,8 @@ Item {
     property int processorId
 
     function processorAdded(processorData) {
-        if (processorId === -1) {
+        if (processorId === processorData['id']) {
             if (processorData['result']) {
-                processorId = processorData['id']
                 state = ""
             } else
                 root.destroy()
