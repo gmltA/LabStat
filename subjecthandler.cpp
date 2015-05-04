@@ -56,6 +56,11 @@ void SubjectHandler::attachDrive(QString rootFolder)
     QtConcurrent::run(currentSubject, &SubjectData::attachDrive, rootFolder);
 }
 
+void SubjectHandler::attachSQLite(QString rootFolder)
+{
+    QtConcurrent::run(currentSubject, &SubjectData::attachSQLite, rootFolder);
+}
+
 void SubjectHandler::loadGroupData(int group)
 {
     QList<Student> students = currentSubject->getDataSheet()->getStudentList();

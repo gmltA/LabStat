@@ -60,7 +60,10 @@ ApplicationWindow {
                 }
             }
             onAccepted: {
-                SubjectHandler.attachDrive(text.text)
+                if (driveCheckBox.checked)
+                    SubjectHandler.attachDrive(text.text)
+                else if (sqlCheckBox.checked)
+                    SubjectHandler.attachSQLite(text.text)
             }
         }
     }

@@ -1,4 +1,5 @@
 #include "drivesyncprocessor.h"
+#include "sqlitesyncprocessor.h"
 #include "subjectdata.h"
 
 #include "googledesktopauthclient.h"
@@ -45,6 +46,12 @@ void SubjectData::attachDrive(QString rootFolder)
     DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
 
     syncHandler->registerProcessor(driveProcessor);
+}
+
+void SubjectData::attachSQLite(QString rootFolder)
+{
+    SQLiteSyncProcessor* sqliteProcessor = new SQLiteSyncProcessor();
+    syncHandler->registerProcessor(sqliteProcessor);
 }
 
 void SubjectData::disconnectAll()
