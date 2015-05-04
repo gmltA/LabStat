@@ -14,7 +14,7 @@ Rectangle {
     Component {
         id: pageDelegate
         Item {
-
+            property int thisIndex: index
             property alias scrollStop: pupils.scrollStop
             property alias scrollDiff: pupils.scrollDiff
             width: root.width
@@ -23,6 +23,7 @@ Rectangle {
             ListView {
                 id: pupils
 
+                property int pageId: parent.thisIndex
                 property int scrollStop: 0
                 property int scrollDiff: 0
 
