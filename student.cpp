@@ -1,6 +1,6 @@
 #include "student.h"
 
-Student::Student(QDomNode studentNode)
+Student::Student(int _id, QDomNode studentNode) : id(_id)
 {
     QStringList nameData = studentNode.firstChildElement("gsx:фио").text().split(" ");
     surname = nameData[0];
@@ -72,6 +72,16 @@ QString Student::getNote() const
 void Student::setNote(const QString& value)
 {
     note = value;
+}
+
+int Student::getId() const
+{
+    return id;
+}
+
+void Student::setId(int value)
+{
+    id = value;
 }
 
 StudentListModel::StudentListModel(QObject* parent)

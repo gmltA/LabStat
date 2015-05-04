@@ -7,7 +7,7 @@
 class Student
 {
     public:
-        Student(QDomNode studentNode);
+        Student(int _id, QDomNode studentNode);
 
         QString getName() const;
         void setName(const QString& value);
@@ -27,7 +27,12 @@ class Student
         QString getNote() const;
         void setNote(const QString& value);
 
+        int getId() const;
+        void setId(int value);
+
     private:
+        int id;
+
         QString name;
         QString surname;
         QString patronymic;
