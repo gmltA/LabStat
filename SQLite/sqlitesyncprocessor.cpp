@@ -12,7 +12,6 @@ SQLiteSyncProcessor::~SQLiteSyncProcessor()
 
 void SQLiteSyncProcessor::init()
 {
-    // todo: check and\or re-init DB structure
     emit initFinished(true);
 }
 

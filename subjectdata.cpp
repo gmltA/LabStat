@@ -1,11 +1,11 @@
-#include "drivesyncprocessor.h"
-#include "sqlitesyncprocessor.h"
+#include "GoogleDrive/drivesyncprocessor.h"
+#include "SQLite/sqlitesyncprocessor.h"
 #include "subjectdata.h"
 
-#include "googledesktopauthclient.h"
-#include "googleauthclient.h"
-#include "interface.authclient.h"
-#include "GoogleDrive/driveapi.h"
+#include "GoogleDrive/googledesktopauthclient.h"
+#include "GoogleDrive/googleauthclient.h"
+#include "GoogleDrive/interface.authclient.h"
+#include "GoogleDrive/API/driveapi.h"
 
 SubjectData::SubjectData(QString title, QObject *parent) : QObject(parent)
 {

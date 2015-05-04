@@ -7,19 +7,19 @@ android{
 }
 
 SOURCES += main.cpp \
-    googleauthclient.cpp \
-    GoogleDrive/apirequest.cpp \
-    GoogleDrive/driveapi.cpp \
-    GoogleDrive/drivefile.cpp \
     synchandler.cpp \
-    googledesktopauthclient.cpp \
     datasheet.cpp \
-    drivesyncprocessor.cpp \
-    GoogleDrive/sheetsapirequest.cpp \
     subjectdata.cpp \
     subjecthandler.cpp \
     student.cpp \
-    sqlitesyncprocessor.cpp
+    GoogleDrive/drivesyncprocessor.cpp \
+    GoogleDrive/googleauthclient.cpp \
+    GoogleDrive/googledesktopauthclient.cpp \
+    GoogleDrive/API/apirequest.cpp \
+    GoogleDrive/API/driveapi.cpp \
+    GoogleDrive/API/drivefile.cpp \
+    GoogleDrive/API/sheetsapirequest.cpp \
+    SQLite/sqlitesyncprocessor.cpp
 
 RESOURCES += qml.qrc
 
@@ -63,19 +63,20 @@ DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/src/org/qtproject/labstat/GoogleAuthClient.java
 
 HEADERS += \
-    googleauthclient.h \
-    GoogleDrive/apirequest.h \
-    GoogleDrive/driveapi.h \
     interface.datastore.h \
     interface.dataitem.h \
-    GoogleDrive/drivefile.h \
     synchandler.h \
     interface.authclient.h \
-    googledesktopauthclient.h \
     datasheet.h \
-    drivesyncprocessor.h \
-    GoogleDrive/sheetsapirequest.h \
     subjectdata.h \
     subjecthandler.h \
     student.h \
-    sqlitesyncprocessor.h
+    GoogleDrive/drivesyncprocessor.h \
+    GoogleDrive/googleauthclient.h \
+    GoogleDrive/googledesktopauthclient.h \
+    GoogleDrive/interface.authclient.h \
+    GoogleDrive/API/apirequest.h \
+    GoogleDrive/API/driveapi.h \
+    GoogleDrive/API/drivefile.h \
+    GoogleDrive/API/sheetsapirequest.h \
+    SQLite/sqlitesyncprocessor.h

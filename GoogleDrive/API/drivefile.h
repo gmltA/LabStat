@@ -1,13 +1,13 @@
 #ifndef DRIVEFILE_H
 #define DRIVEFILE_H
 
-#include "../interface.dataitem.h"
+#include "../../interface.dataitem.h"
 
 #include <QDataStream>
 #include <QDateTime>
 #include <QJsonObject>
 #include <QDomDocument>
-#include "../datasheet.h"
+#include "../../datasheet.h"
 
 struct DriveFileInfo
 {
