@@ -1,6 +1,7 @@
 #ifndef SQLITESYNCPROCESSOR_H
 #define SQLITESYNCPROCESSOR_H
 
+#include <QtSql>
 #include <QObject>
 #include "interface.datastore.h"
 
@@ -23,6 +24,7 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
     private:
         QSqlDatabase db;
 
+        void createDbStructure();
         QString serializeStudent(Student person);
 
     signals:

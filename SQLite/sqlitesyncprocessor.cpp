@@ -1,4 +1,5 @@
 #include "sqlitesyncprocessor.h"
+#include <QDebug>
 
 SQLiteSyncProcessor::SQLiteSyncProcessor(QObject *parent)
     : QObject(parent), IDataStore(Origin::OriginOffline, "SQLite local"),
@@ -13,7 +14,18 @@ SQLiteSyncProcessor::~SQLiteSyncProcessor()
 
 void SQLiteSyncProcessor::init()
 {
-    emit initFinished(true);
+    //todo: get DB file name from front-end dialog?
+    db.setDatabaseName("db_name.sqlite");
+
+    if (db.open())
+    {
+        createDbStructure();
+        emit initFinished(true);
+        return;
+    }
+    emit initFinished(false);
+}
+
 void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 {
     QSqlQuery query;
@@ -71,6 +83,22 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
 
     dataFile->synced(id);
     emit syncDone();
+}
+
+void SQLiteSyncProcessor::createDbStructure()
+{
+    QSqlQuery query;
+    query.exec("CREATE TABLE students("
+               "id INTEGER NOT NULL,"
+               "surname TEXT(255) NOT NULL,"
+               "name TEXT(255) NOT NULL,"
+               "patronymic TEXT(255),"
+               "note TEXT(255),"
+               "'group' INTEGER NOT NULL,"
+               "subgroup INTEGER,"
+               "PRIMARY KEY (id)"
+               ")");
+    qDebug() << query.lastError().text();
 }
 
 QString SQLiteSyncProcessor::serializeStudent(Student person)
