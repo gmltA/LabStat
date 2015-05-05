@@ -75,9 +75,16 @@ class DataSheet : public QObject
         void setTimeTable(const QList<TimetableEntry>& value);
         void buildTimeTable(QByteArray rawData);
 
+        QDateTime getLastSyncTime() const;
+        int getLastSyncProcessorId() const;
+
+        void synced(int processorId);
+
     private:
         uint id;
         QString fileName;
+        int lastSyncProcessorId;
+        QDateTime lastSyncTime;
 
         QStringList groups;
         QList<Student> students;

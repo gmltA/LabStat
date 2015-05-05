@@ -27,11 +27,15 @@ class IDataStore
 
         QString getTitle() const { return title; }
 
+        int getId() const { return id; }
+        void setId(int value) { id = value; }
+
     signals:
         virtual void initFinished(bool success) = 0;
         virtual void syncDone() = 0;
 
-    private:
+    protected:
+        int id;
         Origin origin;
         const QString title;
 };

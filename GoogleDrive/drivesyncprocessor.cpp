@@ -46,6 +46,7 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
     workSheetData = driveService->Sheets.getListFeed(labs);
     dataFile->buildTimeTable(workSheetData);
 
+    dataFile->synced(id);
     emit syncDone();
 }
 

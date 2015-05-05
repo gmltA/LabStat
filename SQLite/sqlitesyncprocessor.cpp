@@ -18,6 +18,7 @@ void SQLiteSyncProcessor::init()
 
 void SQLiteSyncProcessor::syncFile(DataSheet *dataFile)
 {
+    dataFile->synced(id);
     emit syncDone();
 }
 

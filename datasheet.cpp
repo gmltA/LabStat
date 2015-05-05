@@ -143,6 +143,22 @@ void DataSheet::buildTimeTable(QByteArray rawData)
     }
 }
 
+QDateTime DataSheet::getLastSyncTime() const
+{
+    return lastSyncTime;
+}
+
+int DataSheet::getLastSyncProcessorId() const
+{
+    return lastSyncProcessorId;
+}
+
+void DataSheet::synced(int processorId)
+{
+    lastSyncProcessorId = processorId;
+    lastSyncTime = QDateTime::currentDateTime();
+}
+
 TimeTableModel::TimeTableModel(QObject* parent)
     : QAbstractListModel(parent)
 {

@@ -58,6 +58,8 @@ void SyncHandler::sync(IDataStore::Origin origin)
 void SyncHandler::registerProcessor(IDataStore* processor)
 {
     syncProcessors.push_back(processor);
+    processor->setId(syncProcessors.indexOf(processor));
+
     emit processorAddCalled(buildProcessorData(processor));
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(initFinished(bool)), this, SLOT(checkProcessorInit(bool)));
