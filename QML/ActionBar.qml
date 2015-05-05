@@ -6,6 +6,7 @@ Rectangle {
     id: root
 
     property alias title: titleText.text
+    property alias elevation: shadow.depth
     anchors.top: parent.top
     width: parent.width
     height: 48 * dp
@@ -29,9 +30,10 @@ Rectangle {
     }
 
     MaterialShadow {
+        id: shadow
         anchors.fill: parent
-        z : -1
-        depth : 1
+        z: -1
+        depth: 1
         asynchronous: true
     }
 }

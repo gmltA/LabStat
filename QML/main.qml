@@ -14,7 +14,6 @@ ApplicationWindow {
     width: 360
     height: 640
     visible: true
-    color: Theme.backgroundColor
 
     // for QMLScene debug only!
     property real dp: mainWindow.width / 320
@@ -97,6 +96,7 @@ ApplicationWindow {
 
     ActionBar {
         id: actionBar
+        elevation: 0
         z: 1
     }
 
