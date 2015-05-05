@@ -7,6 +7,7 @@
 class Student
 {
     public:
+        Student(int _id, QString _surname, QString _name, QString _patronymic = "", QString _note = "");
         Student(int _id, QDomNode studentNode);
 
         QString getName() const;

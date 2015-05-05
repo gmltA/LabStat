@@ -16,8 +16,14 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
         void init() override final;
         void syncFile(DataSheet* dataFile) override final;
 
+        void saveStudentList(DataSheet* dataFile);
+
+        void loadStudentList(DataSheet* dataFile);
+
     private:
         QSqlDatabase db;
+
+        QString serializeStudent(Student person);
 
     signals:
         void initFinished(bool success) override final;

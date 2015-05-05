@@ -1,5 +1,11 @@
 #include "student.h"
 
+Student::Student(int _id, QString _surname, QString _name, QString _patronymic, QString _note)
+    : id(_id), surname(_surname), name(_name), patronymic(_patronymic), note(_note)
+{
+
+}
+
 Student::Student(int _id, QDomNode studentNode) : id(_id)
 {
     QStringList nameData = studentNode.firstChildElement("gsx:фио").text().split(" ");
