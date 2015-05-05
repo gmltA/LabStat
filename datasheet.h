@@ -60,8 +60,10 @@ class DataSheet : public QObject
         uint getId() const;
         void setId(const uint& value);
 
-        QStringList getGroupList() const;
-        void setGroupList(const QStringList& value);
+        QList<int> getGroupList() const;
+        void setGroupList(const QList<int>& value);
+
+        //todo: move build* functions back to sync processor
         void buildGroupList(QByteArray rawData);
 
         QString getFileName() const;
@@ -86,12 +88,12 @@ class DataSheet : public QObject
         int lastSyncProcessorId;
         QDateTime lastSyncTime;
 
-        QStringList groups;
+        QList<int> groups;
         QList<Student> students;
         QList<TimetableEntry> timeTable;
 
     signals:
-        void groupListChanged(QStringList groups);
+        void groupListChanged(QList<int> groups);
 };
 
 #endif // DATASHEET_H

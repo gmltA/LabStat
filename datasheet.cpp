@@ -26,12 +26,12 @@ QString DataSheet::toString() const
     return "a \t b \t c \nd \t e \t n";
 }
 
-QStringList DataSheet::getGroupList() const
+QList<int> DataSheet::getGroupList() const
 {
     return groups;
 }
 
-void DataSheet::setGroupList(const QStringList& value)
+void DataSheet::setGroupList(const QList<int>& value)
 {
     groups = value;
     emit groupListChanged(groups);
@@ -40,13 +40,13 @@ void DataSheet::setGroupList(const QStringList& value)
 void DataSheet::buildGroupList(QByteArray rawData)
 {
     QDomDocument doc;
-    QStringList groupList;
+    QList<int> groupList;
     if (doc.setContent(rawData))
     {
         QDomNodeList groupNodes = doc.elementsByTagName("gsx:группы");
         for (int i = 0; i < groupNodes.size(); i++)
             if (!groupNodes.item(i).toElement().text().isEmpty())
-                groupList.push_back(groupNodes.item(i).toElement().text());
+                groupList.push_back(groupNodes.item(i).toElement().text().toInt());
 
         setGroupList(groupList);
     }

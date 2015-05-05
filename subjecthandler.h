@@ -57,7 +57,7 @@ class SubjectHandler : public QObject
         void processorAdded(QVariantMap processorData);
         void syncStopped(int processorId);
 
-        void groupListChanged(QStringList groups);
+        void groupListChanged(QList<int> groups);
         void groupDataLoaded(StudentListModel* students, TimeTableModel* timeTable);
 
     public slots:
