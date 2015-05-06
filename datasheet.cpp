@@ -182,12 +182,21 @@ QVariant TimeTableModel::data(const QModelIndex & index, int role) const {
         return QVariant();
 
     const TimetableEntry& entry = timeTable[index.row()];
-    if (role == DateRole)
-        return entry.dateTime.date();
-    else if (role == TimeRole)
-        return entry.dateTime.time();
-    else if (role == GroupRole)
-        return entry.subgroup;
+    switch (role)
+    {
+        case DateRole:
+            return entry.dateTime.date();
+        case TimeRole:
+            return entry.dateTime.time();
+        case GroupRole:
+            return entry.subgroup;
+        case StudentsRole:
+        {
+            QVariant var;
+            var.setValue(entry.students);
+            return var;
+        }
+    }
     return QVariant();
 }
 
@@ -201,5 +210,6 @@ QHash<int, QByteArray> TimeTableModel::roleNames() const {
     roles[DateRole] = "date";
     roles[TimeRole] = "time";
     roles[GroupRole] = "group";
+    roles[StudentsRole] = "students";
     return roles;
 }

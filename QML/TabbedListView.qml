@@ -8,13 +8,11 @@ import "."
 Rectangle {
     id: root
 
-    property var tabsModel
-    property var contentModel
+    property var model
 
     Component {
         id: pageDelegate
         Item {
-            property int thisIndex: index
             property alias scrollStop: pupils.scrollStop
             property alias scrollDiff: pupils.scrollDiff
             width: root.width
@@ -22,13 +20,11 @@ Rectangle {
 
             ListView {
                 id: pupils
-
-                property int pageId: parent.thisIndex
                 property int scrollStop: 0
                 property int scrollDiff: 0
 
                 anchors.fill: parent
-                model: contentModel
+                model: students
                 delegate: personDelegate
                 displayMarginBeginning: 48 * dp
                 onContentYChanged: {
@@ -186,15 +182,8 @@ Rectangle {
         Item {
             id: personDelegateElement
 
-            height: {
-                    //if (tabsModel.subGroupIdForIndex(ListView.view.pageId) == subgroup || tabsModel.subGroupIdForIndex(ListView.view.pageId) == 0)
-                        return personHeader.height + personStats.height
-                    //else
-                        //return 0
-            }
+            height: personHeader.height + personStats.height
             width: root.width
-
-            visible: height != 0
 
             Item {
                 id: personHeader
@@ -355,7 +344,7 @@ Rectangle {
             highlightRangeMode: ItemView.StrictlyEnforceRange
             boundsBehavior: Flickable.StopAtBounds
             snapMode: ListView.SnapOneItem
-            model: tabsModel
+            model: root.model
             delegate: tabDelegate
             preferredHighlightBegin: parent.width / 3
             preferredHighlightEnd: (parent.width / 3) * 2
@@ -401,7 +390,7 @@ Rectangle {
         highlightRangeMode: ItemView.StrictlyEnforceRange
         boundsBehavior: Flickable.StopAtBounds
         snapMode: ListView.SnapOneItem
-        model: tabsModel
+        model: root.model
 
         delegate: pageDelegate
 
@@ -413,7 +402,7 @@ Rectangle {
     states: [
         State {
             name: "hidden"
-            when: tabsModel.count === 0
+            when: root.model.count === 0
             PropertyChanges {
                 target: root
                 visible: false

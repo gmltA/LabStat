@@ -67,20 +67,23 @@ void SubjectHandler::loadGroupData(int group)
     if (studentList != nullptr)
         studentList->deleteLater();
 
-    studentList = new StudentListModel();
-    foreach (Student person, students)
-    {
-        if (person.getGroup() == group)
-            studentList->addStudent(person);
-    }
-
     TimeTableModel* timeTable = new TimeTableModel();
     foreach (TimetableEntry timeTableEntry, currentSubject->getDataSheet()->getTimeTable())
     {
         if (group == timeTableEntry.group)
+        {
+            foreach (Student person, students)
+            {
+                if (person.getGroup() == group && (person.getSubgroup() == timeTableEntry.subgroup
+                        || timeTableEntry.subgroup == 0 || person.getSubgroup() == 0))
+                {
+                    timeTableEntry.students->addStudent(person);
+                }
+            }
             timeTable->addEntry(timeTableEntry);
+        }
     }
-    emit groupDataLoaded(studentList, timeTable);
+    emit groupDataLoaded(timeTable);
 }
 
 SubjectHandler* SubjectHandler::getInstance()
@@ -90,4 +93,3 @@ SubjectHandler* SubjectHandler::getInstance()
 
     return instance;
 }
-

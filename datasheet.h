@@ -13,11 +13,19 @@ struct TimetableEntry
         {
             dateTime.setDate(date);
             dateTime.setTime(time);
+            students = new StudentListModel();
+        }
+
+        ~TimetableEntry()
+        {
+            // BUG! Causes app crash
+            //delete students;
         }
 
         int id;
 
         QDateTime dateTime;
+        StudentListModel* students;
         int group;
         int subgroup;
 };
@@ -29,7 +37,8 @@ class TimeTableModel : public QAbstractListModel
         enum TimeTableDataRoles {
             DateRole = Qt::UserRole + 1,
             TimeRole,
-            GroupRole
+            GroupRole,
+            StudentsRole
         };
 
         TimeTableModel(QObject *parent = 0);

@@ -68,4 +68,6 @@ class StudentListModel : public QAbstractListModel
     private:
         QList<Student> students;
 };
+
+Q_DECLARE_METATYPE(StudentListModel*)
 #endif // STUDENT_H

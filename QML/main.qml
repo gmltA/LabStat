@@ -94,8 +94,7 @@ ApplicationWindow {
             }
         }
         onGroupDataLoaded: {
-            stats.contentModel = students
-            stats.tabsModel = timeTable
+            stats.model = timeTable
         }
     }
 
@@ -285,7 +284,5 @@ ApplicationWindow {
         width: parent.width
         anchors.top: actionBar.bottom
 
-        tabsModel: testModel
-        contentModel: groupListModel
     }
 }
