@@ -72,19 +72,14 @@ class DataSheet : public QObject
         QList<int> getGroupList() const;
         void setGroupList(const QList<int>& value);
 
-        //todo: move build* functions back to sync processor
-        void buildGroupList(QByteArray rawData);
-
         QString getFileName() const;
         void setFileName(const QString& value);
 
         QList<Student> getStudentList() const;
         void setStudentList(const QList<Student>& value);
-        void buildStudentList(QByteArray rawData);
 
         QList<TimetableEntry> getTimeTable() const;
         void setTimeTable(const QList<TimetableEntry>& value);
-        void buildTimeTable(QByteArray rawData);
 
         QDateTime getLastSyncTime() const;
         int getLastSyncProcessorId() const;

@@ -25,6 +25,9 @@ class DriveSyncProcessor : public QObject, public IDataStore
         SpreadSheet* sheet;
 
         void fillSpreadSheet();
+        QList<int>              buildGroupList(QByteArray rawData);
+        QList<Student>          buildStudentList(QByteArray rawData);
+        QList<TimetableEntry>   buildTimeTable(QByteArray rawData);
 
     signals:
         void initFinished(bool success) override final;
