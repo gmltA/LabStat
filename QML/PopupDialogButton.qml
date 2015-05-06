@@ -4,6 +4,7 @@ Item {
     id: button
 
     property alias caption: text.text
+    property alias color: text.color
 
     anchors.verticalCenter: parent.verticalCenter
 
@@ -20,7 +21,7 @@ Item {
         text: "Button"
         font.family: "Roboto Medium"
         font.pixelSize: 14
-        color: "#00BCD4"
+        color: Theme.textColor
         font.capitalization: Font.AllUppercase
     }
 

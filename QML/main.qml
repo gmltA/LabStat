@@ -37,6 +37,12 @@ ApplicationWindow {
             RadioButton {
                 id: driveCheckBox
                 text: "Google Drive"
+                onCheckedChanged: {
+                    if (checked)
+                        text.forceActiveFocus()
+                    else
+                        parent.forceActiveFocus()
+                }
             }
             RadioButton {
                 id: sqlCheckBox
@@ -46,7 +52,6 @@ ApplicationWindow {
             TextInput {
                 id: text
                 visible: driveCheckBox.checked
-                focus: visible
                 width: parent.width
                 height: 24 * dp
                 font.pixelSize: 14
