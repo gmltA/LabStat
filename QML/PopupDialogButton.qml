@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "."
 
 Item {
     id: button
@@ -21,7 +22,7 @@ Item {
         text: "Button"
         font.family: "Roboto Medium"
         font.pixelSize: 14
-        color: Theme.textColor
+        color: Theme.accentColor
         font.capitalization: Font.AllUppercase
     }
 

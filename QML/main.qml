@@ -31,7 +31,7 @@ ApplicationWindow {
         id: dialogBuilder
 
         PopupDialog {
-            title: "Register new sync processor"
+            title: "Add sync processor"
             active: true
             z: 6
             RadioButton {
@@ -205,65 +205,6 @@ ApplicationWindow {
                     }
                 }
             }
-        }
-    }
-
-    ListModel {
-        id: testModel
-        ListElement {
-            date: "12.04"
-            time: "13:25"
-            group: 0
-        }
-        ListElement {
-            date: "12.04"
-            time: "13:25"
-            group: 1
-        }
-        ListElement {
-            date: "12.04"
-            time: "13:25"
-            group: 2
-        }
-    }
-
-    ListModel {
-        id: groupListModel
-        ListElement {
-            name: "Test"
-            note: "Asadasd"
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
-        }
-        ListElement {
-            name: "Test 1"
-            note: ""
         }
     }
 

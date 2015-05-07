@@ -74,7 +74,7 @@ Rectangle {
                     text: Qt.formatDateTime(date, "dd.MM")
                     font.family: "Roboto Regular"
                     font.pixelSize: 15 * dp
-                    color: Theme.textColor
+                    color: "white"
                 }
                 Text {
                     id: timeText
@@ -84,7 +84,7 @@ Rectangle {
                     text: Qt.formatDateTime(time, "hh:mm")
                     font.family: "Roboto Condensed Light"
                     font.pixelSize: 12 * dp
-                    color: Theme.textColor
+                    color: "white"
                 }
 
                 transform: Scale {
@@ -112,7 +112,7 @@ Rectangle {
                 anchors.bottom: highlight.top
 
                 text: group == 1 ? "1 подгруппа" : group == 2 ? "2 подгруппа" : "Группа целиком"
-                color: Theme.subTextColor
+                color: "white"
                 font.pixelSize: 12 * dp
                 font.family: "Roboto Condensed"
 
@@ -139,7 +139,7 @@ Rectangle {
                 id: highlight
                 anchors.bottom: parent.bottom
                 width: parent.width
-                color: Theme.tabHighlightColor
+                color: "white"
 
                 Behavior on height {
                     NumberAnimation {
@@ -162,7 +162,7 @@ Rectangle {
                     }
                     PropertyChanges {
                         target: highlight
-                        height: 4 * dp
+                        height: 2 * dp
                     }
                     PropertyChanges {
                         target: dateText
@@ -326,6 +326,8 @@ Rectangle {
         y: Math.min(0, Math.max(-height, content.currentItem.scrollDiff))
         z: 1
 
+        color: Theme.primaryColor
+
         Behavior on y {
             NumberAnimation {
                 duration: 100
@@ -348,26 +350,6 @@ Rectangle {
             delegate: tabDelegate
             preferredHighlightBegin: parent.width / 3
             preferredHighlightEnd: (parent.width / 3) * 2
-            Rectangle {
-                anchors.centerIn: parent
-                width: tabContainer.height
-                height: tabContainer.width
-                rotation: 90
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: "white"
-                    }
-                    GradientStop {
-                        position: 0.5
-                        color: "transparent"
-                    }
-                    GradientStop {
-                        position: 1.0
-                        color: "white"
-                    }
-                }
-            }
         }
         MaterialShadow {
             anchors.fill: parent
@@ -402,7 +384,7 @@ Rectangle {
     states: [
         State {
             name: "hidden"
-            when: root.model.count === 0
+            when: !root.model
             PropertyChanges {
                 target: root
                 visible: false
