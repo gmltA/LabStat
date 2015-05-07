@@ -4,9 +4,9 @@ import "."
 pragma Singleton
 
 QtObject {
-    property color primaryColor: Palette.colors["indigo"]["500"]
+    property color primaryColor: Palette.colors["cyan"]["500"]
     property color primaryDarkColor: Palette.colors["indigo"]["700"]
-    property color accentColor: Palette.colors["pink"]["A200"]
+    property color accentColor: primaryColor
     property color backgroundColor: "#f3f3f3"
     property color tabHighlightColor: accentColor
 
