@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
+import "../."
 
 Rectangle {
     id: header
@@ -9,10 +10,9 @@ Rectangle {
     property alias buttonIcon: icon.text
     property alias buttonArea: area
 
-    height: 56 * dp
+    height: 144 * dp
     width: parent.width
 
-    color: "#84BAC4"
     Image {
         id: headerBG
         anchors.fill: parent
@@ -22,10 +22,19 @@ Rectangle {
     }
 
     Rectangle {
-        height: parent.height
+        anchors.bottom: parent.bottom
         width: parent.width
-        anchors.verticalCenter: parent.verticalCenter
-        color: "transparent"
+        height: 56 * dp
+        gradient: Gradient{
+            GradientStop { position: 0 ; color: "#00000000"}
+            GradientStop { position: 1 ; color: "#2c000000"}
+        }
+    }
+
+    Item {
+        height: 56 * dp
+        width: parent.width
+        anchors.bottom: parent.bottom
 
         // todo: should we replace Layout with just Column or even simple Rectangle?
         ColumnLayout {
@@ -47,7 +56,8 @@ Rectangle {
             }
             Text {
                 id: secondaryTextItem
-                text: "Drawer subtitle"
+
+                visible: text != ""
 
                 font.pointSize: 14
                 font.family: "Roboto Regular"
@@ -55,7 +65,7 @@ Rectangle {
             }
         }
         Rectangle {
-            height: parent.parent.height
+            height: parent.height
             width: parent.height
             color: area.pressed ? Qt.rgba(1,1,1,0.5) : Qt.rgba(0,0,0,0)
 
@@ -68,7 +78,6 @@ Rectangle {
                 font.family: materialIcons.name
 
                 color: "white"
-                //color: Qt.rgba(0,0,0,0.87)
             }
             MouseArea {
                 id: area

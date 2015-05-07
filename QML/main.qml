@@ -137,7 +137,6 @@ ApplicationWindow {
                 NavigationDrawerHeader {
                     id: header
                     mainText: "Alex gmlt.A"
-                    secondaryText: "Just a text"
 
                     buttonArea.onClicked: {
                         drawer.togglePage()
