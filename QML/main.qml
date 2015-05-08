@@ -96,7 +96,8 @@ ApplicationWindow {
 
     ActionBar {
         id: actionBar
-        elevation: 0
+        elevation: stats.state === "" ? 0 : 1
+
         z: 1
     }
 
@@ -219,6 +220,5 @@ ApplicationWindow {
         height: parent.height - actionBar.height
         width: parent.width
         anchors.top: actionBar.bottom
-
     }
 }
