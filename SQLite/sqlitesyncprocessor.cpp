@@ -26,6 +26,36 @@ void SQLiteSyncProcessor::init()
     emit initFinished(false);
 }
 
+void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
+{
+    QSqlQuery query;
+    query.exec("DELETE FROM timetable_entry;");
+
+    QString basicQuery = "INSERT INTO timetable_entry VALUES %1;";
+    QString timeTableData = "";
+    foreach (TimetableEntry entry, dataFile->getTimeTable())
+        timeTableData += serializeTimeTableEntry(entry);
+
+    timeTableData.chop(1);
+    basicQuery = basicQuery.arg(timeTableData);
+
+    query.exec(basicQuery);
+}
+
+void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
+{
+    QSqlQuery query("SELECT id, dateTime, groupId, subgroupId FROM timetable_entry");
+    QList<TimetableEntry> timeTable;
+    while (query.next())
+    {
+        timeTable.push_back(TimetableEntry(query.value(0).toInt(), QDateTime::fromString(query.value(1).toString()),
+                                           query.value(2).toInt(), query.value(3).toInt()));
+    }
+
+    if (!timeTable.isEmpty())
+        dataFile->setTimeTable(timeTable);
+}
+
 void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 {
     QSqlQuery query;
@@ -44,7 +74,7 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
 {
-    QSqlQuery query("SELECT id, surname, name, patronymic, note, `group`, subgroup FROM students");
+    QSqlQuery query("SELECT id, surname, name, patronymic, note, groupId, subgroupId FROM students");
     QList<Student> studentList;
     QList<int> groupList;
     while (query.next())
@@ -77,9 +107,13 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
     if (dataFile->getLastSyncTime().isValid() && dataFile->getLastSyncProcessorId() != id)
     {
         saveStudentList(dataFile);
+        saveTimeTable(dataFile);
     }
     else
+    {
         loadStudentList(dataFile);
+        loadTimeTable(dataFile);
+    }
 
     dataFile->synced(id);
     emit syncDone();
@@ -94,10 +128,19 @@ void SQLiteSyncProcessor::createDbStructure()
                "name TEXT(255) NOT NULL,"
                "patronymic TEXT(255),"
                "note TEXT(255),"
-               "'group' INTEGER NOT NULL,"
-               "subgroup INTEGER,"
+               "groupId INTEGER NOT NULL,"
+               "subgroupId INTEGER,"
                "PRIMARY KEY (id)"
                ")");
+    qDebug() << query.lastError().text();
+
+    query.exec("CREATE TABLE timetable_entry ("
+                   "id INTEGET NOT NULL,"
+                   "dateTime TEXT(255) NOT NULL,"
+                   "groupId INTEGER NOT NULL,"
+                   "subgroupId INTEGER,"
+                   "PRIMARY KEY (id)"
+                   ")");
     qDebug() << query.lastError().text();
 }
 
@@ -111,4 +154,13 @@ QString SQLiteSyncProcessor::serializeStudent(Student person)
             .arg(person.getNote())
             .arg(person.getGroup())
             .arg(person.getSubgroup());
+}
+
+QString SQLiteSyncProcessor::serializeTimeTableEntry(TimetableEntry entry)
+{
+    QString ttEntryTpl = "(%1, '%2', '%3', '%4'),";
+    return ttEntryTpl.arg(entry.id)
+            .arg(entry.dateTime.toString())
+            .arg(entry.group)
+            .arg(entry.subgroup);
 }

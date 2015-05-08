@@ -17,8 +17,9 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
         void init() override final;
         void syncFile(DataSheet* dataFile) override final;
 
+        void saveTimeTable(DataSheet* dataFile);
+        void loadTimeTable(DataSheet* dataFile);
         void saveStudentList(DataSheet* dataFile);
-
         void loadStudentList(DataSheet* dataFile);
 
     private:
@@ -26,6 +27,7 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
 
         void createDbStructure();
         QString serializeStudent(Student person);
+        QString serializeTimeTableEntry(TimetableEntry entry);
 
     signals:
         void initFinished(bool success) override final;

@@ -8,6 +8,13 @@
 
 struct TimetableEntry
 {
+        TimetableEntry(int _id, QDateTime _dateTime, int _group, int _subgroup = 0)
+            : id(_id), group(_group), subgroup(_subgroup)
+        {
+            dateTime = _dateTime;
+            students = new StudentListModel();
+        }
+
         TimetableEntry(int _id, QDate date, QTime time, int _group, int _subgroup = 0)
             : id(_id), group(_group), subgroup(_subgroup)
         {
