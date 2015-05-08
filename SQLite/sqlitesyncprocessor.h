@@ -26,8 +26,8 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
         QSqlDatabase db;
 
         void createDbStructure();
-        QString serializeStudent(Student person);
-        QString serializeTimeTableEntry(TimetableEntry entry);
+        QString serializeStudent(int subjectId, Student person);
+        QString serializeTimeTableEntry(int subjectId, TimetableEntry entry);
 
     signals:
         void initFinished(bool success) override final;

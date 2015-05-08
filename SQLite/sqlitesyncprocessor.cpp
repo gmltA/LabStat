@@ -29,12 +29,13 @@ void SQLiteSyncProcessor::init()
 void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 {
     QSqlQuery query;
-    query.exec("DELETE FROM timetable_entry;");
+    QString cleanQuery = "DELETE FROM timetable_entry WHERE subjectId = %1";
+    query.exec(cleanQuery.arg(dataFile->getId()));
 
     QString basicQuery = "INSERT INTO timetable_entry VALUES %1;";
     QString timeTableData = "";
     foreach (TimetableEntry entry, dataFile->getTimeTable())
-        timeTableData += serializeTimeTableEntry(entry);
+        timeTableData += serializeTimeTableEntry(dataFile->getId(), entry);
 
     timeTableData.chop(1);
     basicQuery = basicQuery.arg(timeTableData);
@@ -44,7 +45,8 @@ void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 {
-    QSqlQuery query("SELECT id, dateTime, groupId, subgroupId FROM timetable_entry");
+    QString queryString = "SELECT id, dateTime, groupId, subgroupId FROM timetable_entry WHERE subjectId = %1";
+    QSqlQuery query(queryString.arg(dataFile->getId()));
     QList<TimetableEntry> timeTable;
     while (query.next())
     {
@@ -59,12 +61,13 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 {
     QSqlQuery query;
-    query.exec("DELETE FROM students;");
+    QString cleanQuery = "DELETE FROM students WHERE subjectId = %1";
+    query.exec(cleanQuery.arg(dataFile->getId()));
 
     QString basicQuery = "INSERT INTO students VALUES %1;";
     QString studentsData = "";
     foreach (Student person, dataFile->getStudentList())
-        studentsData += serializeStudent(person);
+        studentsData += serializeStudent(dataFile->getId(), person);
 
     studentsData.chop(1);
     basicQuery = basicQuery.arg(studentsData);
@@ -74,7 +77,8 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
 {
-    QSqlQuery query("SELECT id, surname, name, patronymic, note, groupId, subgroupId FROM students");
+    QString queryString = "SELECT id, surname, name, patronymic, note, groupId, subgroupId FROM students WHERE subjectId = %1";
+    QSqlQuery query(queryString.arg(dataFile->getId()));
     QList<Student> studentList;
     QList<int> groupList;
     while (query.next())
@@ -123,6 +127,7 @@ void SQLiteSyncProcessor::createDbStructure()
 {
     QSqlQuery query;
     query.exec("CREATE TABLE students("
+               "subjectId INTEGER NOT NULL,"
                "id INTEGER NOT NULL,"
                "surname TEXT(255) NOT NULL,"
                "name TEXT(255) NOT NULL,"
@@ -130,24 +135,26 @@ void SQLiteSyncProcessor::createDbStructure()
                "note TEXT(255),"
                "groupId INTEGER NOT NULL,"
                "subgroupId INTEGER,"
-               "PRIMARY KEY (id)"
+               "PRIMARY KEY (subjectId, id)"
                ")");
     qDebug() << query.lastError().text();
 
     query.exec("CREATE TABLE timetable_entry ("
+                   "subjectId INTEGER NOT NULL,"
                    "id INTEGET NOT NULL,"
                    "dateTime TEXT(255) NOT NULL,"
                    "groupId INTEGER NOT NULL,"
                    "subgroupId INTEGER,"
-                   "PRIMARY KEY (id)"
+                   "PRIMARY KEY (subjectId, id)"
                    ")");
     qDebug() << query.lastError().text();
 }
 
-QString SQLiteSyncProcessor::serializeStudent(Student person)
+QString SQLiteSyncProcessor::serializeStudent(int subjectId, Student person)
 {
-    QString personTpl = "(%1, '%2', '%3', '%4', '%5', '%6', '%7'),";
-    return personTpl.arg(person.getId())
+    QString personTpl = "(%1, '%2', '%3', '%4', '%5', '%6', '%7', '%8'),";
+    return personTpl.arg(subjectId)
+            .arg(person.getId())
             .arg(person.getSurname())
             .arg(person.getName())
             .arg(person.getPatronymic())
@@ -156,10 +163,11 @@ QString SQLiteSyncProcessor::serializeStudent(Student person)
             .arg(person.getSubgroup());
 }
 
-QString SQLiteSyncProcessor::serializeTimeTableEntry(TimetableEntry entry)
+QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimetableEntry entry)
 {
-    QString ttEntryTpl = "(%1, '%2', '%3', '%4'),";
-    return ttEntryTpl.arg(entry.id)
+    QString ttEntryTpl = "(%1, '%2', '%3', '%4', '%5'),";
+    return ttEntryTpl.arg(subjectId)
+            .arg(entry.id)
             .arg(entry.dateTime.toString())
             .arg(entry.group)
             .arg(entry.subgroup);
