@@ -29,6 +29,8 @@ class DriveSyncProcessor : public QObject, public IDataStore
         QList<Student>          buildStudentList(QByteArray rawData);
         QList<TimetableEntry>   buildTimeTable(QByteArray rawData);
 
+        QMap<int, QString>      timeTableAccordance;
+
     signals:
         void initFinished(bool success) override final;
         void syncDone() override final;

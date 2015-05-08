@@ -132,7 +132,9 @@ QList<TimetableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
                 int group = groupData[0].toInt();
                 int subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();
 
-                timeTable.push_back(TimetableEntry(entryIndex++, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
+                timeTableAccordance[entryIndex++] = timeElement.tagName();
+
+                timeTable.push_back(TimetableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
                                                    QTime::fromString(timeElement.text(), "h:mm"), group, subgroup));
             }
         }
