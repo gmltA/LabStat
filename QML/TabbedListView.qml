@@ -323,7 +323,7 @@ Rectangle {
         //      and this causes buggy tab highlight behaviour
         width: mainWindow.width
         height: 48 * dp
-        y: Math.min(0, Math.max(-height, content.currentItem.scrollDiff))
+        y: Math.min(0, Math.max(-height, content.currentItem ? content.currentItem.scrollDiff : 0))
         z: 1
 
         color: Theme.primaryColor

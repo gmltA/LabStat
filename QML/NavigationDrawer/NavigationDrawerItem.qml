@@ -6,8 +6,8 @@ import "../." // Singletons import
 Button {
     id: root
     height: 48 * dp
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.left: parent ? parent.left : undefined
+    anchors.right: parent ? parent.right : undefined
 
     property alias icon: leftIcon.text
     property alias secondaryAction: secondaryActionArea

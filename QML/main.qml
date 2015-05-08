@@ -84,14 +84,10 @@ ApplicationWindow {
             listItem.processorId = processorData['id']
         }
         onGroupListChanged: {
-            for (var i = 0; i < groupList.data.length; i++)
-                groupList.data[i].destroy()
-
-            for (i = 0; i < groups.length; i++) {
-                var groupItem = groupList.addItem("", groups[i],
-                                                  groups[i])
-                groupItem.triggered.connect(groupItemClicked)
-            }
+            groupList.listModel = []
+            groups.forEach(function(group) {
+                groupList.addItem("", group, group, groupItemClicked)
+            })
         }
         onGroupDataLoaded: {
             stats.model = timeTable

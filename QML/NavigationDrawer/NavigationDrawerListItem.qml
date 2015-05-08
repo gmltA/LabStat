@@ -5,10 +5,10 @@ import "../." // Singletons import
 
 Item
 {
-    default property alias data: listItems.data
     property alias icon: listHeader.icon
     property alias rightIcon: listHeader.rightIcon
     property alias caption: listHeader.caption
+    property var listModel
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -16,15 +16,20 @@ Item
 
     state: "collapsed"
 
-    function addItem(icon, title, extraData)
+    function addItem(icon, title, extraData, clickCallback)
     {
-        var component = Qt.createComponent("NavigationDrawerItem.qml");
-        var listItem = component.createObject(listItems);
-        listItem.icon = icon;
-        listItem.caption = title;
-        listItem.extraData = extraData;
+        var listItem = {}
+        var model = listModel
+        listItem["icon"] = icon;
+        listItem["caption"] = title;
+        listItem["extraData"] = extraData;
+        listItem["clickCallback"] = clickCallback;
 
-        return listItem
+        if (!model)
+            model = []
+
+        model.push(listItem)
+        listModel = model
     }
 
     function toogle()
@@ -37,7 +42,7 @@ Item
 
     function isEmpty()
     {
-        return listItems.children.length === 0
+        return !listModel || listModel.length === 0
     }
 
     NavigationDrawerDivider {
@@ -72,6 +77,7 @@ Item
             icon: ""
             caption: "No items"
             visible: isEmpty()
+            enabled: false
         }
 
         Column {
@@ -79,6 +85,19 @@ Item
 
             anchors.left: parent.left
             anchors.right: parent.right
+
+            Repeater {
+                model: listModel
+                NavigationDrawerItem {
+                    icon: listModel[index].icon
+                    caption: listModel[index].caption
+                    extraData: listModel[index].extraData
+
+                    onTriggered: {
+                        listModel[index].clickCallback(extraData);
+                    }
+                }
+            }
         }
 
         NavigationDrawerDivider {
