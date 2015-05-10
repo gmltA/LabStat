@@ -7,9 +7,9 @@
 #include "GoogleDrive/interface.authclient.h"
 #include "GoogleDrive/API/driveapi.h"
 
-SubjectData::SubjectData(QString title, QObject *parent) : QObject(parent)
+SubjectData::SubjectData(QString _title, QObject *parent) : QObject(parent), title(_title)
 {
-    dataSheet = new DataSheet(title);
+    dataSheet = new DataSheet(_title);
     syncHandler = new SyncHandler(this);
 }
 
@@ -59,4 +59,14 @@ void SubjectData::disconnectAll()
     syncHandler->disconnect();
     dataSheet->disconnect();
     disconnect();
+}
+
+QString SubjectData::getTitle() const
+{
+    return title;
+}
+
+void SubjectData::setTitle(const QString& value)
+{
+    title = value;
 }

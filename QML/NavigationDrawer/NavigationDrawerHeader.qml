@@ -9,6 +9,10 @@ Rectangle {
     property alias secondaryText: secondaryTextItem.text
     property alias buttonIcon: icon.text
     property alias buttonArea: area
+    property alias actionButton: button
+    property var model
+
+    signal headerContentScrolled(int index)
 
     height: 144 * dp
     width: parent.width
@@ -28,6 +32,61 @@ Rectangle {
         gradient: Gradient{
             GradientStop { position: 0 ; color: "#00000000"}
             GradientStop { position: 1 ; color: "#2c000000"}
+        }
+    }
+
+    Rectangle {
+        anchors.right: parent.right
+        anchors.rightMargin: 18 * dp
+        height: 48 * dp
+        width: 48 * dp
+        z: 1
+        radius: height / 2
+        color: Theme.accentColor
+        Text {
+            anchors.centerIn: parent
+            text: "+"
+            color: "white"
+            font.family: "Roboto Regular"
+            font.pixelSize: 14 * dp
+        }
+        MouseArea {
+            id: button
+            anchors.fill: parent
+        }
+    }
+
+    ListView {
+        id: headerList
+        anchors.fill: parent
+
+        visible: header.model && header.model.length !== 0
+
+        orientation: ListView.Horizontal
+        highlightRangeMode: ListView.StrictlyEnforceRange
+        boundsBehavior: Flickable.StopAtBounds
+        snapMode: ListView.SnapOneItem
+
+        onCurrentIndexChanged: {
+            header.headerContentScrolled(currentIndex)
+        }
+
+        model: header.model
+        delegate: Component {
+            Item {
+                width: headerList.width
+                height: headerList.height
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 24 * dp
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: title
+                    color: "white"
+                    font.pointSize: 24
+                    font.family: "Roboto Light"
+                }
+            }
         }
     }
 

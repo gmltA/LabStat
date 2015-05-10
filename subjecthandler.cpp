@@ -6,7 +6,6 @@ SubjectHandler* SubjectHandler::instance = nullptr;
 
 SubjectHandler::SubjectHandler() : QObject(), currentSubject(nullptr), studentList(nullptr)
 {
-
 }
 
 SubjectData* SubjectHandler::getCurrentSubject() const
@@ -32,6 +31,7 @@ void SubjectHandler::setCurrentSubject(SubjectData* subject)
     connect(currentSubject->getSyncHandler(), &SyncHandler::syncStopped, this, &SubjectHandler::syncStopped);
 
     connect(currentSubject->getDataSheet(), &DataSheet::groupListChanged, this, &SubjectHandler::groupListChanged);
+    emit processorListChanged(currentSubject->getSyncHandler()->buildProcessorsData());
 }
 
 void SubjectHandler::addSubject(SubjectData* subject)
@@ -39,6 +39,16 @@ void SubjectHandler::addSubject(SubjectData* subject)
     subjects.push_back(subject);
     if (!currentSubject)
         setCurrentSubject(subject);
+
+    subjectModel.append(subject->getTitle());
+
+    emit subjectListChanged(subjectModel);
+}
+
+void SubjectHandler::addSubject(QString subjectTitle)
+{
+    SubjectData* subject = new SubjectData(subjectTitle);
+    addSubject(subject);
 }
 
 void SubjectHandler::init()

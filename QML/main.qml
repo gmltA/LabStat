@@ -28,6 +28,33 @@ ApplicationWindow {
     }
 
     Component {
+        id: addSubjectDialogBuilder
+
+        PopupDialog {
+            title: "Add subject"
+            active: true
+            z: 6
+
+            TextInput {
+                id: text
+                width: parent.width
+                height: 24 * dp
+                font.pixelSize: 14 * dp
+                maximumLength: 20
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    height: 1 * dp
+                    color: Qt.rgba(0, 0, 0, 0.57)
+                }
+            }
+            onAccepted: {
+                SubjectHandler.addSubject(text.text)
+            }
+        }
+    }
+
+    Component {
         id: dialogBuilder
 
         PopupDialog {
@@ -74,9 +101,19 @@ ApplicationWindow {
 
     Connections {
         target: SubjectHandler
+        onSubjectListChanged: {
+            header.model = subjectListModel
+        }
+        onProcessorListChanged: {
+            var model = []
+            processors.forEach(function(processor) {
+                model.push({"title": processor['title'], "id": processor['id'], "state": ""})
+            })
+            syncProcessors.processorsModel = model
+        }
         onProcessorAddCalled: {
             var model = syncProcessors.processorsModel
-            model.push({"title": processorData['title'], "id": processorData['id']})
+            model.push({"title": processorData['title'], "id": processorData['id'], "state": "inactive"})
             syncProcessors.processorsModel =  model
         }
         onGroupListChanged: {
@@ -87,6 +124,13 @@ ApplicationWindow {
         }
         onGroupDataLoaded: {
             stats.model = timeTable
+        }
+    }
+
+    Connections {
+        target: header
+        onHeaderContentScrolled: {
+            SubjectHandler.setCurrentSubject(index)
         }
     }
 
@@ -133,6 +177,14 @@ ApplicationWindow {
 
                     buttonArea.onClicked: {
                         drawer.togglePage()
+                    }
+
+                    actionButton.onClicked: {
+                        var p = header.parent
+                        while (p.parent)
+                            p = p.parent
+
+                        var dialog = addSubjectDialogBuilder.createObject(p)
                     }
                 }
 
@@ -186,6 +238,7 @@ ApplicationWindow {
                             NavigationDrawerSyncItem {
                                 processorId: syncProcessors.processorsModel[index].id
                                 caption: syncProcessors.processorsModel[index].title
+                                state: syncProcessors.processorsModel[index].state
                             }
                         }
                     }

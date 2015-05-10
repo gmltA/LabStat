@@ -20,7 +20,12 @@ class SubjectData : public QObject
         void attachSQLite(QString rootFolder = "LabStat");
         void disconnectAll();
 
+        QString getTitle() const;
+        void setTitle(const QString& value);
+
     private:
+        QString title;
+
         DataSheet* dataSheet;
         SyncHandler* syncHandler;
 

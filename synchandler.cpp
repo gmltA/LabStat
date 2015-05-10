@@ -55,6 +55,17 @@ void SyncHandler::sync(IDataStore::Origin origin)
     }
 }
 
+QVariantList SyncHandler::buildProcessorsData()
+{
+    QVariantList processorsData;
+    foreach (IDataStore* processor, syncProcessors)
+    {
+        processorsData.append(buildProcessorData(processor));
+    }
+
+    return processorsData;
+}
+
 void SyncHandler::registerProcessor(IDataStore* processor)
 {
     syncProcessors.push_back(processor);

@@ -22,6 +22,8 @@ class SyncHandler : public QObject
         Q_INVOKABLE void sync(int processorIndex);
         void sync(IDataStore::Origin origin = IDataStore::OriginAny);
 
+        QVariantList buildProcessorsData();
+
     private:
 
         void sync(IDataStore* processor);

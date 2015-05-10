@@ -36,9 +36,10 @@ class SubjectHandler : public QObject
         Q_INVOKABLE void loadGroupData(int group);
 
         SubjectData* getCurrentSubject() const;
-        void setCurrentSubject(int id);
+        Q_INVOKABLE void setCurrentSubject(int id);
 
         void addSubject(SubjectData* subject);
+        Q_INVOKABLE void addSubject(QString subjectTitle);
 
     private:
         SubjectHandler();
@@ -51,8 +52,12 @@ class SubjectHandler : public QObject
         SubjectData* currentSubject;
 
         StudentListModel* studentList;
+        QStringList subjectModel;
 
     signals:
+        void subjectListChanged(QStringList subjectListModel);
+
+        void processorListChanged(QVariantList processors);
         void processorAddCalled(QVariantMap processorData);
         void processorAdded(QVariantMap processorData);
         void syncStopped(int processorId);
