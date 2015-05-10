@@ -7,12 +7,14 @@ Item {
     property alias caption: item.caption
     property int processorId
 
+    signal initCompleted(bool success)
+
     function processorAdded(processorData) {
         if (processorId === processorData['id']) {
-            if (processorData['result']) {
+            if (processorData['result'])
                 state = ""
-            } else
-                root.destroy()
+
+            initCompleted(processorData['result'])
         }
     }
 
@@ -22,8 +24,8 @@ Item {
     }
 
     height: 48 * dp
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.left: parent ? parent.left : undefined
+    anchors.right: parent ? parent.right : undefined
 
     state: "inactive"
 

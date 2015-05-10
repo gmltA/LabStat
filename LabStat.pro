@@ -19,8 +19,7 @@ SOURCES += main.cpp \
     GoogleDrive/API/driveapi.cpp \
     GoogleDrive/API/drivefile.cpp \
     GoogleDrive/API/sheetsapirequest.cpp \
-    SQLite/sqlitesyncprocessor.cpp \
-    subjectlistmodel.cpp
+    SQLite/sqlitesyncprocessor.cpp
 
 RESOURCES += qml.qrc
 
@@ -80,5 +79,4 @@ HEADERS += \
     GoogleDrive/API/driveapi.h \
     GoogleDrive/API/drivefile.h \
     GoogleDrive/API/sheetsapirequest.h \
-    SQLite/sqlitesyncprocessor.h \
-    subjectlistmodel.h
+    SQLite/sqlitesyncprocessor.h

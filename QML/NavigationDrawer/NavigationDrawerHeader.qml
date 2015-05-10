@@ -81,7 +81,7 @@ Rectangle {
                     anchors.leftMargin: 24 * dp
                     anchors.verticalCenter: parent.verticalCenter
 
-                    text: title
+                    text: modelData
                     color: "white"
                     font.pointSize: 24
                     font.family: "Roboto Light"

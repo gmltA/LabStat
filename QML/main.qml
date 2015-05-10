@@ -239,6 +239,14 @@ ApplicationWindow {
                                 processorId: syncProcessors.processorsModel[index].id
                                 caption: syncProcessors.processorsModel[index].title
                                 state: syncProcessors.processorsModel[index].state
+
+                                onInitCompleted: {
+                                    if (success)
+                                        syncProcessors.processorsModel[index].state = ""
+                                    else
+                                        syncProcessors.processorsModel.splice(index, 1);
+
+                                }
                             }
                         }
                     }
