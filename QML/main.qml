@@ -75,13 +75,9 @@ ApplicationWindow {
     Connections {
         target: SubjectHandler
         onProcessorAddCalled: {
-            var component = Qt.createComponent(
-                        "NavigationDrawer/NavigationDrawerSyncItem.qml")
-            var listItem = component.createObject(syncProcessors)
-
-            //listItem.icon = processorData['online'] === 1 ? "" : "";
-            listItem.caption = processorData['title']
-            listItem.processorId = processorData['id']
+            var model = syncProcessors.processorsModel
+            model.push({"title": processorData['title'], "id": processorData['id']})
+            syncProcessors.processorsModel =  model
         }
         onGroupListChanged: {
             groupList.listModel = []
@@ -180,8 +176,18 @@ ApplicationWindow {
 
                     Column {
                         id: syncProcessors
+
+                        property var processorsModel: []
+
                         anchors.left: parent.left
                         anchors.right: parent.right
+                        Repeater {
+                            model: syncProcessors.processorsModel
+                            NavigationDrawerSyncItem {
+                                processorId: syncProcessors.processorsModel[index].id
+                                caption: syncProcessors.processorsModel[index].title
+                            }
+                        }
                     }
 
                     NavigationDrawerDivider {
