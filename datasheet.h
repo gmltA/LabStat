@@ -48,7 +48,7 @@ class TimeTableModel : public QAbstractListModel
             StudentsRole
         };
 
-        TimeTableModel(QObject *parent = 0);
+        TimeTableModel(int groupId, QObject *parent = 0);
 
         void addEntry(const TimetableEntry& entry);
 
@@ -56,10 +56,13 @@ class TimeTableModel : public QAbstractListModel
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
         Q_INVOKABLE int subGroupIdForIndex(int index);
 
+        int getGroupId() const;
+
     protected:
         QHash<int, QByteArray> roleNames() const;
 
     private:
+        int groupId;
         QList<TimetableEntry> timeTable;
 };
 
@@ -93,6 +96,8 @@ class DataSheet : public QObject
 
         void synced(int processorId);
 
+        TimeTableModel* getTimeTableModel(int groupId = 0);
+
     private:
         uint id;
         QString fileName;
@@ -102,6 +107,7 @@ class DataSheet : public QObject
         QList<int> groups;
         QList<Student> students;
         QList<TimetableEntry> timeTable;
+        TimeTableModel* timeTableModel;
 
     signals:
         void groupListChanged(QList<int> groups);

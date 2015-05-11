@@ -3,12 +3,14 @@
 #include <QDebug>
 
 DataSheet::DataSheet(QString _fileName, QObject *parent)
-    : QObject(parent), id(0), fileName(_fileName)
+    : QObject(parent), id(0), fileName(_fileName), timeTableModel(nullptr)
 {
 }
 
 DataSheet::~DataSheet()
 {
+    if (timeTableModel)
+        timeTableModel->deleteLater();
 }
 
 uint DataSheet::getId() const
@@ -84,8 +86,38 @@ void DataSheet::synced(int processorId)
     lastSyncTime = QDateTime::currentDateTime();
 }
 
-TimeTableModel::TimeTableModel(QObject* parent)
-    : QAbstractListModel(parent)
+TimeTableModel* DataSheet::getTimeTableModel(int groupId)
+{
+    if (!groupId)
+        return timeTableModel;
+
+    if (!timeTableModel || timeTableModel->getGroupId() != groupId)
+    {
+        if (timeTableModel)
+            timeTableModel->deleteLater();
+
+        timeTableModel = new TimeTableModel(groupId);
+        foreach (TimetableEntry timeTableEntry, timeTable)
+        {
+            if (groupId == timeTableEntry.group)
+            {
+                foreach (Student person, students)
+                {
+                    if (person.getGroup() == groupId && (person.getSubgroup() == timeTableEntry.subgroup
+                            || timeTableEntry.subgroup == 0 || person.getSubgroup() == 0))
+                    {
+                        timeTableEntry.students->addStudent(person);
+                    }
+                }
+                timeTableModel->addEntry(timeTableEntry);
+            }
+        }
+    }
+    return timeTableModel;
+}
+
+TimeTableModel::TimeTableModel(int _groupId, QObject* parent)
+    : QAbstractListModel(parent), groupId(_groupId)
 {
 
 }
@@ -137,4 +169,9 @@ QHash<int, QByteArray> TimeTableModel::roleNames() const {
     roles[GroupRole] = "group";
     roles[StudentsRole] = "students";
     return roles;
+}
+
+int TimeTableModel::getGroupId() const
+{
+    return groupId;
 }

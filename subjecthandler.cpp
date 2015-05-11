@@ -32,6 +32,8 @@ void SubjectHandler::setCurrentSubject(SubjectData* subject)
 
     connect(currentSubject->getDataSheet(), &DataSheet::groupListChanged, this, &SubjectHandler::groupListChanged);
     emit processorListChanged(currentSubject->getSyncHandler()->buildProcessorsData());
+    emit groupListChanged(currentSubject->getDataSheet()->getGroupList());
+    emit groupDataLoaded(currentSubject->getDataSheet()->getTimeTableModel());
 }
 
 void SubjectHandler::addSubject(SubjectData* subject)
@@ -73,27 +75,7 @@ void SubjectHandler::attachSQLite(QString rootFolder)
 
 void SubjectHandler::loadGroupData(int group)
 {
-    QList<Student> students = currentSubject->getDataSheet()->getStudentList();
-    if (studentList != nullptr)
-        studentList->deleteLater();
-
-    TimeTableModel* timeTable = new TimeTableModel();
-    foreach (TimetableEntry timeTableEntry, currentSubject->getDataSheet()->getTimeTable())
-    {
-        if (group == timeTableEntry.group)
-        {
-            foreach (Student person, students)
-            {
-                if (person.getGroup() == group && (person.getSubgroup() == timeTableEntry.subgroup
-                        || timeTableEntry.subgroup == 0 || person.getSubgroup() == 0))
-                {
-                    timeTableEntry.students->addStudent(person);
-                }
-            }
-            timeTable->addEntry(timeTableEntry);
-        }
-    }
-    emit groupDataLoaded(timeTable);
+    emit groupDataLoaded(currentSubject->getDataSheet()->getTimeTableModel(group));
 }
 
 SubjectHandler* SubjectHandler::getInstance()
