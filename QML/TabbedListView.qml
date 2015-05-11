@@ -165,9 +165,6 @@ Rectangle {
                         height: 2 * dp
                     }
                     PropertyChanges {
-                        target: dateText
-                    }
-                    PropertyChanges {
                         target: groupScale
                         xScale: 1
                         yScale: 1
@@ -192,7 +189,7 @@ Rectangle {
                 height: 72 * dp
                 width: parent.width
 
-                ColumnLayout {
+                Column {
                     anchors.left: parent.left
                     anchors.leftMargin: 16 * dp
                     anchors.verticalCenter: parent.verticalCenter
@@ -203,17 +200,14 @@ Rectangle {
                         font.family: "Roboto Medium"
                         font.pixelSize: 14 * dp
                         color: Theme.textColor
-
-                        Layout.alignment: Qt.AlignVCenter
                     }
                     Text {
-                        text: note
+                        id: noteField
+                        text: "Test note" /* note */
                         font.family: "Roboto Regular"
                         font.pixelSize: 12 * dp
                         color: Theme.subTextColor
-                        visible: text != ""
-
-                        Layout.alignment: Qt.AlignVCenter
+                        visible: false
                     }
                 }
 
@@ -310,6 +304,10 @@ Rectangle {
                     PropertyChanges {
                         target: personStats
                         height: statControls.height
+                    }
+                    PropertyChanges {
+                        target: noteField
+                        visible: noteField.text != "" ? true : false
                     }
                 }
             ]
