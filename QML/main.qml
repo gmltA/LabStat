@@ -81,7 +81,7 @@ ApplicationWindow {
                 visible: driveCheckBox.checked
                 width: parent.width
                 height: 24 * dp
-                font.pixelSize: 14
+                font.pixelSize: 14 * dp
                 maximumLength: 20
                 Rectangle {
                     anchors.bottom: parent.bottom

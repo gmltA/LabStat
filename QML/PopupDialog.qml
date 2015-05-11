@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import "../QML/QuickAndroid"
+import "."
 import Material 0.1 as Material
 
 PopupArea {
@@ -58,7 +59,7 @@ PopupArea {
                 visible: text != ""
 
                 font.family: "Roboto Medium"
-                font.pixelSize: 20
+                font.pixelSize: 20 * dp
                 color: "#212121"
                 text: "Use Google's location service?"
                 wrapMode: Text.WordWrap
@@ -68,7 +69,7 @@ PopupArea {
                 width: parent.width
 
                 font.family: "Roboto"
-                font.pixelSize: 14
+                font.pixelSize: 14 * dp
                 lineHeight: 13 * dp
                 lineHeightMode: Text.FixedHeight
                 color: "#757575"
