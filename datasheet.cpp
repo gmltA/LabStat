@@ -157,11 +157,6 @@ QVariant TimeTableModel::data(const QModelIndex & index, int role) const {
     return QVariant();
 }
 
-int TimeTableModel::subGroupIdForIndex(int index)
-{
-    return timeTable[index].subgroup;
-}
-
 QHash<int, QByteArray> TimeTableModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[DateRole] = "date";

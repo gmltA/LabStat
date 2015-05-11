@@ -51,7 +51,6 @@ class SubjectHandler : public QObject
         QList<SubjectData*> subjects;
         SubjectData* currentSubject;
 
-        StudentListModel* studentList;
         QStringList subjectModel;
 
     signals:

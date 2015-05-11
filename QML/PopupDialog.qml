@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import "../QML/QuickAndroid"
 import "."
-import Material 0.1 as Material
+//import Material 0.1 as Material
 
 PopupArea {
     id: popupDialog
@@ -99,16 +99,16 @@ PopupArea {
             layoutDirection: Qt.RightToLeft
             spacing: 8 * dp
 
-            Material.Button {
-                text: positiveButtonText
+            PopupDialogButton {
+                caption: positiveButtonText
                 onClicked: {
                     accepted()
                     close()
                 }
             }
 
-            Material.Button {
-                text: negativeButtonText
+            PopupDialogButton {
+                caption: negativeButtonText
                 onClicked: {
                     rejected()
                     close()
