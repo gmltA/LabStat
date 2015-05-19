@@ -61,24 +61,22 @@ ApplicationWindow {
             title: "Add sync processor"
             active: true
             z: 6
-            RadioButton {
-                id: driveCheckBox
-                text: "Google Drive"
-                onCheckedChanged: {
-                    if (checked)
+            ComboBox {
+                id: processorSelector
+                width: parent.width
+                model: ["Google Drive", "SQLite storage"]
+                currentIndex: 1
+                onCurrentIndexChanged: {
+                    if (currentIndex == 0)
                         text.forceActiveFocus()
-                    else
+                    else if (parent)
                         parent.forceActiveFocus()
                 }
-            }
-            RadioButton {
-                id: sqlCheckBox
-                text: "SQLite storage"
             }
 
             TextInput {
                 id: text
-                visible: driveCheckBox.checked
+                visible: processorSelector.currentIndex == 0
                 width: parent.width
                 height: 24 * dp
                 font.pixelSize: 14 * dp
@@ -91,9 +89,9 @@ ApplicationWindow {
                 }
             }
             onAccepted: {
-                if (driveCheckBox.checked)
+                if (processorSelector.currentIndex == 0)
                     SubjectHandler.attachDrive(text.text)
-                else if (sqlCheckBox.checked)
+                else if (processorSelector.currentIndex == 1)
                     SubjectHandler.attachSQLite(text.text)
             }
         }
