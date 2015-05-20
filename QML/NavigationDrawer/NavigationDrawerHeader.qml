@@ -129,6 +129,16 @@ Rectangle {
             color: area.pressed ? Qt.rgba(1,1,1,0.5) : Qt.rgba(0,0,0,0)
 
             anchors.right: parent.right
+            Rectangle {
+                anchors.left: parent.left
+                height: parent.height
+                width: 1 * dp
+                gradient: Gradient{
+                    GradientStop { position: 1; color: "#00FFFFFF"}
+                    GradientStop { position: 0; color: "#FFFFFFFF"}
+                }
+            }
+
             Text {
                 id: icon
                 anchors.centerIn: parent

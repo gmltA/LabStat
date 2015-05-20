@@ -1,16 +1,7 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#include <QAbstractListModel>
 #include <QDomDocument>
-
-struct StatTableEntry
-{
-    int id;
-    int timeTableId;
-    int studentId;
-    bool attended;
-};
 
 class Student
 {
@@ -52,33 +43,4 @@ class Student
         int subgroup;
 };
 
-class StudentListModel : public QAbstractListModel
-{
-    Q_OBJECT
-    public:
-        enum StudentDataRoles {
-            NameRole = Qt::UserRole + 1,
-            SurnameRole,
-            NoteRole,
-            SubGroupRole,
-            AttendenceRole
-        };
-
-        StudentListModel(QObject *parent = 0);
-
-        void addStudent(const Student& student);
-        void addStatEntry(const StatTableEntry& entry);
-
-        int rowCount(const QModelIndex & parent = QModelIndex()) const;
-        QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-
-    protected:
-        QHash<int, QByteArray> roleNames() const;
-
-    private:
-        QList<Student> students;
-        QList<StatTableEntry> stats;
-};
-
-Q_DECLARE_METATYPE(StudentListModel*)
 #endif // STUDENT_H

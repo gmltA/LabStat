@@ -5,65 +5,8 @@
 #include <QObject>
 #include <QStringList>
 #include "student.h"
-
-struct TimetableEntry
-{
-        TimetableEntry(int _id, QDateTime _dateTime, int _group, int _subgroup = 0)
-            : id(_id), group(_group), subgroup(_subgroup)
-        {
-            dateTime = _dateTime;
-            students = new StudentListModel();
-        }
-
-        TimetableEntry(int _id, QDate date, QTime time, int _group, int _subgroup = 0)
-            : id(_id), group(_group), subgroup(_subgroup)
-        {
-            dateTime.setDate(date);
-            dateTime.setTime(time);
-            students = new StudentListModel();
-        }
-
-        ~TimetableEntry()
-        {
-            // BUG! Causes app crash
-            //delete students;
-        }
-
-        int id;
-
-        QDateTime dateTime;
-        StudentListModel* students;
-        int group;
-        int subgroup;
-};
-
-class TimeTableModel : public QAbstractListModel
-{
-    Q_OBJECT
-    public:
-        enum TimeTableDataRoles {
-            DateRole = Qt::UserRole + 1,
-            TimeRole,
-            GroupRole,
-            StudentsRole
-        };
-
-        TimeTableModel(int groupId, QObject *parent = 0);
-
-        void addEntry(const TimetableEntry& entry);
-
-        int rowCount(const QModelIndex & parent = QModelIndex()) const;
-        QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-
-        int getGroupId() const;
-
-    protected:
-        QHash<int, QByteArray> roleNames() const;
-
-    private:
-        int groupId;
-        QList<TimetableEntry> timeTable;
-};
+#include "studentlistmodel.h"
+#include "timetablemodel.h"
 
 class DataSheet : public QObject
 {
@@ -87,8 +30,8 @@ class DataSheet : public QObject
         QList<Student> getStudentList() const;
         void setStudentList(const QList<Student>& value);
 
-        QList<TimetableEntry> getTimeTable() const;
-        void setTimeTable(const QList<TimetableEntry>& value);
+        QList<TimeTableEntry> getTimeTable() const;
+        void setTimeTable(const QList<TimeTableEntry>& value);
 
         QList<StatTableEntry> getStatTable() const;
         void setStatTable(const QList<StatTableEntry>& value);
@@ -108,7 +51,7 @@ class DataSheet : public QObject
 
         QList<int> groups;
         QList<Student> students;
-        QList<TimetableEntry> timeTable;
+        QList<TimeTableEntry> timeTable;
         QList<StatTableEntry> statTable;
         TimeTableModel* timeTableModel;
 

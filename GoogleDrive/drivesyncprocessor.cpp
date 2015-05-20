@@ -95,11 +95,11 @@ QList<Student> DriveSyncProcessor::buildStudentList(QByteArray rawData)
     return studentList;
 }
 
-QList<TimetableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
+QList<TimeTableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
 {
     QDomDocument doc;
     QList<QDomElement> dateList;
-    QList<TimetableEntry> timeTable;
+    QList<TimeTableEntry> timeTable;
 
     if (doc.setContent(rawData))
     {
@@ -135,7 +135,7 @@ QList<TimetableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
 
                 timeTableAccordance[entryIndex] = timeElement.tagName();
 
-                timeTable.push_back(TimetableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
+                timeTable.push_back(TimeTableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
                                                    QTime::fromString(timeElement.text(), "h:mm"), group, subgroup));
                 entryIndex++;
             }

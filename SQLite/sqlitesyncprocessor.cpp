@@ -34,7 +34,7 @@ void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 
     QString basicQuery = "INSERT INTO timetable_entry VALUES %1;";
     QString timeTableData = "";
-    foreach (TimetableEntry entry, dataFile->getTimeTable())
+    foreach (TimeTableEntry entry, dataFile->getTimeTable())
         timeTableData += serializeTimeTableEntry(dataFile->getId(), entry);
 
     timeTableData.chop(1);
@@ -47,10 +47,10 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, dateTime, groupId, subgroupId FROM timetable_entry WHERE subjectId = %1";
     QSqlQuery query(queryString.arg(dataFile->getId()));
-    QList<TimetableEntry> timeTable;
+    QList<TimeTableEntry> timeTable;
     while (query.next())
     {
-        timeTable.push_back(TimetableEntry(query.value(0).toInt(), QDateTime::fromString(query.value(1).toString()),
+        timeTable.push_back(TimeTableEntry(query.value(0).toInt(), QDateTime::fromString(query.value(1).toString()),
                                            query.value(2).toInt(), query.value(3).toInt()));
     }
 
@@ -126,6 +126,7 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
 void SQLiteSyncProcessor::createDbStructure()
 {
     QSqlQuery query;
+    //query.exec("DROP TABLE IF EXISTS students;");
     query.exec("CREATE TABLE students("
                "subjectId INTEGER NOT NULL,"
                "id INTEGER NOT NULL,"
@@ -139,6 +140,7 @@ void SQLiteSyncProcessor::createDbStructure()
                ")");
     qDebug() << query.lastError().text();
 
+    //query.exec("DROP TABLE IF EXISTS timetable_entry;");
     query.exec("CREATE TABLE timetable_entry ("
                    "subjectId INTEGER NOT NULL,"
                    "id INTEGET NOT NULL,"
@@ -163,7 +165,7 @@ QString SQLiteSyncProcessor::serializeStudent(int subjectId, Student person)
             .arg(person.getSubgroup());
 }
 
-QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimetableEntry entry)
+QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimeTableEntry entry)
 {
     QString ttEntryTpl = "(%1, '%2', '%3', '%4', '%5'),";
     return ttEntryTpl.arg(subjectId)

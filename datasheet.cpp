@@ -60,12 +60,12 @@ void DataSheet::setStudentList(const QList<Student>& value)
     students = value;
 }
 
-QList<TimetableEntry> DataSheet::getTimeTable() const
+QList<TimeTableEntry> DataSheet::getTimeTable() const
 {
     return timeTable;
 }
 
-void DataSheet::setTimeTable(const QList<TimetableEntry>& value)
+void DataSheet::setTimeTable(const QList<TimeTableEntry>& value)
 {
     timeTable = value;
 }
@@ -97,7 +97,7 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
             timeTableModel->deleteLater();
 
         timeTableModel = new TimeTableModel(groupId);
-        foreach (TimetableEntry timeTableEntry, timeTable)
+        foreach (TimeTableEntry timeTableEntry, timeTable)
         {
             if (groupId == timeTableEntry.group)
             {
@@ -130,59 +130,4 @@ QList<StatTableEntry> DataSheet::getStatTable() const
 void DataSheet::setStatTable(const QList<StatTableEntry>& value)
 {
     statTable = value;
-}
-
-TimeTableModel::TimeTableModel(int _groupId, QObject* parent)
-    : QAbstractListModel(parent), groupId(_groupId)
-{
-
-}
-
-void TimeTableModel::addEntry(const TimetableEntry& entry)
-{
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    timeTable << entry;
-    endInsertRows();
-}
-
-int TimeTableModel::rowCount(const QModelIndex & parent) const {
-    Q_UNUSED(parent);
-    return timeTable.count();
-}
-
-QVariant TimeTableModel::data(const QModelIndex & index, int role) const {
-    if (index.row() < 0 || index.row() >= timeTable.count())
-        return QVariant();
-
-    const TimetableEntry& entry = timeTable[index.row()];
-    switch (role)
-    {
-        case DateRole:
-            return entry.dateTime.date();
-        case TimeRole:
-            return entry.dateTime.time();
-        case GroupRole:
-            return entry.subgroup;
-        case StudentsRole:
-        {
-            QVariant var;
-            var.setValue(entry.students);
-            return var;
-        }
-    }
-    return QVariant();
-}
-
-QHash<int, QByteArray> TimeTableModel::roleNames() const {
-    QHash<int, QByteArray> roles;
-    roles[DateRole] = "date";
-    roles[TimeRole] = "time";
-    roles[GroupRole] = "group";
-    roles[StudentsRole] = "students";
-    return roles;
-}
-
-int TimeTableModel::getGroupId() const
-{
-    return groupId;
 }
