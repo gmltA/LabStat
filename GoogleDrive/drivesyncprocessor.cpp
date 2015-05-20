@@ -98,22 +98,14 @@ QList<Student> DriveSyncProcessor::buildStudentList(QByteArray rawData)
 QList<TimeTableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
 {
     QDomDocument doc;
-    QList<QDomElement> dateList;
     QList<TimeTableEntry> timeTable;
 
     if (doc.setContent(rawData))
     {
         // BUG: firstChildElement doesn't work
-        QDomNodeList dateNodes = doc.elementsByTagName("entry").at(0).childNodes();
+        QList<QDomElement> dateList = selectDateElementList(doc.elementsByTagName("entry").at(0).childNodes());
         QDomNodeList timeNodes = doc.elementsByTagName("entry").at(1).childNodes();
         QDomNodeList groupNodes = doc.elementsByTagName("entry").at(2).childNodes();
-
-        for (int i = 0; i < dateNodes.size(); i++)
-        {
-            QDomElement dateElement = dateNodes.item(i).toElement();
-            if (dateElement.tagName().contains("gsx"))
-                dateList.push_back(dateElement);
-        }
 
         int dateIndex = 0;
         int entryIndex  = 0;
@@ -151,9 +143,9 @@ QList<StatTableEntry> DriveSyncProcessor::buildStats(QByteArray rawData)
     if (doc.setContent(rawData))
     {
         QDomNodeList studentNodes = doc.elementsByTagName("entry");
-        for (int studentIndex = 3; studentIndex < studentNodes.size(); studentIndex++)
+        for (int index = 3; index < studentNodes.size(); index++)
         {
-            QDomNodeList dataNodes = studentNodes.item(studentIndex).childNodes();
+            QDomNodeList dataNodes = studentNodes.item(index).childNodes();
             for (int j = 3, entryId = 0, gsxCount = 0; j < dataNodes.size(); j++)
             {
                 QString dataTag = dataNodes.item(j).toElement().tagName();
@@ -166,7 +158,7 @@ QList<StatTableEntry> DriveSyncProcessor::buildStats(QByteArray rawData)
                     entry.id = entryId++;
                     entry.timeTableId = timeTableAccordance.key(dataTag);
                     entry.attended = dataNodes.item(j).toElement().text() == "н" ? false : true;
-                    entry.studentId = studentIndex - 3;
+                    entry.studentId = index - 3;
 
                     statTable.push_back(entry);
                 }
@@ -174,4 +166,18 @@ QList<StatTableEntry> DriveSyncProcessor::buildStats(QByteArray rawData)
         }
     }
     return statTable;
+}
+
+QList<QDomElement> DriveSyncProcessor::selectDateElementList(QDomNodeList dateNodes)
+{
+    QList<QDomElement> dateList;
+
+    for (int i = 0; i < dateNodes.size(); i++)
+    {
+        QDomElement dateElement = dateNodes.item(i).toElement();
+        if (dateElement.tagName().contains("gsx"))
+            dateList.push_back(dateElement);
+    }
+
+    return dateList;
 }

@@ -30,6 +30,8 @@ class DriveSyncProcessor : public QObject, public IDataStore
         QList<TimeTableEntry>   buildTimeTable(QByteArray rawData);
         QList<StatTableEntry>   buildStats(QByteArray rawData);
 
+        QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
+
         QMap<int, QString>      timeTableAccordance;
 
     signals:
