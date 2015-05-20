@@ -45,6 +45,7 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
     WorkSheet labs = sheet->getWorkSheet("Лабораторные работы");
     workSheetData = driveService->Sheets.getListFeed(labs);
     dataFile->setTimeTable(buildTimeTable(workSheetData));
+    dataFile->setStatTable(buildStats(workSheetData));
 
     dataFile->synced(id);
     emit syncDone();
@@ -132,12 +133,45 @@ QList<TimetableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
                 int group = groupData[0].toInt();
                 int subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();
 
-                timeTableAccordance[entryIndex++] = timeElement.tagName();
+                timeTableAccordance[entryIndex] = timeElement.tagName();
 
                 timeTable.push_back(TimetableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
                                                    QTime::fromString(timeElement.text(), "h:mm"), group, subgroup));
+                entryIndex++;
             }
         }
     }
     return timeTable;
+}
+
+QList<StatTableEntry> DriveSyncProcessor::buildStats(QByteArray rawData)
+{
+    QDomDocument doc;
+    QList<StatTableEntry> statTable;
+    if (doc.setContent(rawData))
+    {
+        QDomNodeList studentNodes = doc.elementsByTagName("entry");
+        for (int studentIndex = 3; studentIndex < studentNodes.size(); studentIndex++)
+        {
+            QDomNodeList dataNodes = studentNodes.item(studentIndex).childNodes();
+            for (int j = 3, entryId = 0, gsxCount = 0; j < dataNodes.size(); j++)
+            {
+                QString dataTag = dataNodes.item(j).toElement().tagName();
+                if (dataTag.contains("gsx"))
+                    gsxCount++;
+
+                if (gsxCount >= 3)
+                {
+                    StatTableEntry entry;
+                    entry.id = entryId++;
+                    entry.timeTableId = timeTableAccordance.key(dataTag);
+                    entry.attended = dataNodes.item(j).toElement().text() == "н" ? false : true;
+                    entry.studentId = studentIndex - 3;
+
+                    statTable.push_back(entry);
+                }
+            }
+        }
+    }
+    return statTable;
 }

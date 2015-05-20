@@ -4,6 +4,14 @@
 #include <QAbstractListModel>
 #include <QDomDocument>
 
+struct StatTableEntry
+{
+    int id;
+    int timeTableId;
+    int studentId;
+    bool attended;
+};
+
 class Student
 {
     public:
@@ -52,12 +60,14 @@ class StudentListModel : public QAbstractListModel
             NameRole = Qt::UserRole + 1,
             SurnameRole,
             NoteRole,
-            SubGroupRole
+            SubGroupRole,
+            AttendenceRole
         };
 
         StudentListModel(QObject *parent = 0);
 
         void addStudent(const Student& student);
+        void addStatEntry(const StatTableEntry& entry);
 
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
@@ -67,6 +77,7 @@ class StudentListModel : public QAbstractListModel
 
     private:
         QList<Student> students;
+        QList<StatTableEntry> stats;
 };
 
 Q_DECLARE_METATYPE(StudentListModel*)

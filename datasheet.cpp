@@ -107,6 +107,12 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
                             || timeTableEntry.subgroup == 0 || person.getSubgroup() == 0))
                     {
                         timeTableEntry.students->addStudent(person);
+
+                        foreach (StatTableEntry entry, statTable)
+                        {
+                            if (entry.studentId == person.getId() && entry.timeTableId == timeTableEntry.id)
+                                timeTableEntry.students->addStatEntry(entry);
+                        }
                     }
                 }
                 timeTableModel->addEntry(timeTableEntry);
@@ -114,6 +120,16 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
         }
     }
     return timeTableModel;
+}
+
+QList<StatTableEntry> DataSheet::getStatTable() const
+{
+    return statTable;
+}
+
+void DataSheet::setStatTable(const QList<StatTableEntry>& value)
+{
+    statTable = value;
 }
 
 TimeTableModel::TimeTableModel(int _groupId, QObject* parent)

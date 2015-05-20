@@ -103,6 +103,13 @@ void StudentListModel::addStudent(const Student& student)
     endInsertRows();
 }
 
+void StudentListModel::addStatEntry(const StatTableEntry& entry)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    stats << entry;
+    endInsertRows();
+}
+
 int StudentListModel::rowCount(const QModelIndex & parent) const {
     Q_UNUSED(parent);
     return students.count();
@@ -123,6 +130,13 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
             return student.getNote();
         case SubGroupRole:
             return student.getSubgroup();
+        case AttendenceRole:
+            foreach (StatTableEntry entry, stats)
+            {
+                if (entry.studentId == student.getId())
+                    return entry.attended;
+            }
+            return false;
         default:
             return QVariant();
     }
@@ -134,5 +148,6 @@ QHash<int, QByteArray> StudentListModel::roleNames() const {
     roles[SurnameRole] = "surname";
     roles[NoteRole] = "note";
     roles[SubGroupRole] = "subgroup";
+    roles[AttendenceRole] = "attendence";
     return roles;
 }

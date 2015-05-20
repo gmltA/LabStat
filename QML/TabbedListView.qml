@@ -218,6 +218,8 @@ Rectangle {
 
                     z: 1
 
+                    checked: attendence
+
                     style: MaterialCheckBox {
                         color: Theme.accentColor
                         uncheckedColor: Theme.iconColor
