@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QObject>
 #include <QStringList>
+
 #include "student.h"
 #include "studentlistmodel.h"
 #include "timetablemodel.h"

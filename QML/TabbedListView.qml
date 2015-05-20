@@ -220,6 +220,10 @@ Rectangle {
 
                     checked: attendence
 
+                    onClicked: {
+                        attendence = checked
+                    }
+
                     style: MaterialCheckBox {
                         color: Theme.accentColor
                         uncheckedColor: Theme.iconColor

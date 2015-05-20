@@ -52,6 +52,29 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
     }
 }
 
+bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (index.row() < 0 || index.row() >= students.count())
+        return false;
+
+    const Student& student = students[index.row()];
+    switch (role)
+    {
+        case AttendenceRole:
+            for (StatTableEntry& entry: stats)
+            {
+                if (entry.studentId == student.getId())
+                {
+                    entry.attended = value.toBool();
+
+                    emit dataChanged(index, index);
+                    return true;
+                }
+            }
+    }
+    return false;
+}
+
 QHash<int, QByteArray> StudentListModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[NameRole] = "name";
