@@ -6,7 +6,7 @@ StudentListModel::StudentListModel(QObject* parent)
 
 }
 
-void StudentListModel::addStudent(const Student& student)
+void StudentListModel::addStudent(Student* student)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     students << student;
@@ -29,21 +29,21 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
     if (index.row() < 0 || index.row() >= students.count())
         return QVariant();
 
-    const Student& student = students[index.row()];
+    Student* student = students[index.row()];
     switch (role)
     {
         case NameRole:
-            return student.getName();
+            return student->getName();
         case SurnameRole:
-            return student.getSurname();
+            return student->getSurname();
         case NoteRole:
-            return student.getNote();
+            return student->getNote();
         case SubGroupRole:
-            return student.getSubgroup();
+            return student->getSubgroup();
         case AttendenceRole:
             foreach (StatTableEntry entry, stats)
             {
-                if (entry.studentId == student.getId())
+                if (entry.studentId == student->getId())
                     return entry.attended;
             }
             return false;
@@ -57,13 +57,17 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
     if (index.row() < 0 || index.row() >= students.count())
         return false;
 
-    const Student& student = students[index.row()];
+    Student* student = students[index.row()];
     switch (role)
     {
+        case NameRole:
+            student->setName(value.toString());
+            emit dataChanged(index, index);
+            break;
         case AttendenceRole:
             for (StatTableEntry& entry: stats)
             {
-                if (entry.studentId == student.getId())
+                if (entry.studentId == student->getId())
                 {
                     entry.attended = value.toBool();
 
@@ -71,6 +75,7 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
                     return true;
                 }
             }
+            break;
     }
     return false;
 }

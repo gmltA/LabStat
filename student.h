@@ -43,6 +43,6 @@ class Student
         int subgroup;
 };
 
-typedef QList<Student> StudentList;
+typedef QList<Student*> StudentList;
 
 #endif // STUDENT_H

@@ -90,7 +90,7 @@ StudentList DriveSyncProcessor::buildStudentList(QByteArray rawData)
     {
         QDomNodeList studentNodes = doc.elementsByTagName("entry");
         for (int i = 0; i < studentNodes.size(); i++)
-            studentList.push_back(Student(i, studentNodes.item(i)));
+            studentList.push_back(new Student(i, studentNodes.item(i)));
     }
     return studentList;
 }

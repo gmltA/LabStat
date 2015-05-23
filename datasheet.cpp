@@ -102,16 +102,16 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
             if (groupId != timeTableEntry.group)
                 continue;
 
-            foreach (Student person, students)
+            foreach (Student* person, students)
             {
-                if (person.getGroup() == groupId && (person.getSubgroup() == timeTableEntry.subgroup
-                        || timeTableEntry.subgroup == 0 || person.getSubgroup() == 0))
+                if (person->getGroup() == groupId && (person->getSubgroup() == timeTableEntry.subgroup
+                        || timeTableEntry.subgroup == 0 || person->getSubgroup() == 0))
                 {
                     timeTableEntry.students->addStudent(person);
 
                     foreach (StatTableEntry entry, statTable)
                     {
-                        if (entry.studentId == person.getId() && entry.timeTableId == timeTableEntry.id)
+                        if (entry.studentId == person->getId() && entry.timeTableId == timeTableEntry.id)
                             timeTableEntry.students->addStatEntry(entry);
                     }
                 }

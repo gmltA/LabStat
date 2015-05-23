@@ -66,7 +66,7 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 
     QString basicQuery = "INSERT INTO students VALUES %1;";
     QString studentsData = "";
-    foreach (Student person, dataFile->getStudentList())
+    foreach (Student* person, dataFile->getStudentList())
         studentsData += serializeStudent(dataFile->getId(), person);
 
     studentsData.chop(1);
@@ -84,16 +84,16 @@ void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
     QList<int> groupList;
     while (query.next())
     {
-        Student person(query.value(0).toInt(), query.value(1).toString(),
-                        query.value(2).toString(), query.value(3).toString(),
-                        query.value(4).toString());
-        person.setGroup(query.value(5).toInt());
-        person.setSubgroup(query.value(6).toInt());
+        Student* person = new Student(query.value(0).toInt(), query.value(1).toString(),
+                                        query.value(2).toString(), query.value(3).toString(),
+                                        query.value(4).toString());
+        person->setGroup(query.value(5).toInt());
+        person->setSubgroup(query.value(6).toInt());
 
         studentList.push_back(person);
 
-        if (!groupList.contains(person.getGroup()))
-            groupList.append(person.getGroup());
+        if (!groupList.contains(person->getGroup()))
+            groupList.append(person->getGroup());
     }
 
     if (!groupList.isEmpty())
@@ -153,17 +153,17 @@ void SQLiteSyncProcessor::createDbStructure()
     qDebug() << query.lastError().text();
 }
 
-QString SQLiteSyncProcessor::serializeStudent(int subjectId, Student person)
+QString SQLiteSyncProcessor::serializeStudent(int subjectId, Student* person)
 {
     QString personTpl = "(%1, '%2', '%3', '%4', '%5', '%6', '%7', '%8'),";
     return personTpl.arg(subjectId)
-            .arg(person.getId())
-            .arg(person.getSurname())
-            .arg(person.getName())
-            .arg(person.getPatronymic())
-            .arg(person.getNote())
-            .arg(person.getGroup())
-            .arg(person.getSubgroup());
+            .arg(person->getId())
+            .arg(person->getSurname())
+            .arg(person->getName())
+            .arg(person->getPatronymic())
+            .arg(person->getNote())
+            .arg(person->getGroup())
+            .arg(person->getSubgroup());
 }
 
 QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimeTableEntry entry)
