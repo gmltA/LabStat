@@ -82,10 +82,10 @@ QList<int> DriveSyncProcessor::buildGroupList(QByteArray rawData)
     return groupList;
 }
 
-QList<Student> DriveSyncProcessor::buildStudentList(QByteArray rawData)
+StudentList DriveSyncProcessor::buildStudentList(QByteArray rawData)
 {
     QDomDocument doc;
-    QList<Student> studentList;
+    StudentList studentList;
     if (doc.setContent(rawData))
     {
         QDomNodeList studentNodes = doc.elementsByTagName("entry");

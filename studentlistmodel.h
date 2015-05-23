@@ -30,7 +30,7 @@ class StudentListModel : public QAbstractListModel
         QHash<int, QByteArray> roleNames() const;
 
     private:
-        QList<Student> students;
+        StudentList students;
         QList<StatTableEntry> stats;
 };
 

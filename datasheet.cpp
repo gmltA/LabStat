@@ -50,12 +50,12 @@ void DataSheet::setFileName(const QString& value)
     fileName = value;
 }
 
-QList<Student> DataSheet::getStudentList() const
+StudentList DataSheet::getStudentList() const
 {
     return students;
 }
 
-void DataSheet::setStudentList(const QList<Student>& value)
+void DataSheet::setStudentList(const StudentList& value)
 {
     students = value;
 }

@@ -28,8 +28,8 @@ class DataSheet : public QObject
         QString getFileName() const;
         void setFileName(const QString& value);
 
-        QList<Student> getStudentList() const;
-        void setStudentList(const QList<Student>& value);
+        StudentList getStudentList() const;
+        void setStudentList(const StudentList& value);
 
         QList<TimeTableEntry> getTimeTable() const;
         void setTimeTable(const QList<TimeTableEntry>& value);
@@ -51,7 +51,7 @@ class DataSheet : public QObject
         QDateTime lastSyncTime;
 
         QList<int> groups;
-        QList<Student> students;
+        StudentList students;
         QList<TimeTableEntry> timeTable;
         QList<StatTableEntry> statTable;
         TimeTableModel* timeTableModel;

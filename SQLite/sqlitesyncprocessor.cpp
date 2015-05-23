@@ -79,7 +79,8 @@ void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, surname, name, patronymic, note, groupId, subgroupId FROM students WHERE subjectId = %1";
     QSqlQuery query(queryString.arg(dataFile->getId()));
-    QList<Student> studentList;
+
+    StudentList studentList;
     QList<int> groupList;
     while (query.next())
     {
