@@ -60,7 +60,8 @@ DISTFILES += \
     QML/MaterialCheckBox.qml \
     QML/Palette.qml \
     QML/qmldir \
-    QML/Theme.qml
+    QML/Theme.qml \
+    QML/InputPopupDialog.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

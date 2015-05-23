@@ -29,6 +29,7 @@
         <file>QML/Palette.qml</file>
         <file>QML/qmldir</file>
         <file>QML/Theme.qml</file>
+        <file>QML/InputPopupDialog.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

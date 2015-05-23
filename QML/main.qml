@@ -30,26 +30,11 @@ ApplicationWindow {
     Component {
         id: addSubjectDialogBuilder
 
-        PopupDialog {
-            title: "Add subject"
-            active: true
-            z: 6
+        InputPopupDialog {
+            body: "Add new subject to track stats for"
 
-            TextInput {
-                id: text
-                width: parent.width
-                height: 24 * dp
-                font.pixelSize: 14 * dp
-                maximumLength: 20
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1 * dp
-                    color: Qt.rgba(0, 0, 0, 0.57)
-                }
-            }
             onAccepted: {
-                SubjectHandler.addSubject(text.text)
+                SubjectHandler.addSubject(input.text)
             }
         }
     }
