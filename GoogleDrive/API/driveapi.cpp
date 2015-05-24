@@ -25,7 +25,6 @@ bool GoogleDriveAPI::init()
     auto list = listFiles(appRootDir);
     if (!list.isEmpty())
     {
-        VERBOSE("folder found")
         appRootDir->fill(list.first());
 
         return true;

@@ -37,7 +37,7 @@ void SyncHandler::sync(IDataStore* processor)
 QVariantMap SyncHandler::buildProcessorData(IDataStore* processor)
 {
     QVariantMap processorData;
-    processorData["id"] = syncProcessors.contains(processor) ? syncProcessors.indexOf(processor) : -1;
+    processorData["id"] = syncProcessors.contains(processor) ? processor->getId() : -1;
     processorData["title"] = processor->getTitle();
     processorData["online"] = processor->getOrigin() == IDataStore::OriginOnline ? 1 : 0;
 

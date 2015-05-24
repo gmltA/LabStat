@@ -1,5 +1,4 @@
 #include "drivefile.h"
-#include <QDebug>
 #include <QRegularExpression>
 
 QDataStream& operator<<(QDataStream &out, const DriveFileInfo &obj)
@@ -23,15 +22,12 @@ DriveFile::DriveFile(DataSheet* dataSheet)
 DriveFile::DriveFile(QJsonObject object)
     : IDataItem(object["id"].toString(), object["title"].toString())
 {
-
 }
 
 DriveFile::DriveFile(QString _title, QString _mimeType, QString _parentId)
     : IDataItem(_title),
       parentId(_parentId), mimeType(_mimeType)
 {
-    qDebug() << "parent is: " << _parentId;
-    qDebug() << "mime is: " << _mimeType;
 }
 
 DriveFile::DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType)
@@ -105,13 +101,11 @@ void DriveFile::setModifiedDate(const QDateTime& value)
 SpreadSheet::SpreadSheet() :
     DriveFile(QString(), "application/vnd.google-apps.spreadsheet")
 {
-
 }
 
 SpreadSheet::SpreadSheet(QString _id) :
     DriveFile(_id, "application/vnd.google-apps.spreadsheet")
 {
-
 }
 
 SpreadSheet::SpreadSheet(QDomNode node)
@@ -145,7 +139,6 @@ void SpreadSheet::setWorkSheets(const QList<WorkSheet>& value)
 
 WorkSheet::WorkSheet()
 {
-
 }
 
 WorkSheet::WorkSheet(QDomNode node)
