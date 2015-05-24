@@ -9,8 +9,8 @@ Item {
 
     anchors.verticalCenter: parent.verticalCenter
 
-    height: 36 * dp
-    width: text.width + 16 * dp
+    implicitHeight: 36 * dp
+    implicitWidth: text.width + 16 * dp
 
     signal clicked()
 
@@ -21,7 +21,7 @@ Item {
 
         text: "Button"
         font.family: "Roboto Medium"
-        font.pixelSize: 14
+        font.pixelSize: 14 * dp
         color: Theme.accentColor
         font.capitalization: Font.AllUppercase
     }
