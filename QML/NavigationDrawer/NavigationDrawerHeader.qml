@@ -60,7 +60,7 @@ Rectangle {
         id: headerList
         anchors.fill: parent
 
-        visible: header.model && header.model.length !== 0
+        visible: header.model !== undefined && header.model.length !== 0
 
         orientation: ListView.Horizontal
         highlightRangeMode: ListView.StrictlyEnforceRange
