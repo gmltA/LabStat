@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
-import "../QML/QuickAndroid"
 import "."
 //import Material 0.1 as Material
 
@@ -116,28 +115,8 @@ PopupArea {
             }
         }
 
-        MaterialShadow {
-            anchors.fill: parent
-            z: -10
-            depth: 3
-            asynchronous: true
-            visible: dialog.opacity === 1
-        }
-    }
 
-    AnimationLoader {
-        id: enterAnimation
-        transition: fromNulltoActive
-        source: Qt.resolvedUrl("QuickAndroid/anim/GrowFadeIn.qml")
-        target: dialog
-    }
 
-    AnimationLoader {
-        id: exitAnimation
-        transition: fromActiveToNull
-        source: Qt.resolvedUrl("QuickAndroid/anim/ShrinkFadeOut.qml")
-        target: dialog
-    }
 
     states: [
         State {

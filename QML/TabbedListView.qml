@@ -2,7 +2,6 @@ import QtQuick 2.4
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
-import "../QML/QuickAndroid"
 import "."
 
 Rectangle {
@@ -354,12 +353,6 @@ Rectangle {
             delegate: tabDelegate
             preferredHighlightBegin: parent.width / 3
             preferredHighlightEnd: (parent.width / 3) * 2
-        }
-        MaterialShadow {
-            anchors.fill: parent
-            z: -1
-            depth: 1
-            asynchronous: true
         }
     }
 

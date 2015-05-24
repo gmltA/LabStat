@@ -1,12 +1,10 @@
 import QtQuick 2.0
-import "../QML/QuickAndroid"
 import "."
 
 Rectangle {
     id: root
 
     property alias title: titleText.text
-    property alias elevation: shadow.depth
     anchors.top: parent.top
     width: parent.width
     height: 48 * dp
@@ -27,14 +25,6 @@ Rectangle {
         text: "Application"
         font.pointSize: 20
         color: "white"
-    }
-
-    MaterialShadow {
-        id: shadow
-        anchors.fill: parent
-        z: -1
-        depth: 1
-        asynchronous: true
     }
 }
 
