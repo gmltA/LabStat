@@ -6,6 +6,7 @@
 
 #include <QObject>
 
+
 class SubjectData : public QObject
 {
         Q_OBJECT
@@ -19,6 +20,7 @@ class SubjectData : public QObject
 
         void attachDrive(QString rootFolder = "LabStat");
         void attachSQLite(QString rootFolder = "LabStat");
+        void attachProcessor(int processorTypeId, QString rootFolder = "LabStat");
         void disconnectAll();
 
         QString getTitle() const;

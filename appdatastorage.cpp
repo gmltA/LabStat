@@ -47,12 +47,7 @@ void AppDataStorage::loadSubjectsFromDB()
 
         while (processorsQuery.next())
         {
-            int processorType = processorsQuery.value(0).toInt();
-
-            if (processorType == SyncProcessor::GoogleDrive)
-                subject->attachDrive(processorsQuery.value(1).toString());
-            else if (processorType == SyncProcessor::SQLite)
-                subject->attachSQLite(processorsQuery.value(1).toString());
+            subject->attachProcessor(processorsQuery.value(0).toInt(), processorsQuery.value(1).toString());
         }
         SubjectHandler::getInstance()->addSubject(subject);
     }

@@ -50,7 +50,7 @@ ApplicationWindow {
             ComboBox {
                 id: processorSelector
                 width: parent.width
-                model: ["Google Drive", "SQLite storage"]
+                model: SubjectHandler.getAvailableProcessors()
                 currentIndex: 1
                 onCurrentIndexChanged: {
                     if (currentIndex == 0)
@@ -75,10 +75,7 @@ ApplicationWindow {
                 }
             }
             onAccepted: {
-                if (processorSelector.currentIndex == 0)
-                    SubjectHandler.attachDrive(text.text)
-                else if (processorSelector.currentIndex == 1)
-                    SubjectHandler.attachSQLite(text.text)
+                SubjectHandler.attachProcessor(processorSelector.currentIndex, text.text)
             }
         }
     }

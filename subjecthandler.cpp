@@ -75,14 +75,17 @@ void SubjectHandler::sync(int processorIndex)
     currentSubject->getSyncHandler()->sync(processorIndex);
 }
 
-void SubjectHandler::attachDrive(QString rootFolder)
+void SubjectHandler::attachProcessor(int processorTypeId, QString rootFolder)
 {
-    QtConcurrent::run(currentSubject, &SubjectData::attachDrive, rootFolder);
+    QtConcurrent::run(currentSubject, &SubjectData::attachProcessor, processorTypeId, rootFolder);
 }
 
-void SubjectHandler::attachSQLite(QString rootFolder)
+QStringList SubjectHandler::getAvailableProcessors()
 {
-    QtConcurrent::run(currentSubject, &SubjectData::attachSQLite, rootFolder);
+    QStringList processors;
+    processors.append("Google Drive");
+    processors.append("SQLite storage");
+    return processors;
 }
 
 void SubjectHandler::loadGroupData(int group)

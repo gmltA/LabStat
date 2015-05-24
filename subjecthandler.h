@@ -13,11 +13,6 @@ class QJSEngine;
  * Otherwise ASSERT'ation on program exit happens.
  */
 
-enum SyncProcessor {
-    GoogleDrive = 0,
-    SQLite
-};
-
 class SubjectHandler : public QObject
 {
         Q_OBJECT
@@ -36,8 +31,10 @@ class SubjectHandler : public QObject
         }
 
         Q_INVOKABLE void sync(int processorIndex);
-        Q_INVOKABLE void attachDrive(QString rootFolder = "LabStat");
-        Q_INVOKABLE void attachSQLite(QString rootFolder = "LabStat");
+
+        Q_INVOKABLE void attachProcessor(int processorTypeId, QString rootFolder = "LabStat");
+        Q_INVOKABLE QStringList getAvailableProcessors();
+
         Q_INVOKABLE void loadGroupData(int group);
 
         SubjectData* getCurrentSubject() const;

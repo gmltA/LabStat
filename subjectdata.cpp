@@ -60,6 +60,14 @@ void SubjectData::attachSQLite(QString rootFolder)
     syncHandler->registerProcessor(sqliteProcessor);
 }
 
+void SubjectData::attachProcessor(int processorTypeId, QString rootFolder)
+{
+    if (processorTypeId == 0)
+        attachDrive(rootFolder);
+    else if (processorTypeId == 1)
+        attachSQLite(rootFolder);
+}
+
 void SubjectData::disconnectAll()
 {
     syncHandler->disconnect();
