@@ -64,6 +64,10 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             student->setName(value.toString());
             emit dataChanged(index, index);
             break;
+        case NoteRole:
+            student->setNote(value.toString());
+            emit dataChanged(index, index);
+            break;
         case AttendenceRole:
             for (StatTableEntry& entry: stats)
             {

@@ -22,7 +22,7 @@ class TimeTableModel : public QAbstractListModel
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
-        int getGroupId() const;
+        Q_INVOKABLE int getGroupId() const;
 
     protected:
         QHash<int, QByteArray> roleNames() const;
