@@ -54,3 +54,24 @@ int TimeTableModel::getGroupId() const
 {
     return groupId;
 }
+
+int TimeTableModel::getClosestEntryIndex()
+{
+    QDateTime now = QDateTime::currentDateTime();
+
+    int closest = 0;
+
+    for (int i = 0; i < timeTable.size(); i++)
+    {
+        if (i != closest)
+        {
+            TimeTableEntry entry = timeTable.at(i);
+
+            if (abs(entry.dateTime.secsTo(now)) < abs(timeTable.at(closest).dateTime.secsTo(now)))
+                closest = i;
+        }
+    }
+
+    return closest;
+
+}

@@ -23,6 +23,7 @@ class TimeTableModel : public QAbstractListModel
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
         Q_INVOKABLE int getGroupId() const;
+        Q_INVOKABLE int getClosestEntryIndex();
 
     protected:
         QHash<int, QByteArray> roleNames() const;

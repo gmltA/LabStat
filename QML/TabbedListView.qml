@@ -394,6 +394,21 @@ Rectangle {
 
         delegate: pageDelegate
 
+        // HACK! positionViewAtIndex is broken during onModelChanged function
+        Timer {
+            id: timer
+            interval: 100
+            repeat: false
+            onTriggered: {
+                content.positionViewAtIndex(model.getClosestEntryIndex(), ListView.SnapPosition)
+            }
+        }
+
+        onModelChanged: {
+            if (model)
+                timer.start()
+        }
+
         onCurrentIndexChanged: {
             dateTabs.currentIndex = currentIndex
         }
