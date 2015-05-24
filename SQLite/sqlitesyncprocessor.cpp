@@ -68,7 +68,10 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
     QString basicQuery = "INSERT INTO students VALUES %1;";
     QString studentsData = "";
     foreach (Student* person, dataFile->getStudentList())
+    {
         studentsData += serializeStudent(dataFile->getId(), person);
+        connect(person, &Student::dataChanged, this, &SQLiteSyncProcessor::updateStudent);
+    }
 
     studentsData.chop(1);
     basicQuery = basicQuery.arg(studentsData);

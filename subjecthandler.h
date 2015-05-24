@@ -44,6 +44,7 @@ class SubjectHandler : public QObject
         Q_INVOKABLE void addSubject(QString subjectTitle);
 
         void sendInitialList();
+
     private:
         SubjectHandler();
         ~SubjectHandler() {}
