@@ -16,7 +16,7 @@ class ISyncProcessor
             OriginAny
         };
 
-        ISyncProcessor(QString _title, Origin _origin) : title(_title), origin(_origin) {}
+        ISyncProcessor(QString _title, QString _data, Origin _origin) : title(_title), data(_data), origin(_origin) {}
         virtual ~ISyncProcessor() {}
 
         virtual void init() = 0;
@@ -28,6 +28,12 @@ class ISyncProcessor
         int getId() const { return id; }
         void setId(int value) { id = value; }
 
+        int getTypeId() const { return typeId; }
+        void setTypeId(int value) { typeId = value; }
+
+        QString getData() const { return data; }
+        void setData(const QString& value) { data = value; }
+
         static const QString processorTypeName;
 
         QString getTitle() const { return title; }
@@ -38,7 +44,11 @@ class ISyncProcessor
 
     protected:
         int id;
+        int typeId;
+
         QString title;
+        QString data;
+
         Origin origin;
 };
 

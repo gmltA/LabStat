@@ -30,7 +30,7 @@ void AppDataStorage::initDBStructure()
                    "subjectId  INTEGER NOT NULL,"
                    "processorType  INTEGER NOT NULL,"
                    "data  TEXT(255),"
-                   "PRIMARY KEY (id)"
+                   "PRIMARY KEY (id ASC, subjectId)"
                    ")");
 }
 
@@ -59,4 +59,12 @@ void AppDataStorage::storeSubject(SubjectData* subject)
     QString querySrc = "INSERT INTO subjects VALUES ('%1', '%2')";
     query.exec(querySrc.arg(subject->getId()).arg(subject->getTitle()));
     qDebug() << query.lastError().text();
+}
+
+void AppDataStorage::storeProcessor(SubjectData* subject, ISyncProcessor* processor)
+{
+    QSqlQuery query(db);
+    QString querySrc = "INSERT INTO processors VALUES ('%1', '%2', '%3', '%4')";
+    query.exec(querySrc.arg(processor->getId()).arg(subject->getId()).arg(processor->getTypeId()).arg(processor->getData()));
+    //qDebug() << query.lastError().text();
 }

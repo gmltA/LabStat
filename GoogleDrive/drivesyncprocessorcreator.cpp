@@ -20,7 +20,9 @@ ISyncProcessor* DriveSyncProcessorCreator::createProcessor(QString data)
     QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
 
     //todo: pass string from somewhere
-    return new DriveSyncProcessor(drive, "LSTest1");
+    ISyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
+    driveProcessor->setData(data);
+    return driveProcessor;
 }
 
 QString DriveSyncProcessorCreator::getProcessorTitle()

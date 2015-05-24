@@ -15,6 +15,7 @@ class AppDataStorage
         void loadSubjectsFromDB();
 
         void storeSubject(SubjectData* subject);
+        void storeProcessor(SubjectData* subject, ISyncProcessor* processor);
 
     private:
         AppDataStorage();

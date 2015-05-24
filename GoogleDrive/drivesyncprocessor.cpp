@@ -3,7 +3,7 @@
 const QString DriveSyncProcessor::processorTypeName = "Google Drive";
 
 DriveSyncProcessor::DriveSyncProcessor(GoogleDriveAPI* drive, QString fileName, QObject *parent)
-    : QObject(parent), ISyncProcessor(DriveSyncProcessor::processorTypeName, Origin::OriginOnline), driveService(drive)
+    : QObject(parent), ISyncProcessor(DriveSyncProcessor::processorTypeName, "", Origin::OriginOnline), driveService(drive)
 {
     sheet = new SpreadSheet();
     sheet->setTitle(fileName);

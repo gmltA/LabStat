@@ -1,5 +1,6 @@
 #include "subjectdata.h"
 #include "synchandler.h"
+#include "appdatastorage.h"
 
 #include <QDebug>
 #include <QtConcurrent>
@@ -86,6 +87,7 @@ void SyncHandler::checkProcessorInit(bool success)
     {
         //todo: check if we have this processor in collection already
         processorData = buildProcessorData(processor);
+        AppDataStorage::getInstance().storeProcessor(dynamic_cast<SubjectData*>(parent()), processor);
 
         signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));
     }

@@ -4,7 +4,7 @@
 const QString SQLiteSyncProcessor::processorTypeName = "SQLite storage";
 
 SQLiteSyncProcessor::SQLiteSyncProcessor(QString connectionName, QObject *parent)
-    : QObject(parent), ISyncProcessor(SQLiteSyncProcessor::processorTypeName, Origin::OriginOffline)
+    : QObject(parent), ISyncProcessor(SQLiteSyncProcessor::processorTypeName, connectionName, Origin::OriginOffline)
 {
     db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
 }

@@ -11,7 +11,11 @@ ISyncProcessor* SyncProcessorProvider::createProcessor(int processorTypeId, QStr
     if (creators.size() == 0 || creators.size() < processorTypeId)
         return nullptr;
     else
-        return creators.at(processorTypeId)->createProcessor(data);
+    {
+        ISyncProcessor* processor = creators.at(processorTypeId)->createProcessor(data);
+        processor->setTypeId(processorTypeId);
+        return processor;
+    }
 }
 
 void SyncProcessorProvider::addCreator(ISyncProcessorCreator* creator)
