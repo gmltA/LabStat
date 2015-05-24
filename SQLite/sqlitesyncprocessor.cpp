@@ -1,8 +1,10 @@
 #include "sqlitesyncprocessor.h"
 #include <QDebug>
 
+const QString SQLiteSyncProcessor::processorTypeName = "SQLite storage";
+
 SQLiteSyncProcessor::SQLiteSyncProcessor(QString connectionName, QObject *parent)
-    : QObject(parent), ISyncProcessor(Origin::OriginOffline, "SQLite local")
+    : QObject(parent), ISyncProcessor(SQLiteSyncProcessor::processorTypeName, Origin::OriginOffline)
 {
     db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
 }

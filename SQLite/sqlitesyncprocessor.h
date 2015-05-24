@@ -22,6 +22,8 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
         void saveStudentList(DataSheet* dataFile);
         void loadStudentList(DataSheet* dataFile);
 
+        static const QString processorTypeName;
+
     private:
         QSqlDatabase db;
 

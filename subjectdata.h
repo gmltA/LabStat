@@ -18,9 +18,7 @@ class SubjectData : public QObject
         DataSheet* getDataSheet() const;
         SyncHandler* getSyncHandler() const;
 
-        void attachDrive(QString rootFolder = "LabStat");
-        void attachSQLite(QString rootFolder = "LabStat");
-        void attachProcessor(int processorTypeId, QString rootFolder = "LabStat");
+        void attachProcessor(int processorTypeId, QString additionalData = "LabStat");
         void disconnectAll();
 
         QString getTitle() const;

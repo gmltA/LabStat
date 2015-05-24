@@ -8,6 +8,9 @@
 #endif
 
 #include "subjecthandler.h"
+#include "syncprocessorprovider.h"
+#include "GoogleDrive/drivesyncprocessorcreator.h"
+#include "SQLite/sqlitesyncprocessorcreator.h"
 
 int main(int argc, char *argv[])
 {
@@ -54,6 +57,8 @@ int main(int argc, char *argv[])
     // now calculate the dp ratio
     qreal dp = dpi / 160.f;
 
+    SyncProcessorProvider::getInstance().addCreator(new DriveSyncProcessorCreator);
+    SyncProcessorProvider::getInstance().addCreator(new SQLiteSyncProcessorCreator);
     SubjectHandler::init();
 
     QQmlApplicationEngine engine;

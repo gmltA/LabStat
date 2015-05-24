@@ -1,6 +1,7 @@
 #include "subjecthandler.h"
 #include <QtQml>
 #include "appdatastorage.h"
+#include "syncprocessorprovider.h"
 #include <QtConcurrent>
 
 SubjectHandler* SubjectHandler::instance = nullptr;
@@ -80,12 +81,9 @@ void SubjectHandler::attachProcessor(int processorTypeId, QString rootFolder)
     QtConcurrent::run(currentSubject, &SubjectData::attachProcessor, processorTypeId, rootFolder);
 }
 
-QStringList SubjectHandler::getAvailableProcessors()
+QStringList SubjectHandler::getAvailableProcessorTypes()
 {
-    QStringList processors;
-    processors.append("Google Drive");
-    processors.append("SQLite storage");
-    return processors;
+    return SyncProcessorProvider::getInstance().getAvailableProcessorTypes();
 }
 
 void SubjectHandler::loadGroupData(int group)

@@ -1,6 +1,7 @@
 #include "GoogleDrive/drivesyncprocessor.h"
 #include "SQLite/sqlitesyncprocessor.h"
 #include "subjectdata.h"
+#include "syncprocessorprovider.h"
 
 #include "GoogleDrive/googledesktopauthclient.h"
 #include "GoogleDrive/googleauthclient.h"
@@ -35,37 +36,15 @@ SyncHandler* SubjectData::getSyncHandler() const
     return syncHandler;
 }
 
-void SubjectData::attachDrive(QString rootFolder)
+void SubjectData::attachProcessor(int processorTypeId, QString additionalData)
 {
-    IAuthClient* authClient;
-#if defined(Q_OS_ANDROID)
-    authClient = new GoogleAuthClient();
-#else
-    authClient = new GoogleDesktopAuthClient();
-#endif
-    GoogleDriveAPI* drive = new GoogleDriveAPI(rootFolder);
-    drive->setVerboseOutput(true);
-
-    QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
-    QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
-
-    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, title);
-
-    syncHandler->registerProcessor(driveProcessor);
-}
-
-void SubjectData::attachSQLite(QString rootFolder)
-{
-    SQLiteSyncProcessor* sqliteProcessor = new SQLiteSyncProcessor(rootFolder);
-    syncHandler->registerProcessor(sqliteProcessor);
-}
-
-void SubjectData::attachProcessor(int processorTypeId, QString rootFolder)
-{
-    if (processorTypeId == 0)
-        attachDrive(rootFolder);
-    else if (processorTypeId == 1)
-        attachSQLite(rootFolder);
+    ISyncProcessor* processor = SyncProcessorProvider::getInstance().createProcessor(processorTypeId, additionalData);
+    if (!processor)
+    {
+        qDebug() << "Processor with given typed (" << processorTypeId << ") is not registered";
+        return;
+    }
+    syncHandler->registerProcessor(processor);
 }
 
 void SubjectData::disconnectAll()

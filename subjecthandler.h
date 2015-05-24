@@ -33,7 +33,7 @@ class SubjectHandler : public QObject
         Q_INVOKABLE void sync(int processorIndex);
 
         Q_INVOKABLE void attachProcessor(int processorTypeId, QString rootFolder = "LabStat");
-        Q_INVOKABLE QStringList getAvailableProcessors();
+        Q_INVOKABLE QStringList getAvailableProcessorTypes();
 
         Q_INVOKABLE void loadGroupData(int group);
 

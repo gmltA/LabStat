@@ -20,6 +20,8 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         GoogleDriveAPI* getDriveService() const;
         void setDriveService(GoogleDriveAPI* value);
 
+        static const QString processorTypeName;
+
     private:
         GoogleDriveAPI* driveService;
         SpreadSheet* sheet;

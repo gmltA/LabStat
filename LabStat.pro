@@ -24,7 +24,10 @@ SOURCES += main.cpp \
     timetablemodel.cpp \
     stattableentry.cpp \
     timetableentry.cpp \
-    appdatastorage.cpp
+    appdatastorage.cpp \
+    syncprocessorprovider.cpp \
+    SQLite/sqlitesyncprocessorcreator.cpp \
+    GoogleDrive/drivesyncprocessorcreator.cpp
 
 RESOURCES += qml.qrc
 
@@ -83,4 +86,8 @@ HEADERS += \
     stattableentry.h \
     timetableentry.h \
     appdatastorage.h \
-    interface.syncprocessor.h
+    interface.syncprocessor.h \
+    syncprocessorprovider.h \
+    interface.syncprocessorcreator.h \
+    SQLite/sqlitesyncprocessorcreator.h \
+    GoogleDrive/drivesyncprocessorcreator.h

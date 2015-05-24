@@ -50,7 +50,7 @@ ApplicationWindow {
             ComboBox {
                 id: processorSelector
                 width: parent.width
-                model: SubjectHandler.getAvailableProcessors()
+                model: SubjectHandler.getAvailableProcessorTypes()
                 currentIndex: 1
                 onCurrentIndexChanged: {
                     if (currentIndex == 0)

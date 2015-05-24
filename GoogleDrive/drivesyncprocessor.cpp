@@ -1,7 +1,9 @@
 #include "drivesyncprocessor.h"
 
+const QString DriveSyncProcessor::processorTypeName = "Google Drive";
+
 DriveSyncProcessor::DriveSyncProcessor(GoogleDriveAPI* drive, QString fileName, QObject *parent)
-    : QObject(parent), ISyncProcessor(Origin::OriginOnline, "Google Drive"), driveService(drive)
+    : QObject(parent), ISyncProcessor(DriveSyncProcessor::processorTypeName, Origin::OriginOnline), driveService(drive)
 {
     sheet = new SpreadSheet();
     sheet->setTitle(fileName);
