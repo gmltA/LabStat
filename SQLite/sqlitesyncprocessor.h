@@ -3,12 +3,12 @@
 
 #include <QtSql>
 #include <QObject>
-#include "interface.datastore.h"
+#include "interface.syncprocessor.h"
 
-class SQLiteSyncProcessor : public QObject, public IDataStore
+class SQLiteSyncProcessor : public QObject, public ISyncProcessor
 {
         Q_OBJECT
-        Q_INTERFACES(IDataStore)
+        Q_INTERFACES(ISyncProcessor)
 
     public:
         SQLiteSyncProcessor(QString connectionName, QObject *parent = 0);

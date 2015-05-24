@@ -1,7 +1,7 @@
 #ifndef SYNCHANDLER_H
 #define SYNCHANDLER_H
 
-#include "interface.datastore.h"
+#include "interface.syncprocessor.h"
 
 #include <QObject>
 #include <QSignalMapper>
@@ -16,20 +16,20 @@ class SyncHandler : public QObject
         SyncHandler(QObject* parent);
         ~SyncHandler();
 
-        void registerProcessor(IDataStore* processor);
-        void unregisterProcessor(IDataStore* processor);
+        void registerProcessor(ISyncProcessor* processor);
+        void unregisterProcessor(ISyncProcessor* processor);
 
         Q_INVOKABLE void sync(int processorIndex);
-        void sync(IDataStore::Origin origin = IDataStore::OriginAny);
+        void sync(ISyncProcessor::Origin origin = ISyncProcessor::OriginAny);
 
         QVariantList buildProcessorsData();
 
     private:
 
-        void sync(IDataStore* processor);
-        QVariantMap buildProcessorData(IDataStore* processor);
+        void sync(ISyncProcessor* processor);
+        QVariantMap buildProcessorData(ISyncProcessor* processor);
 
-        QVector<IDataStore*> syncProcessors;
+        QVector<ISyncProcessor*> syncProcessors;
         QSignalMapper* signalMapper;
 
     signals:

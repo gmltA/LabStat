@@ -2,7 +2,7 @@
 #include <QDebug>
 
 SQLiteSyncProcessor::SQLiteSyncProcessor(QString connectionName, QObject *parent)
-    : QObject(parent), IDataStore(Origin::OriginOffline, "SQLite local")
+    : QObject(parent), ISyncProcessor(Origin::OriginOffline, "SQLite local")
 {
     db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
 }

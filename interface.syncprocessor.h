@@ -1,12 +1,12 @@
-#ifndef IDATASTORE_H
-#define IDATASTORE_H
+#ifndef ISYNCPROCESSOR_H
+#define ISYNCPROCESSOR_H
 
 #include "datasheet.h"
 
 #include <QString>
 #include <QObject>
 
-class IDataStore
+class ISyncProcessor
 {
     public:
         enum Origin
@@ -16,8 +16,8 @@ class IDataStore
             OriginAny
         };
 
-        IDataStore(Origin _origin, QString _title) : origin(_origin), title(_title) {}
-        virtual ~IDataStore() {}
+        ISyncProcessor(Origin _origin, QString _title) : origin(_origin), title(_title) {}
+        virtual ~ISyncProcessor() {}
 
         virtual void init() = 0;
         virtual void syncFile(DataSheet* dataFile) = 0;
@@ -40,6 +40,6 @@ class IDataStore
         const QString title;
 };
 
-Q_DECLARE_INTERFACE(IDataStore, "IDataStore")
+Q_DECLARE_INTERFACE(ISyncProcessor, "ISyncProcessor")
 
-#endif // IDATASTORE_H
+#endif // ISYNCPROCESSOR_H

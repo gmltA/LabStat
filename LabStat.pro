@@ -62,7 +62,6 @@ DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/src/org/qtproject/labstat/GoogleAuthClient.java
 
 HEADERS += \
-    interface.datastore.h \
     interface.dataitem.h \
     synchandler.h \
     interface.authclient.h \
@@ -83,4 +82,5 @@ HEADERS += \
     timetablemodel.h \
     stattableentry.h \
     timetableentry.h \
-    appdatastorage.h
+    appdatastorage.h \
+    interface.syncprocessor.h

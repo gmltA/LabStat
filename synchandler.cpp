@@ -12,17 +12,17 @@ SyncHandler::SyncHandler(QObject* parent) : QObject(parent)
 
 SyncHandler::~SyncHandler()
 {
-    foreach(IDataStore* processor, syncProcessors)
+    foreach(ISyncProcessor* processor, syncProcessors)
         dynamic_cast<QObject*>(processor)->deleteLater();
 }
 
 void SyncHandler::sync(int processorIndex)
 {
-    IDataStore* processor = syncProcessors.at(processorIndex);
+    ISyncProcessor* processor = syncProcessors.at(processorIndex);
     sync(processor);
 }
 
-void SyncHandler::sync(IDataStore* processor)
+void SyncHandler::sync(ISyncProcessor* processor)
 {
     if (!processor)
     {
@@ -31,24 +31,24 @@ void SyncHandler::sync(IDataStore* processor)
     }
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
-    QtConcurrent::run(processor, &IDataStore::syncFile, dynamic_cast<SubjectData*>(parent())->getDataSheet());
+    QtConcurrent::run(processor, &ISyncProcessor::syncFile, dynamic_cast<SubjectData*>(parent())->getDataSheet());
 }
 
-QVariantMap SyncHandler::buildProcessorData(IDataStore* processor)
+QVariantMap SyncHandler::buildProcessorData(ISyncProcessor* processor)
 {
     QVariantMap processorData;
     processorData["id"] = syncProcessors.contains(processor) ? processor->getId() : -1;
     processorData["title"] = processor->getTitle();
-    processorData["online"] = processor->getOrigin() == IDataStore::OriginOnline ? 1 : 0;
+    processorData["online"] = processor->getOrigin() == ISyncProcessor::OriginOnline ? 1 : 0;
 
     return processorData;
 }
 
-void SyncHandler::sync(IDataStore::Origin origin)
+void SyncHandler::sync(ISyncProcessor::Origin origin)
 {
-    foreach(IDataStore* processor, syncProcessors)
+    foreach(ISyncProcessor* processor, syncProcessors)
     {
-        if (processor->getOrigin() == origin || origin == IDataStore::OriginAny)
+        if (processor->getOrigin() == origin || origin == ISyncProcessor::OriginAny)
         {
             sync(processor);
         }
@@ -58,7 +58,7 @@ void SyncHandler::sync(IDataStore::Origin origin)
 QVariantList SyncHandler::buildProcessorsData()
 {
     QVariantList processorsData;
-    foreach (IDataStore* processor, syncProcessors)
+    foreach (ISyncProcessor* processor, syncProcessors)
     {
         processorsData.append(buildProcessorData(processor));
     }
@@ -66,7 +66,7 @@ QVariantList SyncHandler::buildProcessorsData()
     return processorsData;
 }
 
-void SyncHandler::registerProcessor(IDataStore* processor)
+void SyncHandler::registerProcessor(ISyncProcessor* processor)
 {
     syncProcessors.push_back(processor);
     processor->setId(syncProcessors.indexOf(processor));
@@ -80,7 +80,7 @@ void SyncHandler::registerProcessor(IDataStore* processor)
 void SyncHandler::checkProcessorInit(bool success)
 {
     QVariantMap processorData;
-    IDataStore* processor = qobject_cast<IDataStore*>(sender());
+    ISyncProcessor* processor = qobject_cast<ISyncProcessor*>(sender());
 
     if (success)
     {
@@ -96,7 +96,7 @@ void SyncHandler::checkProcessorInit(bool success)
     emit processorAdded(processorData);
 }
 
-void SyncHandler::unregisterProcessor(IDataStore* processor)
+void SyncHandler::unregisterProcessor(ISyncProcessor* processor)
 {
     syncProcessors.removeOne(processor);
 }

@@ -2,13 +2,13 @@
 #define DRIVESYNCPROCESSOR_H
 
 #include <QObject>
-#include "../interface.datastore.h"
+#include "../interface.syncprocessor.h"
 #include "API/driveapi.h"
 
-class DriveSyncProcessor : public QObject, public IDataStore
+class DriveSyncProcessor : public QObject, public ISyncProcessor
 {
         Q_OBJECT
-        Q_INTERFACES(IDataStore)
+        Q_INTERFACES(ISyncProcessor)
 
     public:
         DriveSyncProcessor(GoogleDriveAPI* drive, QString fileName, QObject *parent = 0);
