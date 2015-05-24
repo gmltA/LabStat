@@ -69,8 +69,5 @@ int main(int argc, char *argv[])
     engine.load(QUrl("qrc:/QML/main.qml"));
     SubjectHandler::getInstance()->sendInitialList();
 
-    SubjectData* sub = new SubjectData("LSTest1");
-    SubjectHandler::getInstance()->addSubject(sub);
-
     return app.exec();
 }
