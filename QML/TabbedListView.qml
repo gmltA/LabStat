@@ -319,7 +319,7 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    View {
         id: tabContainer
 
         // BUG: should be parent.width, but this property assigns after element init
@@ -327,9 +327,9 @@ Rectangle {
         width: mainWindow.width
         height: 48 * dp
         y: Math.min(0, Math.max(-height, content.currentItem ? content.currentItem.scrollDiff : 0))
-        z: 1
+        elevation: 1
 
-        color: Theme.primaryColor
+        tintColor: Theme.primaryColor
 
         Behavior on y {
             NumberAnimation {

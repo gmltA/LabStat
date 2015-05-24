@@ -2,24 +2,27 @@ import QtQuick 2.4
 import QtQuick.Controls 1.2
 
 PopupDialog {
-    property alias input: text
+    id: inputDialog
 
-    title: ""
-    body: ""
-    active: true
-    z: 6
+    hasActions: true
 
-    TextInput {
-        id: text
-        width: parent.width
-        height: 24 * dp
-        font.pixelSize: 14 * dp
-        maximumLength: 20
-        Rectangle {
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: 1 * dp
-            color: Qt.rgba(0, 0, 0, 0.57)
+    positiveButtonEnabled: textField.acceptableInput
+
+    property alias textField: textField
+
+    property alias validator: textField.validator
+    property alias inputMask: textField.inputMask
+    property alias inputMethodHints: textField.inputMethodHints
+
+    property alias placeholderText: textField.placeholderText
+    property alias value: textField.text
+
+    TextField {
+        id: textField
+
+        anchors {
+            left: parent.left
+            right: parent.right
         }
     }
 }

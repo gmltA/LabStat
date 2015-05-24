@@ -30,10 +30,13 @@ ApplicationWindow {
         id: addSubjectDialogBuilder
 
         InputPopupDialog {
-            body: "Add new subject to track stats for"
+            title: "Change Text"
+            text: "Add new subject to track stats for"
+
+            z: 5
 
             onAccepted: {
-                SubjectHandler.addSubject(input.text)
+                SubjectHandler.addSubject(value)
             }
         }
     }
@@ -43,8 +46,7 @@ ApplicationWindow {
 
         PopupDialog {
             title: "Add sync processor"
-            active: true
-            z: 6
+            z: 5
             ComboBox {
                 id: processorSelector
                 width: parent.width
@@ -126,7 +128,6 @@ ApplicationWindow {
     NavigationDrawer {
         id: drawer
 
-        color: "white"
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
@@ -167,6 +168,7 @@ ApplicationWindow {
                             p = p.parent
 
                         var dialog = addSubjectDialogBuilder.createObject(p)
+                        dialog.showing = true
                     }
                 }
 
@@ -246,7 +248,7 @@ ApplicationWindow {
                                 p = p.parent
 
                             var dialog = dialogBuilder.createObject(p)
-                            //dialog.active = true
+                            dialog.showing = true
                         }
                     }
                 }

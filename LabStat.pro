@@ -51,7 +51,10 @@ DISTFILES += \
     QML/Palette.qml \
     QML/qmldir \
     QML/Theme.qml \
-    QML/InputPopupDialog.qml
+    QML/InputPopupDialog.qml \
+    QML/View.qml \
+    QML/Label.qml \
+    QML/PopupBase.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

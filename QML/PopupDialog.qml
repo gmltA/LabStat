@@ -3,148 +3,267 @@ import QtQuick.Controls 1.0
 import "."
 //import Material 0.1 as Material
 
-PopupArea {
-    id: popupDialog
+PopupBase {
+    id: dialog
 
-    property alias title: title.text
-    property alias body: body.text
+    overlayLayer: "dialogOverlayLayer"
+    overlayColor: Qt.rgba(0, 0, 0, 0.3)
 
-    default property alias data: dialogContent.data
+    opacity: showing ? 1 : 0
+    visible: opacity > 0
+
+    width: Math.max(minimumWidth,
+                    content.contentWidth + 2 * contentMargins)
+
+    height: Math.min(350 * dp,
+                     headerView.height + 32 * dp +
+                     content.contentHeight +
+                     content.topMargin +
+                     content.bottomMargin +
+                     buttonContainer.height)
+
+    property int contentMargins: 16 * dp
+
+    property int minimumWidth: 270 * dp
+
+    property alias title: titleLabel.text
+    property alias text: textLabel.text
+
+    property alias negativeButton: negativeButton
+
+    property alias positiveButton: positiveButton
 
     property string negativeButtonText: "Cancel"
     property string positiveButtonText: "Ok"
+    property alias positiveButtonEnabled: positiveButton.enabled
+
+    property bool hasActions: true
+
+    default property alias dialogContent: column.data
 
     signal accepted()
     signal rejected()
 
-    function close()
-    {
-        active = false
+    anchors {
+        centerIn: parent
+        verticalCenterOffset: showing ? 0 : -(dialog.height/3)
+
+        Behavior on verticalCenterOffset {
+            NumberAnimation { duration: 200 }
+        }
     }
 
-    anchors.centerIn: parent
-    width: parent.width - 96 * dp
-    height: content.implicitHeight + buttons.implicitHeight
-            + content.anchors.bottomMargin + content.anchors.topMargin + 8 * dp
+    Behavior on opacity {
+        NumberAnimation { duration: 200 }
+    }
 
-    enabled: false
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Escape) {
+            closeKeyPressed(event)
+        }
+    }
 
-    Rectangle {
-        id: dialog
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back) {
+            closeKeyPressed(event)
+        }
+    }
+
+    function closeKeyPressed(event) {
+        if (dialog.showing) {
+            if (dialog.dismissOnTap) {
+                dialog.close()
+            }
+            event.accepted = true
+        }
+    }
+
+    function show() {
+        open()
+    }
+
+    View {
+        id: dialogContainer
+
         anchors.fill: parent
-        radius: 2
-        opacity: 0
+        elevation: 5
+        radius: dp * (2)
 
-        color: "white"
+        MouseArea {
+            anchors.fill: parent
+            propagateComposedEvents: false
+
+            onClicked: {
+                mouse.accepted = false
+            }
+        }
+
+        Item {
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+                topMargin: dp * (8)
+            }
+
+            clip: true
+            height: headerView.height + dp * (32)
+
+            View {
+                backgroundColor: "white"
+                elevation: content.atYBeginning ? 0 : 1
+                fullWidth: true
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+
+                height: headerView.height + dp * (16)
+            }
+        }
+
 
         Column {
+            id: headerView
+
+            spacing: dp * (16)
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+
+                leftMargin: dp * (16)
+                rightMargin: dp * (16)
+                topMargin: dp * (16)
+            }
+
+            Label {
+                id: titleLabel
+
+                width: parent.width
+                wrapMode: Text.Wrap
+                style: "title"
+                visible: text != ""
+            }
+
+            Label {
+                id: textLabel
+
+                width: parent.width
+                wrapMode: Text.Wrap
+                style: "dialog"
+                visible: text != ""
+            }
+        }
+
+        Rectangle {
+            anchors.fill: content
+        }
+
+        Flickable {
             id: content
 
+            contentWidth: column.implicitWidth
+            contentHeight: column.height
+            clip: true
+
             anchors {
-                top: parent.top
-                margins: 24 * dp
-                bottomMargin: 16 * dp
-                horizontalCenter: parent.horizontalCenter
+                left: parent.left
+                right: parent.right
+                top: headerView.bottom
+                topMargin: dp * (8)
+                bottomMargin: dp * (-8)
+                bottom: buttonContainer.top
             }
 
-            width: parent.width - anchors.leftMargin - anchors.rightMargin
-            height: title.visible ? title.implicitHeight : 0 + body.implicitHeight + 8 * dp
-            spacing: 8 * dp
+            interactive: contentHeight + dp * (8) > height
+            bottomMargin: hasActions ? 0 : dp * (8)
 
-            Text {
-                id: title
-                width: parent.width
+            Rectangle {
+                Column {
+                    id: column
+                    anchors {
+                        left: parent.left
+                        margins: contentMargins
+                    }
 
-                visible: text != ""
-
-                font.family: "Roboto Medium"
-                font.pixelSize: 20 * dp
-                color: "#212121"
-                text: "Use Google's location service?"
-                wrapMode: Text.WordWrap
-            }
-            Text {
-                id: body
-                width: parent.width
-
-                font.family: "Roboto"
-                font.pixelSize: 14 * dp
-                lineHeight: 13 * dp
-                lineHeightMode: Text.FixedHeight
-                color: "#757575"
-                text: "Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running."
-                wrapMode: Text.Wrap
-            }
-            Column {
-                id: dialogContent
-                spacing: 16 * dp
-                width: parent.width
+                    width: content.width - 2 * contentMargins
+                    spacing: dp * (16)
+                }
             }
         }
 
-        Row {
-            id: buttons
+        Item {
+            id: buttonContainer
+
             anchors {
-                rightMargin: 16 * dp
-                leftMargin: 16 * dp
+                bottomMargin: dp * (8)
                 bottom: parent.bottom
-                bottomMargin: 8 * dp
-                horizontalCenter: parent.horizontalCenter
+                right: parent.right
+                left: parent.left
             }
 
-            width: parent.width - anchors.rightMargin - anchors.leftMargin
-            height: 48 * dp
+            height: hasActions ? buttonView.height + dp * (8) : 0
+            clip: true
 
-            layoutDirection: Qt.RightToLeft
-            spacing: 8 * dp
+            View {
+                id: buttonView
 
-            PopupDialogButton {
-                caption: positiveButtonText
-                onClicked: {
-                    accepted()
-                    close()
+                height: hasActions ? positiveButton.implicitHeight + dp * (8) : 0
+                visible: hasActions
+
+                backgroundColor: "white"
+                elevation: content.atYEnd ? 0 : 1
+                fullWidth: true
+                elevationInverted: true
+
+                anchors {
+                    bottom: parent.bottom
+                    right: parent.right
+                    left: parent.left
+                }
+
+                PopupDialogButton {
+                    id: negativeButton
+
+                    caption: negativeButtonText
+                    color: Theme.accentColor
+
+                    anchors {
+                        top: parent.top
+                        right: positiveButton.left
+                        topMargin: dp * (8)
+                        rightMargin: dp * (8)
+                    }
+
+                    onClicked: {
+                        close();
+                        rejected();
+                    }
+                }
+
+                PopupDialogButton {
+                    id: positiveButton
+
+                    caption: positiveButtonText
+                    color: Theme.accentColor
+
+                    anchors {
+                        top: parent.top
+                        topMargin: dp * (8)
+                        rightMargin: dp * (16)
+                        right: parent.right
+                    }
+
+                    onClicked: {
+                        close()
+                        accepted();
+                    }
                 }
             }
-
-            PopupDialogButton {
-                caption: negativeButtonText
-                onClicked: {
-                    rejected()
-                    close()
-                }
-            }
         }
-
-
-
-
-    states: [
-        State {
-            name: "Active"
-            when: popupDialog.active
-
-            PropertyChanges {
-                target: dialog
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: popupDialog
-                enabled: true
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            id: fromNulltoActive
-            from: ""
-            to: "Active"
-        },
-        Transition {
-            id: fromActiveToNull
-            from: "Active"
-            to: ""
-        }
-    ]
+    }
 }

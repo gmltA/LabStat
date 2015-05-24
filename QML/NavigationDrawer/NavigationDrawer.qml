@@ -1,7 +1,9 @@
 import QtQuick 2.2
+import "../."
 
-Rectangle {
+View {
     id: panel
+    elevation: 2
 
     property bool open: false                     // The open or close state of the drawer
     property int position: Qt.LeftEdge            // Which side of the screen the drawer is on, can be Qt.LeftEdge or Qt.RightEdge
@@ -49,7 +51,6 @@ Rectangle {
     onOpenChanged: completeSlideDirection()
     width: _expandedWidth
     x: _collapsedX
-    z: 10
 
     function _setupAnchors() {     // Note that we can't reliably apply anchors using bindings
         _rootItem = _findRootItem();
@@ -170,7 +171,7 @@ Rectangle {
         color: "black"
     }
 
-    Item {
+    Rectangle {
         id: contentItem
         parent: _rootItem
         width: panel.width
@@ -179,23 +180,6 @@ Rectangle {
         y: panel.y
         z: open ? 5 : 0
         clip: true
-    }
-
-    Item {
-        id: shadow
-        anchors.left: panel.right
-        anchors.leftMargin: _rightEdge ? 0 : 4 * _scaleFactor
-        height: parent.height
-        Rectangle {
-            height: 4 * _scaleFactor
-            width: panel.height
-            rotation: 90
-            opacity: Math.min(1, Math.abs(panel.x - _collapsedX)/_openMarginSize)
-            transformOrigin: Item.TopLeft
-            gradient: Gradient{
-                GradientStop { position: _rightEdge ? 1 : 0 ; color: "#00000000"}
-                GradientStop { position: _rightEdge ? 0 : 1 ; color: "#2c000000"}
-            }
-        }
+        color: "white"
     }
 }

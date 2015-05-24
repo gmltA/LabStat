@@ -19,6 +19,9 @@
         <file>QML/qmldir</file>
         <file>QML/Theme.qml</file>
         <file>QML/InputPopupDialog.qml</file>
+        <file>QML/View.qml</file>
+        <file>QML/Label.qml</file>
+        <file>QML/PopupBase.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

@@ -1,14 +1,14 @@
 import QtQuick 2.0
 import "."
 
-Rectangle {
+View  {
     id: root
 
     property alias title: titleText.text
     anchors.top: parent.top
     width: parent.width
     height: 48 * dp
-    color: Theme.primaryColor
+    tintColor: Theme.primaryColor
 
     MenuBackIcon {
         anchors.left: parent.left
