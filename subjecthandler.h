@@ -66,8 +66,6 @@ class SubjectHandler : public QObject
 
         void groupListChanged(QList<int> groups);
         void groupDataLoaded(TimeTableModel* timeTable);
-
-    public slots:
 };
 
 #endif // SUBJECTHANDLER_H

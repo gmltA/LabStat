@@ -89,7 +89,7 @@ void SyncHandler::checkProcessorInit(bool success)
         processorData = buildProcessorData(processor);
         AppDataStorage::getInstance().storeProcessor(dynamic_cast<SubjectData*>(parent()), processor);
 
-        signalMapper->setMapping(dynamic_cast<QObject*>(processor), syncProcessors.indexOf(processor));
+        signalMapper->setMapping(dynamic_cast<QObject*>(processor), processor->getId());
     }
     else
         unregisterProcessor(processor);
