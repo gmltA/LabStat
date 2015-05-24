@@ -10,6 +10,14 @@ Rectangle {
     property var model
 
     Component {
+        id: modifyNoteDialogBuilder
+
+        InputPopupDialog {
+            text: "Modify sutdent's note"
+        }
+    }
+
+    Component {
         id: pageDelegate
         Item {
             property alias scrollStop: pupils.scrollStop
@@ -178,6 +186,8 @@ Rectangle {
         Item {
             id: personDelegateElement
 
+            property var dialog: undefined
+
             height: personHeader.height + personStats.height
             width: root.width
 
@@ -202,7 +212,7 @@ Rectangle {
                     }
                     Text {
                         id: noteField
-                        text: "Test note" /* note */
+                        text: note
                         font.family: "Roboto Regular"
                         font.pixelSize: 12 * dp
                         color: Theme.subTextColor
@@ -231,16 +241,27 @@ Rectangle {
 
                 MouseArea {
                     anchors.fill: parent
+
                     onPressAndHold: {
-                        if (personDelegateElement.state == "")
-                            personDelegateElement.state = "expanded"
+                        personDelegateElement.state = "expanded"
+
+                        if (!dialog)
+                        {
+                            var p = personHeader.parent
+                            while (p.parent)
+                                p = p.parent
+
+                            dialog = modifyNoteDialogBuilder.createObject(p)
+                            dialog.value = noteField.text
+                            dialog.accepted.connect(function(){
+                                note = dialog.value
+                            })
+                        }
+                        dialog.showing = true
                     }
 
                     onClicked: {
                         personDelegateElement.state = personDelegateElement.state == "" ? "expanded" : ""
-                        /*
-                        if (personDelegateElement.state == "expanded")
-                            personDelegateElement.state = ""*/
                     }
                 }
             }
