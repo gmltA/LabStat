@@ -13,6 +13,11 @@ class QJSEngine;
  * Otherwise ASSERT'ation on program exit happens.
  */
 
+enum SyncProcessor {
+    GoogleDrive = 0,
+    SQLite
+};
+
 class SubjectHandler : public QObject
 {
         Q_OBJECT
@@ -41,6 +46,7 @@ class SubjectHandler : public QObject
         void addSubject(SubjectData* subject);
         Q_INVOKABLE void addSubject(QString subjectTitle);
 
+        void sendInitialList();
     private:
         SubjectHandler();
         ~SubjectHandler() {}

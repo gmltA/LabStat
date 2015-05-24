@@ -10,7 +10,8 @@ class SubjectData : public QObject
 {
         Q_OBJECT
     public:
-        explicit SubjectData(QString title, QObject *parent = 0);
+        SubjectData(int id, QString title, QObject *parent = 0);
+        SubjectData(QString title, QObject *parent = 0);
         ~SubjectData();
 
         DataSheet* getDataSheet() const;
@@ -23,7 +24,11 @@ class SubjectData : public QObject
         QString getTitle() const;
         void setTitle(const QString& value);
 
+        int getId() const;
+        void setId(int value);
+
     private:
+        int id;
         QString title;
 
         DataSheet* dataSheet;

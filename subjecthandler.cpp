@@ -1,5 +1,6 @@
 #include "subjecthandler.h"
 #include <QtQml>
+#include "appdatastorage.h"
 #include <QtConcurrent>
 
 SubjectHandler* SubjectHandler::instance = nullptr;
@@ -52,6 +53,14 @@ void SubjectHandler::addSubject(QString subjectTitle)
 {
     SubjectData* subject = new SubjectData(subjectTitle);
     addSubject(subject);
+    subject->setId(subjects.indexOf(subject));
+
+    AppDataStorage::getInstance().storeSubject(subject);
+}
+
+void SubjectHandler::sendInitialList()
+{
+    emit subjectListChanged(subjectModel);
 }
 
 void SubjectHandler::init()

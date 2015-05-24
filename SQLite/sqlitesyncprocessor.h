@@ -11,7 +11,7 @@ class SQLiteSyncProcessor : public QObject, public IDataStore
         Q_INTERFACES(IDataStore)
 
     public:
-        SQLiteSyncProcessor(QObject *parent = 0);
+        SQLiteSyncProcessor(QString connectionName, QObject *parent = 0);
         ~SQLiteSyncProcessor();
 
         void init() override final;

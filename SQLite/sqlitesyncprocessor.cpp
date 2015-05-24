@@ -1,11 +1,10 @@
 #include "sqlitesyncprocessor.h"
 #include <QDebug>
 
-SQLiteSyncProcessor::SQLiteSyncProcessor(QObject *parent)
-    : QObject(parent), IDataStore(Origin::OriginOffline, "SQLite local"),
-      db(QSqlDatabase::addDatabase("QSQLITE"))
+SQLiteSyncProcessor::SQLiteSyncProcessor(QString connectionName, QObject *parent)
+    : QObject(parent), IDataStore(Origin::OriginOffline, "SQLite local")
 {
-
+    db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
 }
 
 SQLiteSyncProcessor::~SQLiteSyncProcessor()
@@ -28,7 +27,7 @@ void SQLiteSyncProcessor::init()
 
 void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     QString cleanQuery = "DELETE FROM timetable_entry WHERE subjectId = %1";
     query.exec(cleanQuery.arg(dataFile->getId()));
 
@@ -46,7 +45,7 @@ void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, dateTime, groupId, subgroupId FROM timetable_entry WHERE subjectId = %1";
-    QSqlQuery query(queryString.arg(dataFile->getId()));
+    QSqlQuery query(queryString.arg(dataFile->getId()), db);
     QList<TimeTableEntry> timeTable;
     while (query.next())
     {
@@ -60,7 +59,7 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     QString cleanQuery = "DELETE FROM students WHERE subjectId = %1";
     query.exec(cleanQuery.arg(dataFile->getId()));
 
@@ -78,7 +77,7 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, surname, name, patronymic, note, groupId, subgroupId FROM students WHERE subjectId = %1";
-    QSqlQuery query(queryString.arg(dataFile->getId()));
+    QSqlQuery query(queryString.arg(dataFile->getId()), db);
 
     StudentList studentList;
     QList<int> groupList;
@@ -126,7 +125,7 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::createDbStructure()
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     //query.exec("DROP TABLE IF EXISTS students;");
     query.exec("CREATE TABLE students("
                "subjectId INTEGER NOT NULL,"

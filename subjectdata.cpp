@@ -7,6 +7,12 @@
 #include "GoogleDrive/interface.authclient.h"
 #include "GoogleDrive/API/driveapi.h"
 
+SubjectData::SubjectData(int _id, QString _title, QObject *parent) : QObject(parent), id(_id), title(_title)
+{
+    dataSheet = new DataSheet(_title);
+    syncHandler = new SyncHandler(this);
+}
+
 SubjectData::SubjectData(QString _title, QObject *parent) : QObject(parent), title(_title)
 {
     dataSheet = new DataSheet(_title);
@@ -43,14 +49,14 @@ void SubjectData::attachDrive(QString rootFolder)
     QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
 
-    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
+    DriveSyncProcessor* driveProcessor = new DriveSyncProcessor(drive, title);
 
     syncHandler->registerProcessor(driveProcessor);
 }
 
 void SubjectData::attachSQLite(QString rootFolder)
 {
-    SQLiteSyncProcessor* sqliteProcessor = new SQLiteSyncProcessor();
+    SQLiteSyncProcessor* sqliteProcessor = new SQLiteSyncProcessor(rootFolder);
     syncHandler->registerProcessor(sqliteProcessor);
 }
 
@@ -69,4 +75,14 @@ QString SubjectData::getTitle() const
 void SubjectData::setTitle(const QString& value)
 {
     title = value;
+}
+
+int SubjectData::getId() const
+{
+    return id;
+}
+
+void SubjectData::setId(int value)
+{
+    id = value;
 }
