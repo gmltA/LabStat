@@ -69,4 +69,5 @@ int SubjectData::getId() const
 void SubjectData::setId(int value)
 {
     id = value;
+    dataSheet->setId(value);
 }

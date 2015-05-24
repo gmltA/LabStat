@@ -46,6 +46,7 @@ ApplicationWindow {
 
         PopupDialog {
             title: "Add sync processor"
+            text: "Data can be used by processors differently. For Google Drive it should include Folder / File name"
             z: 5
             ComboBox {
                 id: processorSelector

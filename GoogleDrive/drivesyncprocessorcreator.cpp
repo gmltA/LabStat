@@ -13,14 +13,16 @@ ISyncProcessor* DriveSyncProcessorCreator::createProcessor(QString data)
 #else
     authClient = new GoogleDesktopAuthClient();
 #endif
-    GoogleDriveAPI* drive = new GoogleDriveAPI(data);
+    QStringList splittedData = data.split("\\");
+    QString rootFolder = splittedData[0].isEmpty() ? "root" : splittedData[0];
+
+    GoogleDriveAPI* drive = new GoogleDriveAPI(rootFolder);
     drive->setVerboseOutput(true);
 
     QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
 
-    //todo: pass string from somewhere
-    ISyncProcessor* driveProcessor = new DriveSyncProcessor(drive, "LSTest1");
+    ISyncProcessor* driveProcessor = new DriveSyncProcessor(drive, splittedData[1]);
     driveProcessor->setData(data);
     return driveProcessor;
 }
