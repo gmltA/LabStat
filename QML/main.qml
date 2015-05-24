@@ -121,8 +121,13 @@ ApplicationWindow {
     ActionBar {
         id: actionBar
         elevation: stats.state === "" ? 0 : 1
-
         z: 1
+
+        defaultTitle: "Application"
+
+        icon.onMenuClicked: {
+            drawer.show()
+        }
     }
 
     NavigationDrawer {
@@ -271,5 +276,13 @@ ApplicationWindow {
         height: parent.height - actionBar.height
         width: parent.width
         anchors.top: actionBar.bottom
+
+        onModelChanged: {
+            var title = actionBar.defaultTitle
+            if (stats.model)
+                title = model.getGroupId().toString()
+
+            actionBar.title = title
+        }
     }
 }

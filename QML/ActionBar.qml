@@ -4,13 +4,17 @@ import "."
 View  {
     id: root
 
+    property string defaultTitle
     property alias title: titleText.text
+    property alias icon: drawerIcon
+
     anchors.top: parent.top
     width: parent.width
     height: 48 * dp
     tintColor: Theme.primaryColor
 
     MenuBackIcon {
+        id: drawerIcon
         anchors.left: parent.left
         anchors.leftMargin: 16 * dp
         anchors.verticalCenter: parent.verticalCenter
