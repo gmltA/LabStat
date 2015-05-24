@@ -38,6 +38,9 @@ SyncHandler* SubjectData::getSyncHandler() const
 
 void SubjectData::attachProcessor(int processorTypeId, QString additionalData)
 {
+    if (additionalData.isEmpty())
+        additionalData = title;
+
     ISyncProcessor* processor = SyncProcessorProvider::getInstance().createProcessor(processorTypeId, additionalData);
     if (!processor)
     {
