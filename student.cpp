@@ -3,12 +3,11 @@
 #include <QStringList>
 
 Student::Student(int _id, QString _surname, QString _name, QString _patronymic, QString _note)
-    : id(_id), name(_name), surname(_surname),  patronymic(_patronymic), note(_note)
+    : QObject(), id(_id), name(_name), surname(_surname),  patronymic(_patronymic), note(_note)
 {
-
 }
 
-Student::Student(int _id, QDomNode studentNode) : id(_id)
+Student::Student(int _id, QDomNode studentNode) : QObject(), id(_id)
 {
     QStringList nameData = studentNode.firstChildElement("gsx:фио").text().split(" ");
     surname = nameData[0];
@@ -30,6 +29,7 @@ QString Student::getName() const
 void Student::setName(const QString& value)
 {
     name = value;
+    emit dataChanged(this);
 }
 
 QString Student::getSurname() const
@@ -40,6 +40,7 @@ QString Student::getSurname() const
 void Student::setSurname(const QString& value)
 {
     surname = value;
+    emit dataChanged(this);
 }
 
 QString Student::getPatronymic() const
@@ -50,6 +51,7 @@ QString Student::getPatronymic() const
 void Student::setPatronymic(const QString& value)
 {
     patronymic = value;
+    emit dataChanged(this);
 }
 
 int Student::getGroup() const
@@ -60,6 +62,7 @@ int Student::getGroup() const
 void Student::setGroup(const int& value)
 {
     group = value;
+    emit dataChanged(this);
 }
 
 int Student::getSubgroup() const
@@ -70,6 +73,7 @@ int Student::getSubgroup() const
 void Student::setSubgroup(const int& value)
 {
     subgroup = value;
+    emit dataChanged(this);
 }
 
 QString Student::getNote() const
@@ -80,6 +84,7 @@ QString Student::getNote() const
 void Student::setNote(const QString& value)
 {
     note = value;
+    emit dataChanged(this);
 }
 
 int Student::getId() const
@@ -90,4 +95,5 @@ int Student::getId() const
 void Student::setId(int value)
 {
     id = value;
+    emit dataChanged(this);
 }

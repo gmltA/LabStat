@@ -90,6 +90,7 @@ void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
                                         query.value(4).toString());
         person->setGroup(query.value(5).toInt());
         person->setSubgroup(query.value(6).toInt());
+        connect(person, &Student::dataChanged, this, &SQLiteSyncProcessor::updateStudent);
 
         studentList.push_back(person);
 
@@ -105,6 +106,17 @@ void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
 
     if (!studentList.isEmpty())
         dataFile->setStudentList(studentList);
+}
+
+void SQLiteSyncProcessor::updateStudent(Student* person)
+{
+    QSqlQuery query(db);
+    QString queryString = "REPLACE INTO students VALUES %1;";
+
+    // todo: 0 is a subject id which should be passed from somewhere
+    QString studentData = serializeStudent(0, person);
+    studentData.chop(1);
+    query.exec(queryString.arg(studentData));
 }
 
 void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
