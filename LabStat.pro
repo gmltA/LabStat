@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     studentlistmodel.cpp \
     timetablemodel.cpp \
     stattableentry.cpp \
-    timetableentry.cpp
+    timetableentry.cpp \
+    appdatastorage.cpp
 
 RESOURCES += qml.qrc
 
@@ -81,4 +82,5 @@ HEADERS += \
     studentlistmodel.h \
     timetablemodel.h \
     stattableentry.h \
-    timetableentry.h
+    timetableentry.h \
+    appdatastorage.h

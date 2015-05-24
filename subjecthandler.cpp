@@ -57,6 +57,8 @@ void SubjectHandler::addSubject(QString subjectTitle)
 void SubjectHandler::init()
 {
     qmlRegisterSingletonType<SubjectHandler>("SubjectHandler", 1, 0, "SubjectHandler", &SubjectHandler::qmlInstance);
+    AppDataStorage::getInstance().initDBStructure();
+    AppDataStorage::getInstance().loadSubjectsFromDB();
 }
 
 void SubjectHandler::sync(int processorIndex)
