@@ -68,3 +68,17 @@ void AppDataStorage::storeProcessor(SubjectData* subject, ISyncProcessor* proces
     query.exec(querySrc.arg(processor->getId()).arg(subject->getId()).arg(processor->getTypeId()).arg(processor->getData()));
     //qDebug() << query.lastError().text();
 }
+
+void AppDataStorage::removeSubject(SubjectData* subject)
+{
+    QSqlQuery query(db);
+    QString querySrc = "DELETE FROM subjects WHERE id = %1";
+    query.exec(querySrc.arg(subject->getId()));
+}
+
+void AppDataStorage::removeProcessor(SubjectData* subject, ISyncProcessor* processor)
+{
+    QSqlQuery query(db);
+    QString querySrc = "DELETE FROM processors WHERE id = %1";
+    query.exec(querySrc.arg(processor->getId()));
+}

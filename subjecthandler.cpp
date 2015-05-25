@@ -59,6 +59,18 @@ void SubjectHandler::addSubject(QString subjectTitle)
     AppDataStorage::getInstance().storeSubject(subject);
 }
 
+void SubjectHandler::deleteCurrentSubject()
+{
+    SubjectData* current = currentSubject;
+    subjects.removeOne(current);
+    // todo: remove by id
+    subjectModel.removeOne(current->getTitle());
+
+    emit subjectListChanged(subjectModel);
+    setCurrentSubject(subjects.first());
+    delete current;
+}
+
 void SubjectHandler::sendInitialList()
 {
     emit subjectListChanged(subjectModel);

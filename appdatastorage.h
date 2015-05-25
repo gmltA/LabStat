@@ -17,6 +17,9 @@ class AppDataStorage
         void storeSubject(SubjectData* subject);
         void storeProcessor(SubjectData* subject, ISyncProcessor* processor);
 
+        void removeSubject(SubjectData* subject);
+        void removeProcessor(SubjectData* subject, ISyncProcessor* processor);
+
     private:
         AppDataStorage();
 

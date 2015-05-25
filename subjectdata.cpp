@@ -1,5 +1,6 @@
 #include "subjectdata.h"
 #include "syncprocessorprovider.h"
+#include "appdatastorage.h"
 #include <QDebug>
 
 SubjectData::SubjectData(int _id, QString _title, QObject *parent) : QObject(parent), id(_id), title(_title)
@@ -18,6 +19,7 @@ SubjectData::~SubjectData()
 {
     dataSheet->deleteLater();
     syncHandler->deleteLater();
+    AppDataStorage::getInstance().removeSubject(this);
 }
 
 DataSheet* SubjectData::getDataSheet() const

@@ -14,7 +14,10 @@ SyncHandler::SyncHandler(QObject* parent) : QObject(parent)
 SyncHandler::~SyncHandler()
 {
     foreach(ISyncProcessor* processor, syncProcessors)
+    {
+        AppDataStorage::getInstance().removeProcessor(dynamic_cast<SubjectData*>(parent()), processor);
         dynamic_cast<QObject*>(processor)->deleteLater();
+    }
 }
 
 void SyncHandler::sync(int processorIndex)

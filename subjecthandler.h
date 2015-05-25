@@ -42,6 +42,7 @@ class SubjectHandler : public QObject
 
         void addSubject(SubjectData* subject);
         Q_INVOKABLE void addSubject(QString subjectTitle);
+        Q_INVOKABLE void deleteCurrentSubject();
 
         void sendInitialList();
 
