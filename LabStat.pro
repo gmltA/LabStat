@@ -58,7 +58,8 @@ DISTFILES += \
     QML/InputPopupDialog.qml \
     QML/View.qml \
     QML/Label.qml \
-    QML/PopupBase.qml
+    QML/PopupBase.qml \
+    QML/TwoStateActionButton.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

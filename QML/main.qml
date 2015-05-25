@@ -30,7 +30,6 @@ ApplicationWindow {
         id: addSubjectDialogBuilder
 
         InputPopupDialog {
-            title: "Change Text"
             text: "Add new subject to track stats for"
 
             z: 5
@@ -160,11 +159,13 @@ ApplicationWindow {
                 NavigationDrawerHeader {
                     id: header
                     mainText: "Alex gmlt.A"
+                    listEnabled: !actionButton.stateTwoActive
 
                     buttonArea.onClicked: {
                         drawer.togglePage()
                     }
 
+                    actionButton.onStateOneClicked: {
                     actionButton.onClicked: {
                         var p = header.parent
                         while (p.parent)
@@ -172,6 +173,8 @@ ApplicationWindow {
 
                         var dialog = addSubjectDialogBuilder.createObject(p)
                         dialog.showing = true
+                    }
+                    actionButton.onStateTwoClicked: {
                     }
                 }
 

@@ -10,6 +10,7 @@ Rectangle {
     property alias buttonIcon: icon.text
     property alias buttonArea: area
     property alias actionButton: button
+    property alias listEnabled: headerList.interactive
     property var model
 
     signal headerContentScrolled(int index)
@@ -35,25 +36,12 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    TwoStateActionButton {
+        id: button
         anchors.right: parent.right
         anchors.rightMargin: 18 * dp
-        height: 48 * dp
-        width: 48 * dp
         z: 1
-        radius: height / 2
-        color: Theme.accentColor
-        Text {
-            anchors.centerIn: parent
-            text: "+"
-            color: "white"
-            font.family: "Roboto Regular"
-            font.pixelSize: 14 * dp
-        }
-        MouseArea {
-            id: button
-            anchors.fill: parent
-        }
+        elevation: 2
     }
 
     ListView {
