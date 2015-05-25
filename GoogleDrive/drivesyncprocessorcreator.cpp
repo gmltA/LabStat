@@ -13,8 +13,10 @@ ISyncProcessor* DriveSyncProcessorCreator::createProcessor(QString data)
 #else
     authClient = new GoogleDesktopAuthClient();
 #endif
-    QStringList splittedData = data.split("\\");
-    QString rootFolder = splittedData[0].isEmpty() ? "root" : splittedData[0];
+    QRegExp rx("(/|\\\\)");
+    QStringList splitData = data.split(rx);
+    QString rootFolder = splitData[0];
+    QString fileName = splitData.count() > 1 ? splitData[1] : splitData[0];
 
     GoogleDriveAPI* drive = new GoogleDriveAPI(rootFolder);
     drive->setVerboseOutput(true);
@@ -22,7 +24,7 @@ ISyncProcessor* DriveSyncProcessorCreator::createProcessor(QString data)
     QObject::connect(drive, SIGNAL(authRequired()), dynamic_cast<QObject*>(authClient), SLOT(processAuth()));
     QObject::connect(dynamic_cast<QObject*>(authClient), SIGNAL(authCompleted(QString)), drive, SLOT(setToken(QString)));
 
-    ISyncProcessor* driveProcessor = new DriveSyncProcessor(drive, splittedData[1]);
+    ISyncProcessor* driveProcessor = new DriveSyncProcessor(drive, fileName);
     driveProcessor->setData(data);
     return driveProcessor;
 }
