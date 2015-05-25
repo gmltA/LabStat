@@ -21,6 +21,16 @@ ApplicationWindow {
         SubjectHandler.loadGroupData(groupId)
     }
 
+    function createDialog(builder) {
+        var p = drawer.parent
+        while (p.parent)
+            p = p.parent
+
+        var dialog = builder.createObject(p)
+        dialog.showing = true
+        return dialog
+    }
+
     FontLoader {
         id: materialIcons
         source: "qrc:/fonts/Material-Design-Icons.ttf"
@@ -36,6 +46,22 @@ ApplicationWindow {
 
             onAccepted: {
                 SubjectHandler.addSubject(value)
+            }
+        }
+    }
+
+    Component {
+        id: deleteSubjectDialogBuilder
+
+        PopupDialog {
+            title: "Delete subject and all stored data?"
+            text: "Deleting subject would cause full data wipe including recorded stats, attached processors, etc."
+
+            z: 5
+
+            onAccepted: {
+                SubjectHandler.deleteCurrentSubject()
+                header.actionButton.toggleState()
             }
         }
     }
@@ -166,15 +192,10 @@ ApplicationWindow {
                     }
 
                     actionButton.onStateOneClicked: {
-                    actionButton.onClicked: {
-                        var p = header.parent
-                        while (p.parent)
-                            p = p.parent
-
-                        var dialog = addSubjectDialogBuilder.createObject(p)
-                        dialog.showing = true
+                        createDialog(addSubjectDialogBuilder)
                     }
                     actionButton.onStateTwoClicked: {
+                        createDialog(deleteSubjectDialogBuilder)
                     }
                 }
 
@@ -249,12 +270,7 @@ ApplicationWindow {
                         icon: ""
                         caption: "Add sync processor"
                         onClicked: {
-                            var p = addProcessorItem.parent
-                            while (p.parent)
-                                p = p.parent
-
-                            var dialog = dialogBuilder.createObject(p)
-                            dialog.showing = true
+                            createDialog(dialogBuilder)
                         }
                     }
                 }
