@@ -18,8 +18,8 @@ SubjectData* SubjectHandler::getCurrentSubject() const
 void SubjectHandler::setCurrentSubject(int id)
 {
     SubjectData* subject = subjects.at(id);
-    if (subject)
-        setCurrentSubject(subject);
+
+    setCurrentSubject(subject);
 }
 
 void SubjectHandler::setCurrentSubject(SubjectData* subject)
@@ -28,15 +28,24 @@ void SubjectHandler::setCurrentSubject(SubjectData* subject)
         currentSubject->disconnectAll();
 
     currentSubject = subject;
-    connect(currentSubject->getSyncHandler(), &SyncHandler::processorAddCalled, this, &SubjectHandler::processorAddCalled);
-    connect(currentSubject->getSyncHandler(), &SyncHandler::processorAdded, this, &SubjectHandler::processorAdded);
-    connect(currentSubject->getSyncHandler(), &SyncHandler::syncStopped, this, &SubjectHandler::syncStopped);
+    if (currentSubject)
+    {
+        connect(currentSubject->getSyncHandler(), &SyncHandler::processorAddCalled, this, &SubjectHandler::processorAddCalled);
+        connect(currentSubject->getSyncHandler(), &SyncHandler::processorAdded, this, &SubjectHandler::processorAdded);
+        connect(currentSubject->getSyncHandler(), &SyncHandler::syncStopped, this, &SubjectHandler::syncStopped);
 
-    connect(currentSubject->getDataSheet(), &DataSheet::groupListChanged, this, &SubjectHandler::groupListChanged);
+        connect(currentSubject->getDataSheet(), &DataSheet::groupListChanged, this, &SubjectHandler::groupListChanged);
 
-    emit processorListChanged(currentSubject->getSyncHandler()->buildProcessorsData());
-    emit groupListChanged(currentSubject->getDataSheet()->getGroupList());
-    emit groupDataLoaded(currentSubject->getDataSheet()->getTimeTableModel());
+        emit processorListChanged(currentSubject->getSyncHandler()->buildProcessorsData());
+        emit groupListChanged(currentSubject->getDataSheet()->getGroupList());
+        emit groupDataLoaded(currentSubject->getDataSheet()->getTimeTableModel());
+    }
+    else
+    {
+        emit processorListChanged(QVariantList());
+        emit groupListChanged(QList<int>());
+        emit groupDataLoaded(nullptr);
+    }
 }
 
 void SubjectHandler::addSubject(SubjectData* subject)
@@ -53,8 +62,13 @@ void SubjectHandler::addSubject(SubjectData* subject)
 void SubjectHandler::addSubject(QString subjectTitle)
 {
     SubjectData* subject = new SubjectData(subjectTitle);
+    int newSubjectId = 0;
+    if (!subjects.empty())
+        newSubjectId = subjects.last()->getId() + 1;
+
+    subject->setId(newSubjectId);
+
     addSubject(subject);
-    subject->setId(subjects.indexOf(subject));
 
     AppDataStorage::getInstance().storeSubject(subject);
 }
@@ -67,7 +81,12 @@ void SubjectHandler::deleteCurrentSubject()
     subjectModel.removeOne(current->getTitle());
 
     emit subjectListChanged(subjectModel);
-    setCurrentSubject(subjects.first());
+
+    if (subjects.count())
+        setCurrentSubject(subjects.first());
+    else
+        setCurrentSubject();
+
     delete current;
 }
 

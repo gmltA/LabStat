@@ -50,7 +50,7 @@ class SubjectHandler : public QObject
         SubjectHandler();
         ~SubjectHandler() {}
 
-        void setCurrentSubject(SubjectData* subject);
+        void setCurrentSubject(SubjectData* subject = nullptr);
 
         static SubjectHandler* instance;
         QList<SubjectData*> subjects;
