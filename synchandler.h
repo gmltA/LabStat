@@ -8,6 +8,13 @@
 #include <QVariantMap>
 #include <QVector>
 
+/*!
+ * \brief The SyncHandler class is responsible for subject syncProcessors
+ *
+ * Functions of this class are called by QML throught SubjectHandler for current subject.
+ * Actions related to processor registration\initiation are run in parallel thread
+ * using QtConcurrent framework.
+ */
 class SyncHandler : public QObject
 {
         Q_OBJECT
@@ -22,6 +29,10 @@ class SyncHandler : public QObject
         Q_INVOKABLE void sync(int processorIndex);
         void sync(ISyncProcessor::Origin origin = ISyncProcessor::OriginAny);
 
+        /*!
+         * \brief buildProcessorsData
+         * \return data structure used by QML to display list of processors
+         */
         QVariantList buildProcessorsData();
 
     private:
@@ -30,6 +41,9 @@ class SyncHandler : public QObject
         QVariantMap buildProcessorData(ISyncProcessor* processor);
 
         QVector<ISyncProcessor*> syncProcessors;
+        /*!
+         * \brief signalMapper is uset to replace processor pointer with processor id in signal
+         */
         QSignalMapper* signalMapper;
 
     signals:
