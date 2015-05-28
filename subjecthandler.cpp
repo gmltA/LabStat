@@ -18,7 +18,6 @@ SubjectData* SubjectHandler::getCurrentSubject() const
 void SubjectHandler::setCurrentSubject(int id)
 {
     SubjectData* subject = subjects.at(id);
-
     setCurrentSubject(subject);
 }
 

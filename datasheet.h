@@ -14,7 +14,7 @@ class DataSheet : public QObject
         Q_OBJECT
 
     public:
-        explicit DataSheet(QString _fileName = "", QObject* parent = 0);
+        explicit DataSheet(QString fileName = "", int id = 0, QObject* parent = 0);
         ~DataSheet();
 
         QString toString() const;

@@ -5,7 +5,7 @@
 
 SubjectData::SubjectData(int _id, QString _title, QObject *parent) : QObject(parent), id(_id), title(_title)
 {
-    dataSheet = new DataSheet(_title);
+    dataSheet = new DataSheet(_title, _id);
     syncHandler = new SyncHandler(this);
 }
 

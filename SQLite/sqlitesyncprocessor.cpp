@@ -209,7 +209,7 @@ void SQLiteSyncProcessor::createDbStructure()
                    "timeTableId  INTEGER NOT NULL,"
                    "studentId  INTEGER NOT NULL,"
                    "attended  INTEGER NOT NULL,"
-                   "PRIMARY KEY (id))");
+                   "PRIMARY KEY (subjectId, id))");
 
     qDebug() << query.lastError().text();
 }
