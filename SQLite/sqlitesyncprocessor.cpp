@@ -35,7 +35,7 @@ void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 
     QString basicQuery = "INSERT INTO timetable_entry VALUES %1;";
     QString timeTableData = "";
-    foreach (TimeTableEntry entry, dataFile->getTimeTable())
+    foreach (TimeTableEntry* entry, dataFile->getTimeTable())
         timeTableData += serializeTimeTableEntry(dataFile->getId(), entry);
 
     timeTableData.chop(1);
@@ -51,7 +51,7 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
     TimeTable timeTable;
     while (query.next())
     {
-        timeTable.push_back(TimeTableEntry(query.value(0).toInt(), QDateTime::fromString(query.value(1).toString()),
+        timeTable.push_back(new TimeTableEntry(query.value(0).toInt(), QDateTime::fromString(query.value(1).toString()),
                                            query.value(2).toInt(), query.value(3).toInt()));
     }
 
@@ -67,7 +67,7 @@ void SQLiteSyncProcessor::saveStatTable(DataSheet* dataFile)
 
     QString basicQuery = "INSERT INTO stats VALUES %1;";
     QString statTableData = "";
-    foreach (StatTableEntry entry, dataFile->getStatTable())
+    foreach (StatTableEntry* entry, dataFile->getStatTable())
         statTableData += serializeStatTableEntry(dataFile->getId(), entry);
 
     statTableData.chop(1);
@@ -83,8 +83,8 @@ void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
     StatTable stats;
     while (query.next())
     {
-        stats.push_back(StatTableEntry{query.value(0).toInt(), query.value(1).toInt(),
-                                       query.value(2).toInt(), query.value(3).toBool()});
+        stats.push_back(new StatTableEntry{query.value(0).toInt(), query.value(1).toInt(),
+                                            query.value(2).toInt(), query.value(3).toBool()});
     }
 
     if (!stats.isEmpty())
@@ -227,22 +227,22 @@ QString SQLiteSyncProcessor::serializeStudent(int subjectId, Student* person)
             .arg(person->getSubgroup());
 }
 
-QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimeTableEntry entry)
+QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimeTableEntry* entry)
 {
     QString ttEntryTpl = "(%1, '%2', '%3', '%4', '%5'),";
     return ttEntryTpl.arg(subjectId)
-            .arg(entry.id)
-            .arg(entry.dateTime.toString())
-            .arg(entry.group)
-            .arg(entry.subgroup);
+            .arg(entry->id)
+            .arg(entry->dateTime.toString())
+            .arg(entry->group)
+            .arg(entry->subgroup);
 }
 
-QString SQLiteSyncProcessor::serializeStatTableEntry(int subjectId, StatTableEntry entry)
+QString SQLiteSyncProcessor::serializeStatTableEntry(int subjectId, StatTableEntry* entry)
 {
     QString stEntryTpl = "(%1, '%2', '%3', '%4', '%5'),";
-    return stEntryTpl.arg(entry.id)
+    return stEntryTpl.arg(entry->id)
             .arg(subjectId)
-            .arg(entry.timeTableId)
-            .arg(entry.studentId)
-            .arg(entry.attended ? 1 : 0);
+            .arg(entry->timeTableId)
+            .arg(entry->studentId)
+            .arg(entry->attended ? 1 : 0);
 }

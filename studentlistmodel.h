@@ -20,7 +20,7 @@ class StudentListModel : public QAbstractListModel
         StudentListModel(QObject *parent = 0);
 
         void addStudent(Student* student);
-        void addStatEntry(const StatTableEntry& entry);
+        void addStatEntry(StatTableEntry* entry);
 
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

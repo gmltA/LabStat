@@ -33,8 +33,8 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
 
         void createDbStructure();
         QString serializeStudent(int subjectId, Student* person);
-        QString serializeTimeTableEntry(int subjectId, TimeTableEntry entry);
-        QString serializeStatTableEntry(int subjectId, StatTableEntry entry);
+        QString serializeTimeTableEntry(int subjectId, TimeTableEntry* entry);
+        QString serializeStatTableEntry(int subjectId, StatTableEntry* entry);
 
     signals:
         void initFinished(bool success) override final;

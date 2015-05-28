@@ -13,7 +13,7 @@ void StudentListModel::addStudent(Student* student)
     endInsertRows();
 }
 
-void StudentListModel::addStatEntry(const StatTableEntry& entry)
+void StudentListModel::addStatEntry(StatTableEntry* entry)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     stats << entry;
@@ -41,10 +41,10 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
         case SubGroupRole:
             return student->getSubgroup();
         case AttendenceRole:
-            foreach (StatTableEntry entry, stats)
+            foreach (StatTableEntry* entry, stats)
             {
-                if (entry.studentId == student->getId())
-                    return entry.attended;
+                if (entry->studentId == student->getId())
+                    return entry->attended;
             }
             return false;
         default:
@@ -69,9 +69,9 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             emit dataChanged(index, index);
             break;
         case AttendenceRole:
-            for (StatTableEntry& entry: stats)
+            for (StatTableEntry* entry: stats)
             {
-                if (entry.studentId == student->getId())
+                if (entry->studentId == student->getId())
                 {
                     entry.attended = value.toBool();
 

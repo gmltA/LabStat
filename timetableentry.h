@@ -36,6 +36,6 @@ class TimeTableEntry
         int subgroup;
 };
 
-typedef QList<TimeTableEntry> TimeTable;
+typedef QList<TimeTableEntry*> TimeTable;
 
 #endif // TIMETABLEENTRY_H

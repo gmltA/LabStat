@@ -11,6 +11,12 @@ DataSheet::~DataSheet()
 {
     if (timeTableModel)
         timeTableModel->deleteLater();
+
+    foreach (TimeTableEntry* entry, timeTable)
+        entry->deleteLater();
+
+    foreach (StatTableEntry* entry, stats)
+        delete entry;
 }
 
 uint DataSheet::getId() const
@@ -97,22 +103,22 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
             timeTableModel->deleteLater();
 
         timeTableModel = new TimeTableModel(groupId);
-        foreach (TimeTableEntry timeTableEntry, timeTable)
+        foreach (TimeTableEntry* timeTableEntry, timeTable)
         {
-            if (groupId != timeTableEntry.group)
+            if (groupId != timeTableEntry->group)
                 continue;
 
             foreach (Student* person, students)
             {
-                if (person->getGroup() == groupId && (person->getSubgroup() == timeTableEntry.subgroup
-                        || timeTableEntry.subgroup == 0 || person->getSubgroup() == 0))
+                if (person->getGroup() == groupId && (person->getSubgroup() == timeTableEntry->subgroup
+                        || timeTableEntry->subgroup == 0 || person->getSubgroup() == 0))
                 {
-                    timeTableEntry.students->addStudent(person);
+                    timeTableEntry->students->addStudent(person);
 
-                    foreach (StatTableEntry entry, stats)
+                    foreach (StatTableEntry* entry, stats)
                     {
-                        if (entry.studentId == person->getId() && entry.timeTableId == timeTableEntry.id)
-                            timeTableEntry.students->addStatEntry(entry);
+                        if (entry->studentId == person->getId() && entry->timeTableId == timeTableEntry->id)
+                            timeTableEntry->students->addStatEntry(entry);
                     }
                 }
             }

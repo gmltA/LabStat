@@ -6,7 +6,13 @@ TimeTableModel::TimeTableModel(int _groupId, QObject* parent)
 
 }
 
-void TimeTableModel::addEntry(const TimeTableEntry& entry)
+TimeTableModel::~TimeTableModel()
+{
+    foreach (TimeTableEntry* entry, timeTable)
+        entry->deleteLater();
+}
+
+void TimeTableModel::addEntry(TimeTableEntry* entry)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     timeTable << entry;
@@ -22,19 +28,19 @@ QVariant TimeTableModel::data(const QModelIndex & index, int role) const {
     if (index.row() < 0 || index.row() >= timeTable.count())
         return QVariant();
 
-    const TimeTableEntry& entry = timeTable[index.row()];
+    TimeTableEntry* entry = timeTable[index.row()];
     switch (role)
     {
         case DateRole:
-            return entry.dateTime.date();
+            return entry->dateTime.date();
         case TimeRole:
-            return entry.dateTime.time();
+            return entry->dateTime.time();
         case GroupRole:
-            return entry.subgroup;
+            return entry->subgroup;
         case StudentsRole:
         {
             QVariant var;
-            var.setValue(entry.students);
+            var.setValue(entry->students);
             return var;
         }
     }
@@ -65,9 +71,9 @@ int TimeTableModel::getClosestEntryIndex()
     {
         if (i != closest)
         {
-            TimeTableEntry entry = timeTable.at(i);
+            TimeTableEntry* entry = timeTable.at(i);
 
-            if (abs(entry.dateTime.secsTo(now)) < abs(timeTable.at(closest).dateTime.secsTo(now)))
+            if (abs(entry->dateTime.secsTo(now)) < abs(timeTable.at(closest)->dateTime.secsTo(now)))
                 closest = i;
         }
     }

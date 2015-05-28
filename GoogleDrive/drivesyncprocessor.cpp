@@ -129,7 +129,7 @@ TimeTable DriveSyncProcessor::buildTimeTable(QByteArray rawData)
 
                 timeTableAccordance[entryIndex] = timeElement.tagName();
 
-                timeTable.push_back(TimeTableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
+                timeTable.push_back(new TimeTableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
                                                    QTime::fromString(timeElement.text(), "h:mm"), group, subgroup));
                 entryIndex++;
             }

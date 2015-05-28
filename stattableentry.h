@@ -12,6 +12,6 @@ class StatTableEntry
         bool attended;
 };
 
-typedef QList<StatTableEntry> StatTable;
+typedef QList<StatTableEntry*> StatTable;
 
 #endif // STATTABLEENTRY_H

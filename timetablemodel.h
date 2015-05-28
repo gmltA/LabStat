@@ -16,8 +16,9 @@ class TimeTableModel : public QAbstractListModel
         };
 
         TimeTableModel(int groupId, QObject *parent = 0);
+        ~TimeTableModel();
 
-        void addEntry(const TimeTableEntry& entry);
+        void addEntry(TimeTableEntry* entry);
 
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
