@@ -84,7 +84,7 @@ Item {
         states: [
             State {
                 name: "active"
-                when: Math.abs(flickable.visibleArea.xPosition) > 0.5
+                when: Math.abs(flickable.visibleArea.xPosition) > 0.3
                 PropertyChanges {
                     target: deleteCircle
                     color: Theme.accentColor
@@ -100,7 +100,7 @@ Item {
         flickableDirection: Flickable.HorizontalFlick
 
         onDragEnded: {
-            if (Math.abs(flickable.visibleArea.xPosition) > 0.5)
+            if (Math.abs(flickable.visibleArea.xPosition) > 0.3)
                 SubjectHandler.deleteProcessor(processorId)
         }
 
@@ -115,7 +115,7 @@ Item {
             enabled: !flickable.flicking
             opacity: {
                 if (flickable.dragging)
-                    return Math.min(1, Math.max(0, 0.5 - Math.abs(flickable.visibleArea.xPosition)))
+                    return Math.min(1, Math.max(0, 0.3 - Math.abs(flickable.visibleArea.xPosition)))
                 else
                     return 1
             }
