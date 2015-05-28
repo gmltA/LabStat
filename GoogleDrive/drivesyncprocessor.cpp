@@ -157,11 +157,8 @@ StatTable DriveSyncProcessor::buildStats(QByteArray rawData)
 
                 if (gsxCount >= 3)
                 {
-                    StatTableEntry entry;
-                    entry.id = entryId++;
-                    entry.timeTableId = timeTableAccordance.key(dataTag);
-                    entry.attended = dataNodes.item(j).toElement().text() == "н" ? false : true;
-                    entry.studentId = index - 3;
+                    StatTableEntry* entry = new StatTableEntry{entryId++, timeTableAccordance.key(dataTag), index - 3,
+                                                                dataNodes.item(j).toElement().text() == "н" ? false : true};
 
                     statTable.push_back(entry);
                 }
