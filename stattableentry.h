@@ -1,6 +1,8 @@
 #ifndef STATTABLEENTRY_H
 #define STATTABLEENTRY_H
 
+#include <QList>
+
 class StatTableEntry
 {
     public:
@@ -9,5 +11,7 @@ class StatTableEntry
         int studentId;
         bool attended;
 };
+
+typedef QList<StatTableEntry> StatTable;
 
 #endif // STATTABLEENTRY_H

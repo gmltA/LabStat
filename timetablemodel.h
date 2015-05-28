@@ -30,7 +30,7 @@ class TimeTableModel : public QAbstractListModel
 
     private:
         int groupId;
-        QList<TimeTableEntry> timeTable;
+        TimeTable timeTable;
 };
 
 #endif // TIMETABLEMODEL_H

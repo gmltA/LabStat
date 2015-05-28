@@ -60,12 +60,12 @@ void DataSheet::setStudentList(const StudentList& value)
     students = value;
 }
 
-QList<TimeTableEntry> DataSheet::getTimeTable() const
+TimeTable DataSheet::getTimeTable() const
 {
     return timeTable;
 }
 
-void DataSheet::setTimeTable(const QList<TimeTableEntry>& value)
+void DataSheet::setTimeTable(const TimeTable& value)
 {
     timeTable = value;
 }
@@ -109,7 +109,7 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
                 {
                     timeTableEntry.students->addStudent(person);
 
-                    foreach (StatTableEntry entry, statTable)
+                    foreach (StatTableEntry entry, stats)
                     {
                         if (entry.studentId == person->getId() && entry.timeTableId == timeTableEntry.id)
                             timeTableEntry.students->addStatEntry(entry);
@@ -122,12 +122,12 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
     return timeTableModel;
 }
 
-QList<StatTableEntry> DataSheet::getStatTable() const
+StatTable DataSheet::getStatTable() const
 {
-    return statTable;
+    return stats;
 }
 
-void DataSheet::setStatTable(const QList<StatTableEntry>& value)
+void DataSheet::setStatTable(const StatTable& value)
 {
-    statTable = value;
+    stats = value;
 }

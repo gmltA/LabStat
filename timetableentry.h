@@ -2,9 +2,7 @@
 #define TIMETABLEENTRY_H
 
 #include "studentlistmodel.h"
-
 #include <QDateTime>
-
 
 class TimeTableEntry
 {
@@ -37,5 +35,7 @@ class TimeTableEntry
         int group;
         int subgroup;
 };
+
+typedef QList<TimeTableEntry> TimeTable;
 
 #endif // TIMETABLEENTRY_H

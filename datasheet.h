@@ -31,11 +31,11 @@ class DataSheet : public QObject
         StudentList getStudentList() const;
         void setStudentList(const StudentList& value);
 
-        QList<TimeTableEntry> getTimeTable() const;
-        void setTimeTable(const QList<TimeTableEntry>& value);
+        TimeTable getTimeTable() const;
+        void setTimeTable(const TimeTable& value);
 
-        QList<StatTableEntry> getStatTable() const;
-        void setStatTable(const QList<StatTableEntry>& value);
+        StatTable getStatTable() const;
+        void setStatTable(const StatTable& value);
 
         QDateTime getLastSyncTime() const;
         int getLastSyncProcessorId() const;
@@ -52,8 +52,8 @@ class DataSheet : public QObject
 
         QList<int> groups;
         StudentList students;
-        QList<TimeTableEntry> timeTable;
-        QList<StatTableEntry> statTable;
+        TimeTable timeTable;
+        StatTable stats;
         TimeTableModel* timeTableModel;
 
     signals:

@@ -97,10 +97,10 @@ StudentList DriveSyncProcessor::buildStudentList(QByteArray rawData)
     return studentList;
 }
 
-QList<TimeTableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
+TimeTable DriveSyncProcessor::buildTimeTable(QByteArray rawData)
 {
     QDomDocument doc;
-    QList<TimeTableEntry> timeTable;
+    TimeTable timeTable;
 
     if (doc.setContent(rawData))
     {
@@ -138,10 +138,10 @@ QList<TimeTableEntry> DriveSyncProcessor::buildTimeTable(QByteArray rawData)
     return timeTable;
 }
 
-QList<StatTableEntry> DriveSyncProcessor::buildStats(QByteArray rawData)
+StatTable DriveSyncProcessor::buildStats(QByteArray rawData)
 {
     QDomDocument doc;
-    QList<StatTableEntry> statTable;
+    StatTable statTable;
     if (doc.setContent(rawData))
     {
         int entryId = 0;

@@ -31,7 +31,7 @@ class StudentListModel : public QAbstractListModel
 
     private:
         StudentList students;
-        QList<StatTableEntry> stats;
+        StatTable stats;
 };
 
 Q_DECLARE_METATYPE(StudentListModel*)

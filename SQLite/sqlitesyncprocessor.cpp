@@ -48,7 +48,7 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, dateTime, groupId, subgroupId FROM timetable_entry WHERE subjectId = %1";
     QSqlQuery query(queryString.arg(dataFile->getId()), db);
-    QList<TimeTableEntry> timeTable;
+    TimeTable timeTable;
     while (query.next())
     {
         timeTable.push_back(TimeTableEntry(query.value(0).toInt(), QDateTime::fromString(query.value(1).toString()),
@@ -74,14 +74,13 @@ void SQLiteSyncProcessor::saveStatTable(DataSheet* dataFile)
     basicQuery = basicQuery.arg(statTableData);
 
     query.exec(basicQuery);
-    qDebug() << query.lastError().text();
 }
 
 void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, timeTableId, studentId, attended FROM stats WHERE subjectId = %1";
     QSqlQuery query(queryString.arg(dataFile->getId()), db);
-    QList<StatTableEntry> stats;
+    StatTable stats;
     while (query.next())
     {
         stats.push_back(StatTableEntry{query.value(0).toInt(), query.value(1).toInt(),
