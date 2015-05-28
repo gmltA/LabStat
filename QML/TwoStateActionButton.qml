@@ -44,6 +44,25 @@ View {
         color: "white"
         font.family: "Roboto Regular"
         font.pixelSize: 24 * dp
+
+        Behavior on font.pixelSize {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on anchors.verticalCenterOffset {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+        Behavior on anchors.horizontalCenterOffset {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
     MouseArea {
         id: button
@@ -68,10 +87,13 @@ View {
             PropertyChanges {
                 target: root
                 rotation: 45
+                tintColor: Theme.accentColor
             }
             PropertyChanges {
-                target: root
-                tintColor: Theme.accentColor
+                target: buttonText
+                font.pixelSize: 36 * dp
+                anchors.verticalCenterOffset: -2 * dp
+                anchors.horizontalCenterOffset: 1 * dp
             }
         }
     ]
