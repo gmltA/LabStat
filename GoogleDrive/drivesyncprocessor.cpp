@@ -144,11 +144,12 @@ QList<StatTableEntry> DriveSyncProcessor::buildStats(QByteArray rawData)
     QList<StatTableEntry> statTable;
     if (doc.setContent(rawData))
     {
+        int entryId = 0;
         QDomNodeList studentNodes = doc.elementsByTagName("entry");
         for (int index = 3; index < studentNodes.size(); index++)
         {
             QDomNodeList dataNodes = studentNodes.item(index).childNodes();
-            for (int j = 3, entryId = 0, gsxCount = 0; j < dataNodes.size(); j++)
+            for (int j = 3, gsxCount = 0; j < dataNodes.size(); j++)
             {
                 QString dataTag = dataNodes.item(j).toElement().tagName();
                 if (dataTag.contains("gsx"))
