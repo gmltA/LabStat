@@ -4,22 +4,23 @@
 #include "studentlistmodel.h"
 #include <QDateTime>
 
-class TimeTableEntry
+class TimeTableEntry : public QObject
 {
+        Q_OBJECT
     public:
         TimeTableEntry(int _id, QDateTime _dateTime, int _group, int _subgroup = 0)
-            : id(_id), group(_group), subgroup(_subgroup)
+            : QObject(nullptr), id(_id), group(_group), subgroup(_subgroup)
         {
             dateTime = _dateTime;
-            students = new StudentListModel();
+            students = new StudentListModel(this);
         }
 
         TimeTableEntry(int _id, QDate date, QTime time, int _group, int _subgroup = 0)
-            : id(_id), group(_group), subgroup(_subgroup)
+            : QObject(nullptr), id(_id), group(_group), subgroup(_subgroup)
         {
             dateTime.setDate(date);
             dateTime.setTime(time);
-            students = new StudentListModel();
+            students = new StudentListModel(this);
         }
 
         ~TimeTableEntry()

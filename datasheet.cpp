@@ -122,10 +122,19 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
                     }
                 }
             }
+            connect(timeTableEntry->students, &StudentListModel::statEntryAdded, this, &DataSheet::statEntryAdded);
             timeTableModel->addEntry(timeTableEntry);
         }
     }
     return timeTableModel;
+}
+
+void DataSheet::statEntryAdded(StatTableEntry* entry)
+{
+    if (stats.count() > 0)
+        entry->id = stats.last()->id + 1;
+
+    stats.append(entry);
 }
 
 StatTable DataSheet::getStatTable() const

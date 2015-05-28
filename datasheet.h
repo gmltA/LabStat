@@ -58,6 +58,9 @@ class DataSheet : public QObject
 
     signals:
         void groupListChanged(QList<int> groups);
+
+    public slots:
+        void statEntryAdded(StatTableEntry* entry);
 };
 
 #endif // DATASHEET_H

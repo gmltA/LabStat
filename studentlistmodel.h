@@ -26,6 +26,9 @@ class StudentListModel : public QAbstractListModel
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
         bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+    signals:
+        void statEntryAdded(StatTableEntry* entry);
+
     protected:
         QHash<int, QByteArray> roleNames() const;
 

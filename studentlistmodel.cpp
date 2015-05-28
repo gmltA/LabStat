@@ -1,4 +1,5 @@
 #include "studentlistmodel.h"
+#include "timetableentry.h"
 
 StudentListModel::StudentListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -69,17 +70,29 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             emit dataChanged(index, index);
             break;
         case AttendenceRole:
+        {
+            StatTableEntry* operatingEntry = nullptr;
             for (StatTableEntry* entry: stats)
             {
                 if (entry->studentId == student->getId())
                 {
-                    entry.attended = value.toBool();
-
-                    emit dataChanged(index, index);
-                    return true;
+                    operatingEntry = entry;
                 }
             }
+            if (!operatingEntry)
+            {
+                operatingEntry = new StatTableEntry;
+                operatingEntry->studentId = student->getId();
+                operatingEntry->timeTableId = dynamic_cast<TimeTableEntry*>(parent())->id;
+                stats.append(operatingEntry);
+                emit statEntryAdded(operatingEntry);
+            }
+
+            operatingEntry->attended = value.toBool();
+            emit dataChanged(index, index);
+            return true;
             break;
+        }
     }
     return false;
 }
