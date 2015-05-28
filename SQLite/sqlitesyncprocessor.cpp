@@ -59,6 +59,39 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
         dataFile->setTimeTable(timeTable);
 }
 
+void SQLiteSyncProcessor::saveStatTable(DataSheet* dataFile)
+{
+    QSqlQuery query(db);
+    QString cleanQuery = "DELETE FROM stats WHERE subjectId = %1";
+    query.exec(cleanQuery.arg(dataFile->getId()));
+
+    QString basicQuery = "INSERT INTO stats VALUES %1;";
+    QString statTableData = "";
+    foreach (StatTableEntry entry, dataFile->getStatTable())
+        statTableData += serializeStatTableEntry(dataFile->getId(), entry);
+
+    statTableData.chop(1);
+    basicQuery = basicQuery.arg(statTableData);
+
+    query.exec(basicQuery);
+    qDebug() << query.lastError().text();
+}
+
+void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
+{
+    QString queryString = "SELECT id, timeTableId, studentId, attended FROM stats WHERE subjectId = %1";
+    QSqlQuery query(queryString.arg(dataFile->getId()), db);
+    QList<StatTableEntry> stats;
+    while (query.next())
+    {
+        stats.push_back(StatTableEntry{query.value(0).toInt(), query.value(1).toInt(),
+                                       query.value(2).toInt(), query.value(3).toBool()});
+    }
+
+    if (!stats.isEmpty())
+        dataFile->setStatTable(stats);
+}
+
 void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 {
     QSqlQuery query(db);
@@ -129,11 +162,13 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
     {
         saveStudentList(dataFile);
         saveTimeTable(dataFile);
+        saveStatTable(dataFile);
     }
     else
     {
         loadStudentList(dataFile);
         loadTimeTable(dataFile);
+        loadStatTable(dataFile);
     }
 
     dataFile->synced(id);
@@ -167,6 +202,17 @@ void SQLiteSyncProcessor::createDbStructure()
                    "PRIMARY KEY (subjectId, id)"
                    ")");
     qDebug() << query.lastError().text();
+
+    //query.exec("DROP TABLE IF EXISTS stats;");
+    query.exec("CREATE TABLE stats ("
+                   "id  INTEGER NOT NULL,"
+                   "subjectId  INTEGER NOT NULL,"
+                   "timeTableId  INTEGER NOT NULL,"
+                   "studentId  INTEGER NOT NULL,"
+                   "attended  INTEGER NOT NULL,"
+                   "PRIMARY KEY (id))");
+
+    qDebug() << query.lastError().text();
 }
 
 QString SQLiteSyncProcessor::serializeStudent(int subjectId, Student* person)
@@ -190,4 +236,14 @@ QString SQLiteSyncProcessor::serializeTimeTableEntry(int subjectId, TimeTableEnt
             .arg(entry.dateTime.toString())
             .arg(entry.group)
             .arg(entry.subgroup);
+}
+
+QString SQLiteSyncProcessor::serializeStatTableEntry(int subjectId, StatTableEntry entry)
+{
+    QString stEntryTpl = "(%1, '%2', '%3', '%4', '%5'),";
+    return stEntryTpl.arg(entry.id)
+            .arg(subjectId)
+            .arg(entry.timeTableId)
+            .arg(entry.studentId)
+            .arg(entry.attended ? 1 : 0);
 }
