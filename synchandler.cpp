@@ -105,3 +105,15 @@ void SyncHandler::unregisterProcessor(ISyncProcessor* processor)
 {
     syncProcessors.removeOne(processor);
 }
+
+void SyncHandler::deleteProcessor(int processorIndex)
+{
+    foreach (ISyncProcessor* processor, syncProcessors)
+        if (processor->getId() == processorIndex)
+        {
+            unregisterProcessor(processor);
+            AppDataStorage::getInstance().removeProcessor(dynamic_cast<SubjectData*>(parent()), processor);
+            dynamic_cast<QObject*>(processor)->deleteLater();
+            break;
+        }
+}

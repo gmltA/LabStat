@@ -111,6 +111,12 @@ void SubjectHandler::attachProcessor(int processorTypeId, QString rootFolder)
     QtConcurrent::run(currentSubject, &SubjectData::attachProcessor, processorTypeId, rootFolder);
 }
 
+void SubjectHandler::deleteProcessor(int processorIndex)
+{
+    currentSubject->getSyncHandler()->deleteProcessor(processorIndex);
+    emit processorListChanged(currentSubject->getSyncHandler()->buildProcessorsData());
+}
+
 QStringList SubjectHandler::getAvailableProcessorTypes()
 {
     return SyncProcessorProvider::getInstance().getAvailableProcessorTypes();

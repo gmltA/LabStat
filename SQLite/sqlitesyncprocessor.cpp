@@ -11,6 +11,10 @@ SQLiteSyncProcessor::SQLiteSyncProcessor(QString connectionName, QObject *parent
 
 SQLiteSyncProcessor::~SQLiteSyncProcessor()
 {
+    QString connectionName = db.connectionName();
+    db.close();
+    db = QSqlDatabase();
+    QSqlDatabase::removeDatabase(connectionName);
 }
 
 void SQLiteSyncProcessor::init()

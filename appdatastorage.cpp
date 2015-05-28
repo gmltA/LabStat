@@ -79,6 +79,6 @@ void AppDataStorage::removeSubject(SubjectData* subject)
 void AppDataStorage::removeProcessor(SubjectData* subject, ISyncProcessor* processor)
 {
     QSqlQuery query(db);
-    QString querySrc = "DELETE FROM processors WHERE id = %1";
-    query.exec(querySrc.arg(processor->getId()));
+    QString querySrc = "DELETE FROM processors WHERE id = %1 AND subjectId = %2";
+    query.exec(querySrc.arg(processor->getId()).arg(subject->getId()));
 }

@@ -19,6 +19,8 @@ class SyncHandler : public QObject
         void registerProcessor(ISyncProcessor* processor);
         void unregisterProcessor(ISyncProcessor* processor);
 
+        void deleteProcessor(int processorIndex);
+
         Q_INVOKABLE void sync(int processorIndex);
         void sync(ISyncProcessor::Origin origin = ISyncProcessor::OriginAny);
 
