@@ -72,8 +72,14 @@ QVariantList SyncHandler::buildProcessorsData()
 
 void SyncHandler::registerProcessor(ISyncProcessor* processor)
 {
+    if (processor->getId() == PROC_ID_INVALID)
+    {
+        if (syncProcessors.count() > 0)
+            processor->setId(syncProcessors.last()->getId() + 1);
+        else
+            processor->setId(0);
+    }
     syncProcessors.push_back(processor);
-    processor->setId(syncProcessors.indexOf(processor));
 
     emit processorAddCalled(buildProcessorData(processor));
 

@@ -6,6 +6,8 @@
 #include <QString>
 #include <QObject>
 
+#define PROC_ID_INVALID -1
+
 class ISyncProcessor
 {
     public:
@@ -16,7 +18,7 @@ class ISyncProcessor
             OriginAny
         };
 
-        ISyncProcessor(QString _title, QString _data, Origin _origin) : title(_title), data(_data), origin(_origin) {}
+        ISyncProcessor(QString _title, QString _data, Origin _origin) : id(PROC_ID_INVALID), title(_title), data(_data), origin(_origin) {}
         virtual ~ISyncProcessor() {}
 
         virtual void init() = 0;

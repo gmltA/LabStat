@@ -42,12 +42,12 @@ void AppDataStorage::loadSubjectsFromDB()
     while (query.next())
     {
         SubjectData* subject = new SubjectData(query.value(0).toInt(), query.value(1).toString());
-        processorsQuery.exec(QString("SELECT processorType, data FROM processors WHERE subjectId = %1")
+        processorsQuery.exec(QString("SELECT id, processorType, data FROM processors WHERE subjectId = %1")
                              .arg(query.value(0).toInt()));
 
         while (processorsQuery.next())
         {
-            subject->attachProcessor(processorsQuery.value(0).toInt(), processorsQuery.value(1).toString());
+            subject->attachProcessor(processorsQuery.value(0).toInt(), processorsQuery.value(1).toInt(), processorsQuery.value(2).toString());
         }
         SubjectHandler::getInstance()->addSubject(subject);
     }
@@ -58,7 +58,6 @@ void AppDataStorage::storeSubject(SubjectData* subject)
     QSqlQuery query(db);
     QString querySrc = "INSERT INTO subjects VALUES ('%1', '%2')";
     query.exec(querySrc.arg(subject->getId()).arg(subject->getTitle()));
-    qDebug() << query.lastError().text();
 }
 
 void AppDataStorage::storeProcessor(SubjectData* subject, ISyncProcessor* processor)
@@ -66,7 +65,6 @@ void AppDataStorage::storeProcessor(SubjectData* subject, ISyncProcessor* proces
     QSqlQuery query(db);
     QString querySrc = "INSERT INTO processors VALUES ('%1', '%2', '%3', '%4')";
     query.exec(querySrc.arg(processor->getId()).arg(subject->getId()).arg(processor->getTypeId()).arg(processor->getData()));
-    //qDebug() << query.lastError().text();
 }
 
 void AppDataStorage::removeSubject(SubjectData* subject)

@@ -108,7 +108,7 @@ void SubjectHandler::sync(int processorIndex)
 
 void SubjectHandler::attachProcessor(int processorTypeId, QString rootFolder)
 {
-    QtConcurrent::run(currentSubject, &SubjectData::attachProcessor, processorTypeId, rootFolder);
+    QtConcurrent::run(currentSubject, &SubjectData::attachProcessor, PROC_ID_INVALID, processorTypeId, rootFolder);
 }
 
 void SubjectHandler::deleteProcessor(int processorIndex)

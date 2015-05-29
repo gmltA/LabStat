@@ -18,7 +18,7 @@ class SubjectData : public QObject
         DataSheet* getDataSheet() const;
         SyncHandler* getSyncHandler() const;
 
-        void attachProcessor(int processorTypeId, QString additionalData = "LabStat");
+        void attachProcessor(int processorId, int processorTypeId, QString additionalData = "LabStat");
         void disconnectAll();
 
         QString getTitle() const;
@@ -33,10 +33,6 @@ class SubjectData : public QObject
 
         DataSheet* dataSheet;
         SyncHandler* syncHandler;
-
-    signals:
-
-    public slots:
 };
 
 #endif // SUBJECTDATA_H

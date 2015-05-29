@@ -32,7 +32,7 @@ SyncHandler* SubjectData::getSyncHandler() const
     return syncHandler;
 }
 
-void SubjectData::attachProcessor(int processorTypeId, QString additionalData)
+void SubjectData::attachProcessor(int processorId, int processorTypeId, QString additionalData)
 {
     if (additionalData.isEmpty())
         additionalData = title;
@@ -43,6 +43,9 @@ void SubjectData::attachProcessor(int processorTypeId, QString additionalData)
         qDebug() << "Processor with given typed (" << processorTypeId << ") is not registered";
         return;
     }
+    if (processorId != PROC_ID_INVALID)
+        processor->setId(processorId);
+
     syncHandler->registerProcessor(processor);
 }
 
