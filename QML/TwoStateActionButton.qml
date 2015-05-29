@@ -51,18 +51,6 @@ View {
                 easing.type: Easing.InOutQuad
             }
         }
-        Behavior on anchors.verticalCenterOffset {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
-        Behavior on anchors.horizontalCenterOffset {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
     }
     MouseArea {
         id: button
@@ -92,8 +80,6 @@ View {
             PropertyChanges {
                 target: buttonText
                 font.pixelSize: 36 * dp
-                anchors.verticalCenterOffset: -2 * dp
-                anchors.horizontalCenterOffset: 1 * dp
             }
         }
     ]
