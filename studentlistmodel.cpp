@@ -47,6 +47,15 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
                 return statEntry->attended;
             }
             return false;
+        case LabWorksRole:
+        {
+            if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
+            {
+                QVariantList labWorks = statEntry->labWorks;
+                return labWorks;
+            }
+            break;
+        }
     }
     return QVariant();
 }
@@ -84,6 +93,16 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             return true;
             break;
         }
+        case LabWorksRole:
+        {
+            if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
+            {
+                statEntry->labWorks = value.toList();
+                emit dataChanged(index, index);
+                return true;
+            }
+            break;
+        }
     }
     return false;
 }
@@ -95,6 +114,7 @@ QHash<int, QByteArray> StudentListModel::roleNames() const {
     roles[NoteRole] = "note";
     roles[SubGroupRole] = "subgroup";
     roles[AttendenceRole] = "attendence";
+    roles[LabWorksRole] = "labWorks";
     return roles;
 }
 

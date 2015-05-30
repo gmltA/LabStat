@@ -81,6 +81,7 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
+
         states: [
             State {
                 name: "active"

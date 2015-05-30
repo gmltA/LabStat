@@ -279,38 +279,43 @@ Rectangle {
                     }
                 }
 
-                Grid {
+
+                Column {
                     id: statControls
-                    columns: 2
-                    anchors.top: parent.top
+
                     anchors.left: parent.left
-                    anchors.rightMargin: 16 * dp
-                    anchors.leftMargin: 16 * dp
+                    anchors.right: parent.right
+                    Repeater {
+                        id: statRepeater
+                        model: labWorks
 
-                    verticalItemAlignment : Grid.AlignVCenter
-                    Text {
-                        text: "Лабораторная #1"
-                        font.family: "Roboto Regular"
-                        font.pixelSize: 12 * dp
-                    }
+                        delegate: Item {
+                            width: parent ? parent.width : 0
+                            height: 48 * dp
+                            anchors.rightMargin: 16 * dp
+                            anchors.leftMargin: 16 * dp
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
 
-                    CheckBox {
-                        style: MaterialCheckBox {
-                            color: Theme.accentColor
-                            uncheckedColor: Theme.iconColor
-                        }
-                    }
+                            Label {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: "Лабораторная работа #" + index
+                                style: "body1"
+                            }
 
-                    Text {
-                        text: "Лабораторная #2"
-                        font.family: "Roboto Regular"
-                        font.pixelSize: 12 * dp
-                    }
-
-                    CheckBox {
-                        style: MaterialCheckBox {
-                            color: Theme.accentColor
-                            uncheckedColor: Theme.iconColor
+                            CheckBox {
+                                anchors.right: parent.right
+                                checked: modelData
+                                style: MaterialCheckBox {
+                                    color: Theme.accentColor
+                                    uncheckedColor: Theme.iconColor
+                                }
+                                onClicked: {
+                                    var temp = labWorks
+                                    temp[index] = checked
+                                    labWorks = temp
+                                }
+                            }
                         }
                     }
                 }
@@ -349,6 +354,7 @@ Rectangle {
         height: 48 * dp
         y: Math.min(0, Math.max(-height, content.currentItem ? content.currentItem.scrollDiff : 0))
         elevation: 1
+        z: 2
 
         tintColor: Theme.primaryColor
 

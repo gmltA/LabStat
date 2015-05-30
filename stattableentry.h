@@ -2,6 +2,7 @@
 #define STATTABLEENTRY_H
 
 #include <QList>
+#include <QVariantList>
 
 class StatTableEntry
 {
@@ -10,6 +11,7 @@ class StatTableEntry
         int timeTableId;
         int studentId;
         bool attended;
+        QVariantList labWorks;
 };
 
 typedef QList<StatTableEntry*> StatTable;

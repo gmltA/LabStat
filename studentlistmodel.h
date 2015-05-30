@@ -14,7 +14,8 @@ class StudentListModel : public QAbstractListModel
             SurnameRole,
             NoteRole,
             SubGroupRole,
-            AttendenceRole
+            AttendenceRole,
+            LabWorksRole
         };
 
         StudentListModel(QObject *parent = 0);
