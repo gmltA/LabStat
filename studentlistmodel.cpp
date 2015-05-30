@@ -56,7 +56,7 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
             }
 
             QVariantList labWorks;
-            for (int index = 0; index < totalLabCount; index++)
+            for (int index = 1; index < totalLabCount + 1; index++)
             {
                 if (stats.contains(index))
                     labWorks << stats[index];
@@ -89,6 +89,9 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
         {
             StatTableEntry* entry = getOrCreateStatEntryForStudent(student->getId());
             entry->attended = value.toBool();
+            if (!entry->attended)
+                entry->labWorks.clear();
+
             emit dataChanged(index, index);
             return true;
             break;
@@ -131,7 +134,7 @@ QMap<int, bool> StudentListModel::convertListToMap(const QVariant& value)
     QMap<int,bool> updatedStats;
     QVariantList labWorks = value.toList();
     for (int listIndex = 0; listIndex < labWorks.size(); listIndex++)
-        updatedStats[listIndex] = labWorks[listIndex].toBool();
+        updatedStats[listIndex+1] = labWorks[listIndex].toBool();
 
     return updatedStats;
 }
