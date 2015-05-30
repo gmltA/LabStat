@@ -42,15 +42,13 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
         case SubGroupRole:
             return student->getSubgroup();
         case AttendenceRole:
-            foreach (StatTableEntry* entry, stats)
+            if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
             {
-                if (entry->studentId == student->getId())
-                    return entry->attended;
+                return statEntry->attended;
             }
             return false;
-        default:
-            return QVariant();
     }
+    return QVariant();
 }
 
 bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -71,14 +69,7 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             break;
         case AttendenceRole:
         {
-            StatTableEntry* operatingEntry = nullptr;
-            for (StatTableEntry* entry: stats)
-            {
-                if (entry->studentId == student->getId())
-                {
-                    operatingEntry = entry;
-                }
-            }
+            StatTableEntry* operatingEntry = statEntryForStudent(student->getId());
             if (!operatingEntry)
             {
                 operatingEntry = new StatTableEntry;
@@ -105,4 +96,17 @@ QHash<int, QByteArray> StudentListModel::roleNames() const {
     roles[SubGroupRole] = "subgroup";
     roles[AttendenceRole] = "attendence";
     return roles;
+}
+
+StatTableEntry* StudentListModel::statEntryForStudent(int studentId) const
+{
+    StatTableEntry* result = nullptr;
+    for (StatTableEntry* entry: stats)
+    {
+        if (entry->studentId == studentId)
+        {
+            result = entry;
+        }
+    }
+    return result;
 }

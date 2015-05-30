@@ -7,7 +7,7 @@
 
 class StudentListModel : public QAbstractListModel
 {
-    Q_OBJECT
+        Q_OBJECT
     public:
         enum StudentDataRoles {
             NameRole = Qt::UserRole + 1,
@@ -35,6 +35,8 @@ class StudentListModel : public QAbstractListModel
     private:
         StudentList students;
         StatTable stats;
+
+        StatTableEntry* statEntryForStudent(int studentId) const;
 };
 
 Q_DECLARE_METATYPE(StudentListModel*)
