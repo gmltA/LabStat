@@ -27,10 +27,10 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         SpreadSheet* sheet;
 
         void fillSpreadSheet();
-        QList<int>              buildGroupList(QByteArray rawData);
-        StudentList             buildStudentList(QByteArray rawData);
-        TimeTable               buildTimeTable(QByteArray rawData);
-        StatTable               buildStats(QByteArray rawData);
+        QList<int>              parseGroupList(QByteArray rawData);
+        StudentList             parseStudentList(QByteArray rawData);
+        TimeTable               parseTimeTable(QByteArray rawData);
+        StatTable               parseStats(QByteArray rawData);
         int                     parseLabWorksCount(QByteArray rawData);
 
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);

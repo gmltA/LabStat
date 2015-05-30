@@ -38,17 +38,17 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
 {
     WorkSheet other = sheet->getWorkSheet("Разное");
     QByteArray workSheetData = driveService->Sheets.getListFeed(other);
-    dataFile->setGroupList(buildGroupList(workSheetData));
+    dataFile->setGroupList(parseGroupList(workSheetData));
     dataFile->setTotalLabCount(parseLabWorksCount(workSheetData));
 
     WorkSheet students = sheet->getWorkSheet("Список студентов");
     workSheetData = driveService->Sheets.getListFeed(students);
-    dataFile->setStudentList(buildStudentList(workSheetData));
+    dataFile->setStudentList(parseStudentList(workSheetData));
 
     WorkSheet labs = sheet->getWorkSheet("Лабораторные работы");
     workSheetData = driveService->Sheets.getListFeed(labs);
-    dataFile->setTimeTable(buildTimeTable(workSheetData));
-    dataFile->setStatTable(buildStats(workSheetData));
+    dataFile->setTimeTable(parseTimeTable(workSheetData));
+    dataFile->setStatTable(parseStats(workSheetData));
 
     dataFile->synced(id);
     emit syncDone();
@@ -71,7 +71,7 @@ void DriveSyncProcessor::fillSpreadSheet()
 }
 
 
-QList<int> DriveSyncProcessor::buildGroupList(QByteArray rawData)
+QList<int> DriveSyncProcessor::parseGroupList(QByteArray rawData)
 {
     QDomDocument doc;
     QList<int> groupList;
@@ -85,7 +85,7 @@ QList<int> DriveSyncProcessor::buildGroupList(QByteArray rawData)
     return groupList;
 }
 
-StudentList DriveSyncProcessor::buildStudentList(QByteArray rawData)
+StudentList DriveSyncProcessor::parseStudentList(QByteArray rawData)
 {
     QDomDocument doc;
     StudentList studentList;
@@ -98,7 +98,7 @@ StudentList DriveSyncProcessor::buildStudentList(QByteArray rawData)
     return studentList;
 }
 
-TimeTable DriveSyncProcessor::buildTimeTable(QByteArray rawData)
+TimeTable DriveSyncProcessor::parseTimeTable(QByteArray rawData)
 {
     QDomDocument doc;
     TimeTable timeTable;
@@ -139,7 +139,7 @@ TimeTable DriveSyncProcessor::buildTimeTable(QByteArray rawData)
     return timeTable;
 }
 
-StatTable DriveSyncProcessor::buildStats(QByteArray rawData)
+StatTable DriveSyncProcessor::parseStats(QByteArray rawData)
 {
     QDomDocument doc;
     StatTable statTable;
