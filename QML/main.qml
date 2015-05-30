@@ -67,7 +67,7 @@ ApplicationWindow {
     }
 
     Component {
-        id: dialogBuilder
+        id: addSyncProcessorDialogBuilder
 
         PopupDialog {
             title: "Add sync processor"
@@ -264,7 +264,7 @@ ApplicationWindow {
                         icon: ""
                         caption: "Add sync processor"
                         onClicked: {
-                            createDialog(dialogBuilder)
+                            createDialog(addSyncProcessorDialogBuilder)
                         }
                     }
                 }
