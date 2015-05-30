@@ -17,6 +17,8 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
         void init() override final;
         void syncFile(DataSheet* dataFile) override final;
 
+        void saveLabCount(DataSheet* dataFile);
+        void loadLabCount(DataSheet* dataFile);
         void saveTimeTable(DataSheet* dataFile);
         void loadTimeTable(DataSheet* dataFile);
         void saveStatTable(DataSheet* dataFile);

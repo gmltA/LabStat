@@ -48,6 +48,27 @@ void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
     query.exec(basicQuery);
 }
 
+void SQLiteSyncProcessor::loadLabCount(DataSheet* dataFile)
+{
+    QString queryString = "SELECT lab_count FROM lab_works_count WHERE subjectId = %1";
+    QSqlQuery query(db);
+    query.exec(queryString.arg(dataFile->getId()));
+    query.next();
+    dataFile->setTotalLabCount(query.value(0).toInt());
+}
+
+void SQLiteSyncProcessor::saveLabCount(DataSheet* dataFile)
+{
+    QSqlQuery query(db);
+    QString cleanQuery = "DELETE FROM lab_works_count WHERE subjectId = %1";
+    query.exec(cleanQuery.arg(dataFile->getId()));
+
+    QString basicQuery = "INSERT INTO lab_works_count VALUES (%1, %2);";
+    basicQuery = basicQuery.arg(dataFile->getId()).arg(dataFile->getTotalLabCount());
+
+    query.exec(basicQuery);
+}
+
 void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 {
     QString queryString = "SELECT id, dateTime, groupId, subgroupId FROM timetable_entry WHERE subjectId = %1";
@@ -166,12 +187,14 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
         saveStudentList(dataFile);
         saveTimeTable(dataFile);
         saveStatTable(dataFile);
+        saveLabCount(dataFile);
     }
     else
     {
         loadStudentList(dataFile);
         loadTimeTable(dataFile);
         loadStatTable(dataFile);
+        loadLabCount(dataFile);
     }
 
     dataFile->synced(id);
@@ -214,7 +237,14 @@ void SQLiteSyncProcessor::createDbStructure()
                    "studentId  INTEGER NOT NULL,"
                    "attended  INTEGER NOT NULL,"
                    "PRIMARY KEY (subjectId, id))");
+    qDebug() << query.lastError().text();
 
+    //query.exec("DROP TABLE IF EXISTS lab_works_count;");
+    query.exec("CREATE TABLE lab_works_count ("
+                   "subjectId  INTEGER NOT NULL,"
+                   "lab_count  INTEGER NOT NULL,"
+                   "PRIMARY KEY (subjectId)"
+                   ")");
     qDebug() << query.lastError().text();
 }
 
