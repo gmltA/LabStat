@@ -17,6 +17,16 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
         void init() override final;
         void syncFile(DataSheet* dataFile) override final;
 
+        void updateStudent(Student* person);
+
+        static const QString processorTypeName;
+
+        void saveData(DataSheet* dataFile);
+        void loadData(DataSheet* dataFile);
+
+    private:
+        QSqlDatabase db;
+
         void saveLabCount(DataSheet* dataFile);
         void loadLabCount(DataSheet* dataFile);
         void saveTimeTable(DataSheet* dataFile);
@@ -25,13 +35,6 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
         void loadStatTable(DataSheet* dataFile);
         void saveStudentList(DataSheet* dataFile);
         void loadStudentList(DataSheet* dataFile);
-
-        void updateStudent(Student* person);
-
-        static const QString processorTypeName;
-
-    private:
-        QSqlDatabase db;
 
         void createDbStructure();
         QString serializeStudent(int subjectId, Student* person);

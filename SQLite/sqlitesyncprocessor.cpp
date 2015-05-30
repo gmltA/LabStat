@@ -179,22 +179,32 @@ void SQLiteSyncProcessor::updateStudent(Student* person)
     query.exec(queryString.arg(studentData));
 }
 
+void SQLiteSyncProcessor::saveData(DataSheet* dataFile)
+{
+    saveStudentList(dataFile);
+    saveTimeTable(dataFile);
+    saveStatTable(dataFile);
+    saveLabCount(dataFile);
+}
+
+void SQLiteSyncProcessor::loadData(DataSheet* dataFile)
+{
+    loadStudentList(dataFile);
+    loadTimeTable(dataFile);
+    loadStatTable(dataFile);
+    loadLabCount(dataFile);
+}
+
 void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
 {
     // no sync was made or data was updated from different source
     if (dataFile->getLastSyncTime().isValid() && dataFile->getLastSyncProcessorId() != id)
     {
-        saveStudentList(dataFile);
-        saveTimeTable(dataFile);
-        saveStatTable(dataFile);
-        saveLabCount(dataFile);
+        saveData(dataFile);
     }
     else
     {
-        loadStudentList(dataFile);
-        loadTimeTable(dataFile);
-        loadStatTable(dataFile);
-        loadLabCount(dataFile);
+        loadData(dataFile);
     }
 
     dataFile->synced(id);
