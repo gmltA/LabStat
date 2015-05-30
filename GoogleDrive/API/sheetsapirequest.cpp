@@ -11,3 +11,9 @@ Sheets::GetFileRequest::GetFileRequest(SpreadSheet file)
 {
 
 }
+
+Sheets::EditRowRequest::EditRowRequest(QUrl url, QByteArray rowData)
+    : GoogleAPIRequest(url, "PUT", rowData)
+{
+    setRawHeader("Content-Type", QString("application/atom+xml").toLatin1());
+}

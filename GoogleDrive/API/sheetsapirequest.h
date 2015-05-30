@@ -16,6 +16,12 @@ class GetFileRequest : public GoogleAPIRequest
     public:
         GetFileRequest(SpreadSheet file);
 };
+
+class EditRowRequest : public GoogleAPIRequest
+{
+    public:
+        EditRowRequest(QUrl url, QByteArray rowData);
+};
 }
 
 #endif // SHEETSAPIREQUEST_H

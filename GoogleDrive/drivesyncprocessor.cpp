@@ -34,7 +34,14 @@ void DriveSyncProcessor::init()
     emit initFinished(false);
 }
 
-void DriveSyncProcessor::syncFile(DataSheet* dataFile)
+void DriveSyncProcessor::saveData(DataSheet* dataFile)
+{
+    WorkSheet labs = sheet->getWorkSheet("Лабораторные работы");
+    QByteArray workSheetData = driveService->Sheets.getListFeed(labs);
+    saveStats(workSheetData, dataFile);
+}
+
+void DriveSyncProcessor::loadData(DataSheet* dataFile)
 {
     WorkSheet other = sheet->getWorkSheet("Разное");
     QByteArray workSheetData = driveService->Sheets.getListFeed(other);
@@ -49,6 +56,21 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
     workSheetData = driveService->Sheets.getListFeed(labs);
     dataFile->setTimeTable(parseTimeTable(workSheetData));
     dataFile->setStatTable(parseStats(workSheetData));
+}
+
+void DriveSyncProcessor::syncFile(DataSheet* dataFile)
+{
+    /*!
+     * \todo implement proper algorythm to choose between load and store functions
+     */
+    if (dataFile->getLastSyncTime().isValid())
+    {
+        saveData(dataFile);
+    }
+    else
+    {
+        loadData(dataFile);
+    }
 
     dataFile->synced(id);
     emit syncDone();
@@ -185,6 +207,69 @@ int DriveSyncProcessor::parseLabWorksCount(QByteArray rawData)
         }
     }
     return 0;
+}
+
+void DriveSyncProcessor::saveStats(QByteArray rawData, DataSheet* dataFile)
+{
+    QDomDocument doc;
+    if (doc.setContent(rawData))
+    {
+        QDomNodeList studentNodes = doc.elementsByTagName("entry");
+        StudentList students = dataFile->getStudentList();
+        for (int index = 3; index < studentNodes.size(); index++)
+        {
+            QDomNode studentNode = studentNodes.item(index);
+            Student* student = students[index - 3];
+
+            QString selfLink = studentNode.firstChildElement("id").toElement().text();
+            QByteArray rowDataRaw = driveService->sendRequest(GoogleAPIRequest(selfLink, "GET"))->readAll();
+
+            QDomDocument row;
+            row.setContent(rowDataRaw);
+            foreach (StatTableEntry* entry, dataFile->getStatTable())
+            {
+                if (entry->studentId != student->getId())
+                    continue;
+
+                if (!saveStatEntry(&row, entry))
+                    continue;
+            }
+
+            QByteArray updatedRowFeed;
+            QTextStream stream(&updatedRowFeed);
+            row.save(stream, QDomNode::CDATASectionNode);
+
+            QString editUrl = studentNode.toElement().elementsByTagName("link").item(1).toElement().attribute("href");
+
+            driveService->Sheets.editRow(QUrl(editUrl), updatedRowFeed);
+        }
+    }
+}
+
+bool DriveSyncProcessor::saveStatEntry(QDomDocument* row, StatTableEntry* entry)
+{
+    QString timeTableTagName = timeTableAccordance[entry->timeTableId];
+    bool tagExsists = false;
+    if (row->elementsByTagName(timeTableTagName).count() > 0)
+    {
+        QString storedStats = row->elementsByTagName(timeTableTagName).item(0).toElement().text();
+        if (storedStats == entry->labStatsToString())
+            return false;
+
+        tagExsists = true;
+    }
+
+    QDomElement newStatElement = row->createElement(timeTableTagName);
+    QDomText statText = row->createTextNode(entry->labStatsToString());
+    newStatElement.appendChild(statText);
+
+    QDomNode rootNode = row->elementsByTagName("entry").item(0);
+    if (tagExsists)
+        rootNode.replaceChild(newStatElement, row->elementsByTagName(timeTableTagName).item(0));
+    else
+        rootNode.appendChild(newStatElement);
+
+    return true;
 }
 
 QList<QDomElement> DriveSyncProcessor::selectDateElementList(QDomNodeList dateNodes)

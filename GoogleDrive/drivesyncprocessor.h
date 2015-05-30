@@ -22,6 +22,9 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
 
         static const QString processorTypeName;
 
+        void saveData(DataSheet* dataFile);
+        void loadData(DataSheet* dataFile);
+
     private:
         GoogleDriveAPI* driveService;
         SpreadSheet* sheet;
@@ -32,6 +35,9 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         TimeTable               parseTimeTable(QByteArray rawData);
         StatTable               parseStats(QByteArray rawData);
         int                     parseLabWorksCount(QByteArray rawData);
+
+        void saveStats(QByteArray rawData, DataSheet* dataFile);
+        bool saveStatEntry(QDomDocument* row, StatTableEntry* entry);
 
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
 
