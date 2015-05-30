@@ -9,6 +9,11 @@
 #include "studentlistmodel.h"
 #include "timetablemodel.h"
 
+/*!
+ * \brief The DataSheet class contains all valueble data related to particular subject
+ *
+ * Object contains data that can be extracted or modifed e.g. student list, timetable, stats, etc.
+ */
 class DataSheet : public QObject
 {
         Q_OBJECT
