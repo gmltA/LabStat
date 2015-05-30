@@ -3,13 +3,10 @@
 TimeTableModel::TimeTableModel(int _groupId, QObject* parent)
     : QAbstractListModel(parent), groupId(_groupId)
 {
-
 }
 
 TimeTableModel::~TimeTableModel()
 {
-    foreach (TimeTableEntry* entry, timeTable)
-        entry->deleteLater();
 }
 
 void TimeTableModel::addEntry(TimeTableEntry* entry)

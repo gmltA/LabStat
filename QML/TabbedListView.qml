@@ -299,7 +299,7 @@ Rectangle {
 
                             Label {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: "Лабораторная работа #" + index
+                                text: "Лабораторная работа #" + (index + 1)
                                 style: "body1"
                             }
 
