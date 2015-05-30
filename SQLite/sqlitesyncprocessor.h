@@ -37,6 +37,7 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
         QString serializeStudent(int subjectId, Student* person);
         QString serializeTimeTableEntry(int subjectId, TimeTableEntry* entry);
         QString serializeStatTableEntry(int subjectId, StatTableEntry* entry);
+        QString serializeLabStats(QMap<int, bool> labStats);
 
     signals:
         void initFinished(bool success) override final;

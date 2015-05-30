@@ -109,7 +109,7 @@ void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
     while (query.next())
     {
         stats.push_back(new StatTableEntry(query.value(0).toInt(), query.value(1).toInt(),
-                                            query.value(2).toInt(), query.value(3).toBool()));
+                                            query.value(2).toInt(), query.value(3).toString()));
     }
 
     if (!stats.isEmpty())
@@ -278,5 +278,16 @@ QString SQLiteSyncProcessor::serializeStatTableEntry(int subjectId, StatTableEnt
             .arg(subjectId)
             .arg(entry->timeTableId)
             .arg(entry->studentId)
-            .arg(entry->attended ? 1 : 0);
+            .arg(!entry->attended ? "н" : serializeLabStats(entry->labWorks));
+}
+
+QString SQLiteSyncProcessor::serializeLabStats(QMap<int, bool> labStats)
+{
+    QStringList dataList;
+    for (QMap<int, bool>::iterator iter = labStats.begin(); iter != labStats.end(); iter++)
+    {
+        if (iter.value())
+            dataList.append(QString::number(iter.key()));
+    }
+    return dataList.join(",");
 }

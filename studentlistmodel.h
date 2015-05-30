@@ -41,7 +41,9 @@ class StudentListModel : public QAbstractListModel
         StudentList students;
         StatTable stats;
 
+        QMap<int, bool> convertListToMap(const QVariant& value);
         StatTableEntry* statEntryForStudent(int studentId) const;
+        StatTableEntry* getOrCreateStatEntryForStudent(int studentId);
 };
 
 Q_DECLARE_METATYPE(StudentListModel*)

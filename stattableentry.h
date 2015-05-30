@@ -11,11 +11,6 @@ class StatTableEntry
         {
         }
 
-        StatTableEntry(int _id, int _timeTableId, int _studentId, bool _attended)
-            : id(_id), timeTableId(_timeTableId), studentId(_studentId), attended(_attended)
-        {
-        }
-
         StatTableEntry(int _id, int _timeTableId, int _studentId, QString statData)
             : id(_id), timeTableId(_timeTableId), studentId(_studentId)
         {

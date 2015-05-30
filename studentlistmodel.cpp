@@ -46,23 +46,24 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
             {
                 return statEntry->attended;
             }
-            return false;
+            return true;
         case LabWorksRole:
         {
+            QMap<int,bool> stats;
             if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
             {
-                auto stats = statEntry->labWorks;
-                QVariantList labWorks;
-                for (int index = 0; index < totalLabCount; index++)
-                {
-                    if (stats.contains(index))
-                        labWorks << stats[index];
-                    else
-                        labWorks << false;
-                }
-                return labWorks;
+                stats = statEntry->labWorks;
             }
-            break;
+
+            QVariantList labWorks;
+            for (int index = 0; index < totalLabCount; index++)
+            {
+                if (stats.contains(index))
+                    labWorks << stats[index];
+                else
+                    labWorks << false;
+            }
+            return labWorks;
         }
     }
     return QVariant();
@@ -86,35 +87,19 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             break;
         case AttendenceRole:
         {
-            StatTableEntry* operatingEntry = statEntryForStudent(student->getId());
-            if (!operatingEntry)
-            {
-                operatingEntry = new StatTableEntry;
-                operatingEntry->studentId = student->getId();
-                operatingEntry->timeTableId = dynamic_cast<TimeTableEntry*>(parent())->id;
-                stats.append(operatingEntry);
-                emit statEntryAdded(operatingEntry);
-            }
-
-            operatingEntry->attended = value.toBool();
+            StatTableEntry* entry = getOrCreateStatEntryForStudent(student->getId());
+            entry->attended = value.toBool();
             emit dataChanged(index, index);
             return true;
             break;
         }
         case LabWorksRole:
         {
-            if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
-            {
-                QMap<int,bool> updatedStats;
-                QVariantList labWorks = value.toList();
-                for (int listIndex = 0; listIndex < labWorks.size(); listIndex++)
-                    updatedStats[listIndex] = labWorks[listIndex].toBool();
-
-                statEntry->labWorks = updatedStats;
-                emit dataChanged(index, index);
-                return true;
-            }
-            break;
+            StatTableEntry* entry = getOrCreateStatEntryForStudent(student->getId());
+            entry->attended = true;
+            entry->labWorks = convertListToMap(value);
+            emit dataChanged(index, index);
+            return true;
         }
     }
     return false;
@@ -141,6 +126,16 @@ void StudentListModel::setTotalLabCount(int value)
     totalLabCount = value;
 }
 
+QMap<int, bool> StudentListModel::convertListToMap(const QVariant& value)
+{
+    QMap<int,bool> updatedStats;
+    QVariantList labWorks = value.toList();
+    for (int listIndex = 0; listIndex < labWorks.size(); listIndex++)
+        updatedStats[listIndex] = labWorks[listIndex].toBool();
+
+    return updatedStats;
+}
+
 StatTableEntry* StudentListModel::statEntryForStudent(int studentId) const
 {
     StatTableEntry* result = nullptr;
@@ -152,4 +147,18 @@ StatTableEntry* StudentListModel::statEntryForStudent(int studentId) const
         }
     }
     return result;
+}
+
+StatTableEntry* StudentListModel::getOrCreateStatEntryForStudent(int studentId)
+{
+    StatTableEntry* statEntry = statEntryForStudent(studentId);
+    if (!statEntry)
+    {
+        statEntry = new StatTableEntry;
+        statEntry->studentId = studentId;
+        statEntry->timeTableId = dynamic_cast<TimeTableEntry*>(parent())->id;
+        stats.append(statEntry);
+        emit statEntryAdded(statEntry);
+    }
+    return statEntry;
 }
