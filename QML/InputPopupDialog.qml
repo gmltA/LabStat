@@ -24,6 +24,8 @@ PopupDialog {
             left: parent.left
             right: parent.right
         }
+
+        style: TextFieldStyle {
+        }
     }
 }
-

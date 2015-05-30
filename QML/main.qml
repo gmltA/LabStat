@@ -86,18 +86,13 @@ ApplicationWindow {
                 }
             }
 
-            TextInput {
+            TextField {
                 id: text
                 visible: processorSelector.currentIndex == 0
                 width: parent.width
                 height: 24 * dp
                 font.pixelSize: 14 * dp
-                maximumLength: 20
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1 * dp
-                    color: Qt.rgba(0, 0, 0, 0.57)
+                style: TextFieldStyle {
                 }
             }
             onAccepted: {
@@ -190,7 +185,6 @@ ApplicationWindow {
                     buttonArea.onClicked: {
                         drawer.togglePage()
                     }
-
                     actionButton.onStateOneClicked: {
                         createDialog(addSubjectDialogBuilder)
                     }

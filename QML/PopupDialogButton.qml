@@ -1,36 +1,17 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.2
 import "."
 
-Item {
+Button {
     id: button
 
-    property alias caption: text.text
-    property alias color: text.color
+    property color backgroundColor: elevation > 0 ? "white" : "transparent"
 
-    anchors.verticalCenter: parent.verticalCenter
+    property string context: "default" // or "dialog" or "snackbar"
 
-    implicitHeight: 36 * dp
-    implicitWidth: text.width + 16 * dp
+    property int elevation
 
-    signal clicked()
+    property color textColor: Theme.textColor
 
-    Text {
-        id: text
-        anchors.centerIn: parent
-        maximumLineCount: 1
-
-        text: "Button"
-        font.family: "Roboto Medium"
-        font.pixelSize: 14 * dp
-        color: Theme.accentColor
-        font.capitalization: Font.AllUppercase
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        onClicked: {
-            parent.clicked()
-        }
-    }
+    style: ButtonStyle {}
 }

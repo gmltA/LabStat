@@ -49,12 +49,18 @@ PopupBase {
         verticalCenterOffset: showing ? 0 : -(dialog.height/3)
 
         Behavior on verticalCenterOffset {
-            NumberAnimation { duration: 200 }
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.OutQuad
+            }
         }
     }
 
     Behavior on opacity {
-        NumberAnimation { duration: 200 }
+        NumberAnimation {
+            duration: 150
+            easing.type: Easing.OutQuad
+        }
     }
 
     Keys.onPressed: {
@@ -229,8 +235,8 @@ PopupBase {
                 PopupDialogButton {
                     id: negativeButton
 
-                    caption: negativeButtonText
-                    color: Theme.accentColor
+                    text: negativeButtonText
+                    context: "dialog"
 
                     anchors {
                         top: parent.top
@@ -248,8 +254,9 @@ PopupBase {
                 PopupDialogButton {
                     id: positiveButton
 
-                    caption: positiveButtonText
-                    color: Theme.accentColor
+                    text: positiveButtonText
+                    textColor: Theme.accentColor
+                    context: "dialog"
 
                     anchors {
                         top: parent.top

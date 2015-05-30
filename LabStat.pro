@@ -59,7 +59,9 @@ DISTFILES += \
     QML/View.qml \
     QML/Label.qml \
     QML/PopupBase.qml \
-    QML/TwoStateActionButton.qml
+    QML/TwoStateActionButton.qml \
+    QML/TextFieldStyle.qml \
+    QML/ButtonStyle.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \
