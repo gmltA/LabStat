@@ -288,16 +288,5 @@ QString SQLiteSyncProcessor::serializeStatTableEntry(int subjectId, StatTableEnt
             .arg(subjectId)
             .arg(entry->timeTableId)
             .arg(entry->studentId)
-            .arg(!entry->attended ? "н" : serializeLabStats(entry->labWorks));
-}
-
-QString SQLiteSyncProcessor::serializeLabStats(QMap<int, bool> labStats)
-{
-    QStringList dataList;
-    for (QMap<int, bool>::iterator iter = labStats.begin(); iter != labStats.end(); iter++)
-    {
-        if (iter.value())
-            dataList.append(QString::number(iter.key()));
-    }
-    return dataList.join(",");
+            .arg(entry->labStatsToString());
 }
