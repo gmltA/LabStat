@@ -1,4 +1,6 @@
 #include "drivesyncprocessor.h"
+#include <QSqlQuery>
+#include "../appdatastorage.h"
 
 const QString DriveSyncProcessor::processorTypeName = "Google Drive";
 
@@ -16,6 +18,8 @@ DriveSyncProcessor::~DriveSyncProcessor()
 
 void DriveSyncProcessor::init()
 {
+    createDbStructure();
+    loadTimeTableTagAccordance();
     if (driveService->init())
     {
         auto files = driveService->Sheets.listFiles();
@@ -92,6 +96,49 @@ void DriveSyncProcessor::fillSpreadSheet()
     sheet->setWorkSheets(worksheets);
 }
 
+void DriveSyncProcessor::createDbStructure()
+{
+    QSqlQuery query(*(AppDataStorage::getInstance().getDB()));
+    //query.exec("DROP TABLE IF EXISTS timetable_tag_accordance;");
+    query.exec("CREATE TABLE timetable_tag_accordance("
+               "processorId INTEGER NOT NULL,"
+               "timeTableId INTEGER NOT NULL,"
+               "tagName TEXT(255) NOT NULL,"
+               "PRIMARY KEY (processorId, timeTableId)"
+               ")");
+    qDebug() << query.lastError().text();
+}
+
+void DriveSyncProcessor::saveTimeTableTagAccordance()
+{
+    QSqlQuery query(*(AppDataStorage::getInstance().getDB()));
+    QString clearQuery = "DELETE FROM timetable_tag_accordance WHERE processorId = %1";
+    query.exec(clearQuery.arg(id));
+
+    QString insertQuery = "INSERT INTO timetable_tag_accordance VALUES %1;";
+    QString tagAccordanceData = "";
+    QString rowTemplate = "(%1, '%2', '%3'),";
+    for (auto iter = timeTableTagAccordance.begin(); iter != timeTableTagAccordance.end(); iter++)
+        tagAccordanceData += rowTemplate.arg(id).arg(iter.key()).arg(iter.value());
+
+    tagAccordanceData.chop(1);
+    insertQuery = insertQuery.arg(tagAccordanceData);
+
+    query.exec(insertQuery);
+}
+
+void DriveSyncProcessor::loadTimeTableTagAccordance()
+{
+    QSqlQuery query(*(AppDataStorage::getInstance().getDB()));
+    QString queryString = "SELECT timeTableId, tagName FROM timetable_tag_accordance WHERE processorId = %1";
+    query.exec(queryString.arg(id));
+
+    timeTableTagAccordance.clear();
+    while (query.next())
+    {
+        timeTableTagAccordance[query.value(0).toInt()] = query.value(1).toString();
+    }
+}
 
 QList<int> DriveSyncProcessor::parseGroupList(QByteArray rawData)
 {
@@ -150,13 +197,14 @@ TimeTable DriveSyncProcessor::parseTimeTable(QByteArray rawData)
                 int group = groupData[0].toInt();
                 int subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();
 
-                timeTableAccordance[entryIndex] = timeElement.tagName();
+                timeTableTagAccordance[entryIndex] = timeElement.tagName();
 
                 timeTable.push_back(new TimeTableEntry(entryIndex, QDate::fromString(dateList[dateIndex].text(), "dd.MM.yyyy"),
                                                    QTime::fromString(timeElement.text(), "h:mm"), group, subgroup));
                 entryIndex++;
             }
         }
+        saveTimeTableTagAccordance();
     }
     return timeTable;
 }
@@ -180,7 +228,7 @@ StatTable DriveSyncProcessor::parseStats(QByteArray rawData)
 
                 if (gsxCount >= 3)
                 {
-                    StatTableEntry* entry = new StatTableEntry(entryId++, timeTableAccordance.key(dataTag), index - 3,
+                    StatTableEntry* entry = new StatTableEntry(entryId++, timeTableTagAccordance.key(dataTag), index - 3,
                                                                 dataNodes.item(j).toElement().text());
 
                     statTable.push_back(entry);
@@ -248,7 +296,7 @@ void DriveSyncProcessor::saveStats(QByteArray rawData, DataSheet* dataFile)
 
 bool DriveSyncProcessor::saveStatEntry(QDomDocument* row, StatTableEntry* entry)
 {
-    QString timeTableTagName = timeTableAccordance[entry->timeTableId];
+    QString timeTableTagName = timeTableTagAccordance[entry->timeTableId];
     bool tagExsists = false;
     if (row->elementsByTagName(timeTableTagName).count() > 0)
     {

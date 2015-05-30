@@ -30,6 +30,10 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         SpreadSheet* sheet;
 
         void fillSpreadSheet();
+        void createDbStructure();
+        void saveTimeTableTagAccordance();
+        void loadTimeTableTagAccordance();
+
         QList<int>              parseGroupList(QByteArray rawData);
         StudentList             parseStudentList(QByteArray rawData);
         TimeTable               parseTimeTable(QByteArray rawData);
@@ -41,7 +45,7 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
 
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
 
-        QMap<int, QString>      timeTableAccordance;
+        QMap<int, QString>      timeTableTagAccordance;
 
     signals:
         void initFinished(bool success) override final;

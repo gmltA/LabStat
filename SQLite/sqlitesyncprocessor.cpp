@@ -34,8 +34,8 @@ void SQLiteSyncProcessor::init()
 void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
 {
     QSqlQuery query(db);
-    QString cleanQuery = "DELETE FROM timetable_entry WHERE subjectId = %1";
-    query.exec(cleanQuery.arg(dataFile->getId()));
+    QString clearQuery = "DELETE FROM timetable_entry WHERE subjectId = %1";
+    query.exec(clearQuery.arg(dataFile->getId()));
 
     QString basicQuery = "INSERT INTO timetable_entry VALUES %1;";
     QString timeTableData = "";
@@ -60,8 +60,8 @@ void SQLiteSyncProcessor::loadLabCount(DataSheet* dataFile)
 void SQLiteSyncProcessor::saveLabCount(DataSheet* dataFile)
 {
     QSqlQuery query(db);
-    QString cleanQuery = "DELETE FROM lab_works_count WHERE subjectId = %1";
-    query.exec(cleanQuery.arg(dataFile->getId()));
+    QString clearQuery = "DELETE FROM lab_works_count WHERE subjectId = %1";
+    query.exec(clearQuery.arg(dataFile->getId()));
 
     QString basicQuery = "INSERT INTO lab_works_count VALUES (%1, %2);";
     basicQuery = basicQuery.arg(dataFile->getId()).arg(dataFile->getTotalLabCount());
@@ -87,8 +87,8 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 void SQLiteSyncProcessor::saveStatTable(DataSheet* dataFile)
 {
     QSqlQuery query(db);
-    QString cleanQuery = "DELETE FROM stats WHERE subjectId = %1";
-    query.exec(cleanQuery.arg(dataFile->getId()));
+    QString clearQuery = "DELETE FROM stats WHERE subjectId = %1";
+    query.exec(clearQuery.arg(dataFile->getId()));
 
     QString basicQuery = "INSERT INTO stats VALUES %1;";
     QString statTableData = "";
