@@ -1,43 +1,70 @@
 #ifndef DATASHEET_H
 #define DATASHEET_H
 
+#include <QDateTime>
 #include <QObject>
+#include <QStringList>
+
+#include "student.h"
+#include "studentlistmodel.h"
+#include "timetablemodel.h"
 
 class DataSheet : public QObject
 {
         Q_OBJECT
-        Q_ENUMS(Subject)
 
     public:
-        enum Subject
-        {
-            One,
-            Two,
-            None
-        };
-
-        explicit DataSheet(QObject *parent = 0);
+        explicit DataSheet(QString fileName = "", int id = 0, QObject* parent = 0);
         ~DataSheet();
+
+        QString toString() const;
 
         uint getId() const;
         void setId(const uint& value);
 
-        uint getGroupId() const;
-        void setGroupId(const uint& value);
+        QList<int> getGroupList() const;
+        void setGroupList(const QList<int>& value);
 
-        Subject getSubject() const;
-        void setSubject(const Subject& value);
+        QString getFileName() const;
+        void setFileName(const QString& value);
 
-        QString getTitle() const;
+        StudentList getStudentList() const;
+        void setStudentList(const StudentList& value);
 
-        QString toString() const;
+        TimeTable getTimeTable() const;
+        void setTimeTable(const TimeTable& value);
+
+        StatTable getStatTable() const;
+        void setStatTable(const StatTable& value);
+
+        QDateTime getLastSyncTime() const;
+        int getLastSyncProcessorId() const;
+
+        void synced(int processorId);
+
+        TimeTableModel* getTimeTableModel(int groupId = 0);
+
+        int getTotalLabCount() const;
+        void setTotalLabCount(int value);
 
     private:
         uint id;
-        uint groupId;
-        Subject subject;
+        QString fileName;
+        int lastSyncProcessorId;
+        QDateTime lastSyncTime;
 
-        static const char* subjectString(DataSheet::Subject subject);
+        int totalLabCount;
+        QList<int> groups;
+        StudentList students;
+        TimeTable timeTable;
+        StatTable stats;
+        TimeTableModel* timeTableModel;
+
+    signals:
+        void groupListChanged(QList<int> groups);
+
+    public slots:
+        void statEntryAdded(StatTableEntry* entry);
 };
 
 #endif // DATASHEET_H

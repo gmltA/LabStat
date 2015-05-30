@@ -1,10 +1,11 @@
 import QtQuick 2.0
+import "../." // Singletons import
 
 Rectangle {
     id: divider
     anchors.left: parent.left
     width: parent.width
-    height: 1
-    color: Qt.rgba(0,0,0,0.30)
+    height: 1 * dp
+    color: Theme.dividerColor
 }
 

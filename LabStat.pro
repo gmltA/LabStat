@@ -1,20 +1,33 @@
 TEMPLATE = app
 
-QT += qml quick concurrent
+QT += qml sql quick concurrent xml
 
 android{
     QT += androidextras
 }
 
 SOURCES += main.cpp \
-    googleauthclient.cpp \
-    GoogleDrive/apirequest.cpp \
-    GoogleDrive/driveapi.cpp \
-    GoogleDrive/drivefile.cpp \
     synchandler.cpp \
-    GoogleDrive/apirequestresult.cpp \
-    googledesktopauthclient.cpp \
-    datasheet.cpp
+    datasheet.cpp \
+    subjectdata.cpp \
+    subjecthandler.cpp \
+    student.cpp \
+    GoogleDrive/drivesyncprocessor.cpp \
+    GoogleDrive/googleauthclient.cpp \
+    GoogleDrive/googledesktopauthclient.cpp \
+    GoogleDrive/API/apirequest.cpp \
+    GoogleDrive/API/driveapi.cpp \
+    GoogleDrive/API/drivefile.cpp \
+    GoogleDrive/API/sheetsapirequest.cpp \
+    SQLite/sqlitesyncprocessor.cpp \
+    studentlistmodel.cpp \
+    timetablemodel.cpp \
+    stattableentry.cpp \
+    timetableentry.cpp \
+    appdatastorage.cpp \
+    syncprocessorprovider.cpp \
+    SQLite/sqlitesyncprocessorcreator.cpp \
+    GoogleDrive/drivesyncprocessorcreator.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,23 +47,50 @@ DISTFILES += \
     QML/NavigationDrawer/NavigationDrawerDivider.qml \
     QML/NavigationDrawer/NavigationDrawerHeader.qml \
     QML/NavigationDrawer/NavigationDrawerSyncItem.qml \
-    QML/Shadow.qml \
-    QML/MaterialShadow.qml \
-    QML/PopupDialog.qml
+    QML/PopupDialog.qml \
+    QML/PopupDialogButton.qml \
+    QML/ActionBar.qml \
+    QML/TabbedListView.qml \
+    QML/MaterialCheckBox.qml \
+    QML/Palette.qml \
+    QML/qmldir \
+    QML/Theme.qml \
+    QML/InputPopupDialog.qml \
+    QML/View.qml \
+    QML/Label.qml \
+    QML/PopupBase.qml \
+    QML/TwoStateActionButton.qml \
+    QML/TextFieldStyle.qml \
+    QML/ButtonStyle.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \
     android-sources/src/org/qtproject/labstat/GoogleAuthClient.java
 
 HEADERS += \
-    googleauthclient.h \
-    GoogleDrive/apirequest.h \
-    GoogleDrive/driveapi.h \
-    interface.datastore.h \
     interface.dataitem.h \
-    GoogleDrive/drivefile.h \
     synchandler.h \
-    GoogleDrive/apirequestresult.h \
     interface.authclient.h \
-    googledesktopauthclient.h \
-    datasheet.h
+    datasheet.h \
+    subjectdata.h \
+    subjecthandler.h \
+    student.h \
+    GoogleDrive/drivesyncprocessor.h \
+    GoogleDrive/googleauthclient.h \
+    GoogleDrive/googledesktopauthclient.h \
+    GoogleDrive/interface.authclient.h \
+    GoogleDrive/API/apirequest.h \
+    GoogleDrive/API/driveapi.h \
+    GoogleDrive/API/drivefile.h \
+    GoogleDrive/API/sheetsapirequest.h \
+    SQLite/sqlitesyncprocessor.h \
+    studentlistmodel.h \
+    timetablemodel.h \
+    stattableentry.h \
+    timetableentry.h \
+    appdatastorage.h \
+    interface.syncprocessor.h \
+    syncprocessorprovider.h \
+    interface.syncprocessorcreator.h \
+    SQLite/sqlitesyncprocessorcreator.h \
+    GoogleDrive/drivesyncprocessorcreator.h

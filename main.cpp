@@ -7,10 +7,10 @@
     #include <QtAndroidExtras>
 #endif
 
-#include "GoogleDrive/driveapi.h"
-#include "googleauthclient.h"
-#include "googledesktopauthclient.h"
-#include "synchandler.h"
+#include "subjecthandler.h"
+#include "syncprocessorprovider.h"
+#include "GoogleDrive/drivesyncprocessorcreator.h"
+#include "SQLite/sqlitesyncprocessorcreator.h"
 
 int main(int argc, char *argv[])
 {
@@ -57,24 +57,17 @@ int main(int argc, char *argv[])
     // now calculate the dp ratio
     qreal dp = dpi / 160.f;
 
-    SyncHandler::init();
+    SyncProcessorProvider::getInstance().addCreator(new DriveSyncProcessorCreator);
+    SyncProcessorProvider::getInstance().addCreator(new SQLiteSyncProcessorCreator);
+    SubjectHandler::init();
+
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
 
     engine.load(QUrl("qrc:/QML/main.qml"));
-
-    IAuthClient* authClient;
-#if defined(Q_OS_ANDROID)
-    authClient = new GoogleAuthClient();
-#else
-    authClient = new GoogleDesktopAuthClient();
-#endif
-    GoogleDriveAPI* drive = new GoogleDriveAPI(authClient, "LabStat");
-
-
-    SyncHandler::getInstance()->registerProcessor(drive);
+    SubjectHandler::getInstance()->sendInitialList();
 
     return app.exec();
 }

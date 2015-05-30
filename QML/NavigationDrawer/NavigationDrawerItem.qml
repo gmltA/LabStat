@@ -1,18 +1,33 @@
-import QtQuick 2.1
+import QtQuick 2.3
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.2
+import "../." // Singletons import
 
 Button {
     id: root
     height: 48 * dp
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.left: parent ? parent.left : undefined
+    anchors.right: parent ? parent.right : undefined
 
     property alias icon: leftIcon.text
+    property alias secondaryAction: secondaryActionArea
     property alias rightIcon: rightIcon.text
     property alias rightIconItem: rightIcon
+
     property alias caption: captionItem.text
     property alias captionItem: captionItem
+    property alias color: captionItem.color
+    property alias iconColor: leftIcon.color
+    property var extraData
+
+    signal triggered(var extraData);
+
+    Connections {
+        target: root
+        onClicked: {
+            triggered(extraData)
+        }
+    }
 
     Text {
         id: leftIcon
@@ -23,7 +38,7 @@ Button {
         font.family: materialIcons.name
         font.pointSize: 28
 
-        color: Qt.rgba(0,0,0,0.87)
+        color: Theme.iconColor
         text: ""
     }
 
@@ -36,21 +51,32 @@ Button {
         font.pointSize: 14
         font.family: "Roboto Regular"
 
-        color: Qt.rgba(0,0,0,0.87)
+        color: Theme.textColor
         text: "Caption"
     }
 
-    Text {
-        id: rightIcon
+    Item {
+        height: root.height
+        width: height
         anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: 16 * dp
 
-        font.family: materialIcons.name
-        font.pointSize: 28
+        Text {
+            id: rightIcon
+            anchors.centerIn: parent
 
-        color: Qt.rgba(0,0,0,0.87)
-        text: ""
+            font.family: materialIcons.name
+            font.pointSize: 28
+
+            color: Theme.iconColor
+            text: ""
+        }
+
+        MouseArea {
+            id: secondaryActionArea
+            anchors.fill: parent
+            enabled: false
+        }
     }
 
     style: ButtonStyle {

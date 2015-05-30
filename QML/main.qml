@@ -1,9 +1,11 @@
-import QtQuick 2.1
-import QtQuick.Controls.Styles 1.2
+import QtQuick 2.4
+import QtQuick.Controls.Styles 1.3
+import QtQuick.Layouts 1.1
 
 import QtQuick.Controls 1.2
 import "../QML/NavigationDrawer"
-import SyncHandler 1.0
+import "."
+import SubjectHandler 1.0
 
 ApplicationWindow {
     title: "LabStat"
@@ -13,61 +15,154 @@ ApplicationWindow {
     visible: true
 
     // for QMLScene debug only!
-    readonly property real dp: mainWindow.width / 320
+    property real dp: mainWindow.width / 320
 
-    FontLoader { id: materialIcons; source: "qrc:/fonts/Material-Design-Icons.ttf" }
-
-    PopupDialog {
+    function groupItemClicked(groupId) {
+        SubjectHandler.loadGroupData(groupId)
     }
 
-    Rectangle {
-        anchors.top: parent.top
-        width: parent.width
-        height: 48 * dp
-        color: "blue"
+    function createDialog(builder) {
+        var p = drawer.parent
+        while (p.parent)
+            p = p.parent
 
-        MenuBackIcon {
-            anchors.left: parent.left
-            anchors.leftMargin: 16 * dp
-            anchors.verticalCenter: parent.verticalCenter
+        var dialog = builder.createObject(p)
+        dialog.showing = true
+        return dialog
+    }
+
+    FontLoader {
+        id: materialIcons
+        source: "qrc:/fonts/Material-Design-Icons.ttf"
+    }
+
+    Component {
+        id: addSubjectDialogBuilder
+
+        InputPopupDialog {
+            text: "Add new subject to track stats for"
+
+            z: 5
+
+            onAccepted: {
+                SubjectHandler.addSubject(value)
+            }
         }
+    }
 
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 72 * dp
-            anchors.verticalCenter: parent.verticalCenter
+    Component {
+        id: deleteSubjectDialogBuilder
 
-            text: "Application"
-            font.pointSize: 20
-            color: "white"
+        PopupDialog {
+            title: "Delete subject and all stored data?"
+            text: "Deleting subject would cause full data wipe including recorded stats, attached processors, etc."
+
+            z: 5
+
+            onAccepted: {
+                SubjectHandler.deleteCurrentSubject()
+                header.actionButton.toggleState()
+            }
         }
+    }
 
-        MaterialShadow {
-            anchors.fill: parent
-            z : -10
-            depth : 2
-            asynchronous: true
+    Component {
+        id: addSyncProcessorDialogBuilder
+
+        PopupDialog {
+            title: "Add sync processor"
+            text: "Data can be used by processors differently. For Google Drive it should include Folder / File name"
+            z: 5
+            ComboBox {
+                id: processorSelector
+                width: parent.width
+                model: SubjectHandler.getAvailableProcessorTypes()
+                currentIndex: 1
+                onCurrentIndexChanged: {
+                    if (currentIndex == 0)
+                        text.forceActiveFocus()
+                    else if (parent)
+                        parent.forceActiveFocus()
+                }
+            }
+
+            TextField {
+                id: text
+                visible: processorSelector.currentIndex == 0
+                width: parent.width
+                height: 24 * dp
+                font.pixelSize: 14 * dp
+                style: TextFieldStyle {
+                }
+            }
+            onAccepted: {
+                SubjectHandler.attachProcessor(processorSelector.currentIndex, text.text)
+            }
+        }
+    }
+
+    Connections {
+        target: SubjectHandler
+        onSubjectListChanged: {
+            header.model = subjectListModel
+        }
+        onProcessorListChanged: {
+            var model = []
+            processors.forEach(function(processor) {
+                model.push({"title": processor['title'], "id": processor['id'], "state": ""})
+            })
+            syncProcessors.processorsModel = model
+        }
+        onProcessorAddCalled: {
+            var model = syncProcessors.processorsModel
+            model.push({"title": processorData['title'], "id": processorData['id'], "state": "inactive"})
+            syncProcessors.processorsModel =  model
+        }
+        onGroupListChanged: {
+            groupList.listModel = []
+            groups.forEach(function(group) {
+                groupList.addItem("", group, group, groupItemClicked)
+            })
+        }
+        onGroupDataLoaded: {
+            stats.model = timeTable
+        }
+    }
+
+    Connections {
+        target: header
+        onHeaderContentScrolled: {
+            SubjectHandler.setCurrentSubject(index)
+        }
+    }
+
+    ActionBar {
+        id: actionBar
+        elevation: stats.state === "" ? 0 : 1
+        z: 1
+
+        defaultTitle: "Application"
+
+        icon.onMenuClicked: {
+            drawer.show()
         }
     }
 
     NavigationDrawer {
         id: drawer
 
-        color: "white"
-        //anchors.top: navigationBar.bottom
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
         position: Qt.LeftEdge
 
-        function togglePage()
-        {
-            menuPage.visible = !menuPage.visible;
-            syncPage.visible = !syncPage.visible;
+        function togglePage() {
+            menuPage.visible = !menuPage.visible
+            syncPage.visible = !syncPage.visible
             if (syncPage.visible)
-                header.buttonIcon = "";
+                header.buttonIcon = ""
             else
-                header.buttonIcon = "";
+                header.buttonIcon = ""
         }
 
         Flickable {
@@ -75,17 +170,7 @@ ApplicationWindow {
             contentHeight: drawerMenu.height
             contentWidth: parent.width
 
-            Connections {
-                target: SyncHandler
-                onProcessorAdded: {
-                    var component = Qt.createComponent("NavigationDrawer/NavigationDrawerSyncItem.qml");
-                    var listItem = component.createObject(syncProcessors);
-
-                    //listItem.icon = processorData['online'] === 1 ? "" : "";
-                    listItem.caption = processorData['title'];
-                    listItem.processorId = processorData['id'];
-                }
-            }
+            boundsBehavior: Flickable.StopAtBounds
 
             Column {
                 id: drawerMenu
@@ -95,10 +180,16 @@ ApplicationWindow {
                 NavigationDrawerHeader {
                     id: header
                     mainText: "Alex gmlt.A"
-                    secondaryText: "Just a text"
+                    listEnabled: !actionButton.stateTwoActive
 
                     buttonArea.onClicked: {
-                        drawer.togglePage();
+                        drawer.togglePage()
+                    }
+                    actionButton.onStateOneClicked: {
+                        createDialog(addSubjectDialogBuilder)
+                    }
+                    actionButton.onStateTwoClicked: {
+                        createDialog(deleteSubjectDialogBuilder)
                     }
                 }
 
@@ -114,11 +205,6 @@ ApplicationWindow {
                         id: groupList
                         icon: ""
                         caption: "Groups"
-
-                        NavigationDrawerItem {
-                            icon: ""
-                            caption: "250501"
-                        }
                     }
 
                     NavigationDrawerItem {
@@ -147,19 +233,67 @@ ApplicationWindow {
 
                     Column {
                         id: syncProcessors
+
+                        property var processorsModel: []
+
                         anchors.left: parent.left
                         anchors.right: parent.right
+                        Repeater {
+                            model: syncProcessors.processorsModel
+                            NavigationDrawerSyncItem {
+                                processorId: syncProcessors.processorsModel[index].id
+                                caption: syncProcessors.processorsModel[index].title
+                                state: syncProcessors.processorsModel[index].state
+
+                                onInitCompleted: {
+                                    if (success)
+                                        syncProcessors.processorsModel[index].state = ""
+                                    else
+                                        syncProcessors.processorsModel.splice(index, 1);
+
+                                }
+                            }
+                        }
                     }
 
                     NavigationDrawerDivider {
                     }
 
                     NavigationDrawerItem {
+                        id: addProcessorItem
                         icon: ""
                         caption: "Add sync processor"
+                        onClicked: {
+                            createDialog(addSyncProcessorDialogBuilder)
+                        }
                     }
                 }
             }
+        }
+    }
+
+    Text {
+        anchors.centerIn: parent
+        font.pointSize: 24
+        color: Qt.rgba(0, 0, 0, 0.1)
+        text: "Select group\nto display stats"
+        horizontalAlignment: Text.AlignHCenter
+        style: Text.Sunken
+        styleColor: "#AAAAAA"
+    }
+
+    TabbedListView {
+        id: stats
+        height: parent.height - actionBar.height
+        width: parent.width
+        anchors.top: actionBar.bottom
+
+        onModelChanged: {
+            var title = actionBar.defaultTitle
+            if (stats.model)
+                title = model.getGroupId().toString()
+
+            actionBar.title = title
         }
     }
 }

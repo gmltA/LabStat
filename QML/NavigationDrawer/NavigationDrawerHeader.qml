@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
+import "../."
 
 Rectangle {
     id: header
@@ -8,26 +9,79 @@ Rectangle {
     property alias secondaryText: secondaryTextItem.text
     property alias buttonIcon: icon.text
     property alias buttonArea: area
+    property alias actionButton: button
+    property alias listEnabled: headerList.interactive
+    property var model
 
-    height: 56 * dp
+    signal headerContentScrolled(int index)
+
+    height: 144 * dp
     width: parent.width
 
-    color: "#84BAC4"
     Image {
         id: headerBG
-        height: parent.height
-        width: parent.width
+        anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         source: "qrc:/img/bg.jpg"
         verticalAlignment: Image.AlignVCenter
-        clip: true
     }
 
     Rectangle {
-        height: parent.height
+        anchors.bottom: parent.bottom
         width: parent.width
-        anchors.verticalCenter: parent.verticalCenter
-        color: Qt.rgba(0,0,0,0)
+        height: 56 * dp
+        gradient: Gradient{
+            GradientStop { position: 0 ; color: "#00000000"}
+            GradientStop { position: 1 ; color: "#2c000000"}
+        }
+    }
+
+    TwoStateActionButton {
+        id: button
+        anchors.right: parent.right
+        anchors.rightMargin: 18 * dp
+        z: 1
+        elevation: 2
+    }
+
+    ListView {
+        id: headerList
+        anchors.fill: parent
+
+        visible: header.model !== undefined && header.model.length !== 0
+
+        orientation: ListView.Horizontal
+        highlightRangeMode: ListView.StrictlyEnforceRange
+        boundsBehavior: Flickable.StopAtBounds
+        snapMode: ListView.SnapOneItem
+
+        onCurrentIndexChanged: {
+            header.headerContentScrolled(currentIndex)
+        }
+
+        model: header.model
+        delegate: Component {
+            Item {
+                width: headerList.width
+                height: headerList.height
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 24 * dp
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: modelData
+                    color: "white"
+                    font.pointSize: 24
+                    font.family: "Roboto Light"
+                }
+            }
+        }
+    }
+
+    Item {
+        height: 56 * dp
+        width: parent.width
+        anchors.bottom: parent.bottom
 
         // todo: should we replace Layout with just Column or even simple Rectangle?
         ColumnLayout {
@@ -44,25 +98,35 @@ Rectangle {
                 text: "Main drawer title"
 
                 font.pointSize: 14
-                font.weight: Font.Black
+                font.family: "Roboto Medium"
                 color: "white"
-                //color: Qt.rgba(0,0,0,0.54)
             }
             Text {
                 id: secondaryTextItem
-                text: "Drawer subtitle"
+
+                visible: text != ""
 
                 font.pointSize: 14
+                font.family: "Roboto Regular"
                 color: "white"
-                //color: Qt.rgba(0,0,0,0.54)
             }
         }
         Rectangle {
-            height: parent.parent.height
+            height: parent.height
             width: parent.height
             color: area.pressed ? Qt.rgba(1,1,1,0.5) : Qt.rgba(0,0,0,0)
 
             anchors.right: parent.right
+            Rectangle {
+                anchors.left: parent.left
+                height: parent.height
+                width: 1 * dp
+                gradient: Gradient{
+                    GradientStop { position: 1; color: "#00FFFFFF"}
+                    GradientStop { position: 0; color: "#FFFFFFFF"}
+                }
+            }
+
             Text {
                 id: icon
                 anchors.centerIn: parent
@@ -71,7 +135,6 @@ Rectangle {
                 font.family: materialIcons.name
 
                 color: "white"
-                //color: Qt.rgba(0,0,0,0.87)
             }
             MouseArea {
                 id: area

@@ -1,117 +1,276 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import "."
+//import Material 0.1 as Material
 
-Rectangle {
-    width: parent.width - 96 * dp
-    height: 200 * dp
-    radius: 2
+PopupBase {
+    id: dialog
 
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.verticalCenter: parent.verticalCenter
-    color: "white"
+    overlayLayer: "dialogOverlayLayer"
+    overlayColor: Qt.rgba(0, 0, 0, 0.3)
 
-    Rectangle {
-        anchors {
-            top: parent.top
-            margins: 24 * dp
-            bottomMargin: 16 * dp
-            horizontalCenter: parent.horizontalCenter
-        }
+    opacity: showing ? 1 : 0
+    visible: opacity > 0
 
-        height: parent.height - (buttons.height + buttons.anchors.bottomMargin + anchors.topMargin + anchors.bottomMargin)
-        width: parent.width - anchors.leftMargin * 2
+    width: Math.max(minimumWidth,
+                    content.contentWidth + 2 * contentMargins)
 
-        Column
-        {
-            spacing: 18 * dp
-            anchors.fill: parent
-            Text {
-                id: title
-                width: parent.width
+    height: Math.min(350 * dp,
+                     headerView.height + 32 * dp +
+                     content.contentHeight +
+                     content.topMargin +
+                     content.bottomMargin +
+                     buttonContainer.height)
 
-                font.family: "Roboto"
-                font.weight: Font.DemiBold
-                font.pixelSize: 20
-                color: "#212121"
-                text: "Use Google's location service?"
-                wrapMode: Text.Wrap
-            }
+    property int contentMargins: 16 * dp
 
-            Text {
-                id: body
-                width: parent.width
+    property int minimumWidth: 270 * dp
 
-                font.family: "Roboto"
-                font.pixelSize: 14
-                color: "#757575"
-                text: "Let Google help apps determine location."
-                wrapMode: Text.Wrap
-            }
-        }
-    }
+    property alias title: titleLabel.text
+    property alias text: textLabel.text
 
-    Rectangle {
-        id: buttons
+    property alias negativeButton: negativeButton
 
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 8 * dp
+    property alias positiveButton: positiveButton
 
-        width: parent.width
-        height: 48 * dp
+    property string negativeButtonText: "Cancel"
+    property string positiveButtonText: "Ok"
+    property alias positiveButtonEnabled: positiveButton.enabled
 
-        Row
-        {
-            anchors {
-                rightMargin: 16 * dp
-                leftMargin: 16 * dp
-                horizontalCenter: parent.horizontalCenter
-            }
+    property bool hasActions: true
 
-            width: parent.width - anchors.rightMargin - anchors.leftMargin
-            height: parent.height
+    default property alias dialogContent: column.data
 
-            layoutDirection: Qt.RightToLeft
-            spacing: 8 * dp
+    signal accepted()
+    signal rejected()
 
-            Item {
-                anchors.verticalCenter: parent.verticalCenter
-                height: 36 * dp
-                width: childrenRect.width + 16 * dp
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
+    anchors {
+        centerIn: parent
+        verticalCenterOffset: showing ? 0 : -(dialog.height/3)
 
-                    text: "Button"
-                    font.family: "Roboto"
-                    font.weight: Font.DemiBold
-                    font.pixelSize: 14
-                    color: "#212121"
-                    font.capitalization: Font.AllUppercase
-                }
-            }
-            Item {
-                anchors.verticalCenter: parent.verticalCenter
-                height: 36 * dp
-                width: childrenRect.width + 16 * dp
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    text: "Button"
-                    font.family: "Roboto"
-                    font.weight: Font.DemiBold
-                    font.pixelSize: 14
-                    color: "#212121"
-                    font.capitalization: Font.AllUppercase
-                }
+        Behavior on verticalCenterOffset {
+            NumberAnimation {
+                duration: 150
+                easing.type: Easing.OutQuad
             }
         }
     }
 
-    MaterialShadow {
+    Behavior on opacity {
+        NumberAnimation {
+            duration: 150
+            easing.type: Easing.OutQuad
+        }
+    }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Escape) {
+            closeKeyPressed(event)
+        }
+    }
+
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Back) {
+            closeKeyPressed(event)
+        }
+    }
+
+    function closeKeyPressed(event) {
+        if (dialog.showing) {
+            if (dialog.dismissOnTap) {
+                dialog.close()
+            }
+            event.accepted = true
+        }
+    }
+
+    function show() {
+        open()
+    }
+
+    View {
+        id: dialogContainer
+
         anchors.fill: parent
-        z : -10
-        depth : 3
-        asynchronous: true
+        elevation: 5
+        radius: dp * (2)
+
+        MouseArea {
+            anchors.fill: parent
+            propagateComposedEvents: false
+
+            onClicked: {
+                mouse.accepted = false
+            }
+        }
+
+        Item {
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+                topMargin: dp * (8)
+            }
+
+            clip: true
+            height: headerView.height + dp * (32)
+
+            View {
+                backgroundColor: "white"
+                elevation: content.atYBeginning ? 0 : 1
+                fullWidth: true
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+
+                height: headerView.height + dp * (16)
+            }
+        }
+
+
+        Column {
+            id: headerView
+
+            spacing: dp * (16)
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+
+                leftMargin: dp * (16)
+                rightMargin: dp * (16)
+                topMargin: dp * (16)
+            }
+
+            Label {
+                id: titleLabel
+
+                width: parent.width
+                wrapMode: Text.Wrap
+                style: "title"
+                visible: text != ""
+            }
+
+            Label {
+                id: textLabel
+
+                width: parent.width
+                wrapMode: Text.Wrap
+                style: "dialog"
+                visible: text != ""
+            }
+        }
+
+        Rectangle {
+            anchors.fill: content
+        }
+
+        Flickable {
+            id: content
+
+            contentWidth: column.implicitWidth
+            contentHeight: column.height
+            clip: true
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: headerView.bottom
+                topMargin: dp * (8)
+                bottomMargin: dp * (-8)
+                bottom: buttonContainer.top
+            }
+
+            interactive: contentHeight + dp * (8) > height
+            bottomMargin: hasActions ? 0 : dp * (8)
+
+            Rectangle {
+                Column {
+                    id: column
+                    anchors {
+                        left: parent.left
+                        margins: contentMargins
+                    }
+
+                    width: content.width - 2 * contentMargins
+                    spacing: dp * (16)
+                }
+            }
+        }
+
+        Item {
+            id: buttonContainer
+
+            anchors {
+                bottomMargin: dp * (8)
+                bottom: parent.bottom
+                right: parent.right
+                left: parent.left
+            }
+
+            height: hasActions ? buttonView.height + dp * (8) : 0
+            clip: true
+
+            View {
+                id: buttonView
+
+                height: hasActions ? positiveButton.implicitHeight + dp * (8) : 0
+                visible: hasActions
+
+                backgroundColor: "white"
+                elevation: content.atYEnd ? 0 : 1
+                fullWidth: true
+                elevationInverted: true
+
+                anchors {
+                    bottom: parent.bottom
+                    right: parent.right
+                    left: parent.left
+                }
+
+                PopupDialogButton {
+                    id: negativeButton
+
+                    text: negativeButtonText
+                    context: "dialog"
+
+                    anchors {
+                        top: parent.top
+                        right: positiveButton.left
+                        topMargin: dp * (8)
+                        rightMargin: dp * (8)
+                    }
+
+                    onClicked: {
+                        close();
+                        rejected();
+                    }
+                }
+
+                PopupDialogButton {
+                    id: positiveButton
+
+                    text: positiveButtonText
+                    textColor: Theme.accentColor
+                    context: "dialog"
+
+                    anchors {
+                        top: parent.top
+                        topMargin: dp * (8)
+                        rightMargin: dp * (16)
+                        right: parent.right
+                    }
+
+                    onClicked: {
+                        close()
+                        accepted();
+                    }
+                }
+            }
+        }
     }
 }

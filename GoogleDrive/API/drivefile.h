@@ -1,12 +1,13 @@
 #ifndef DRIVEFILE_H
 #define DRIVEFILE_H
 
-#include "../interface.dataitem.h"
+#include "../../interface.dataitem.h"
 
 #include <QDataStream>
 #include <QDateTime>
 #include <QJsonObject>
-#include "../datasheet.h"
+#include <QDomDocument>
+#include "../../datasheet.h"
 
 struct DriveFileInfo
 {
@@ -15,7 +16,6 @@ struct DriveFileInfo
 
         friend QDataStream & operator<< (QDataStream &, const DriveFileInfo &);
         friend QDataStream& operator>> (QDataStream &, DriveFileInfo &);
-
 };
 
 Q_DECLARE_METATYPE(DriveFileInfo)
@@ -28,7 +28,7 @@ class DriveFile : public IDataItem
         DriveFile() {}
         DriveFile(DataSheet* dataSheet);
         DriveFile(QJsonObject object);
-        DriveFile(QString _title, QString _parentId, QString _mimeType);
+        DriveFile(QString _title, QString _mimeType, QString _parentId = "");
         DriveFile(QString _id, QString _title, QString _parentId, QString _mimeType);
         DriveFile(const DriveFile &other);
         ~DriveFile() {}
@@ -54,7 +54,45 @@ class DriveFile : public IDataItem
         QString mimeType;
         QDateTime modifiedDate;
 
+    private:
         QString content;
+};
+
+class WorkSheet
+{
+    public:
+        WorkSheet();
+        WorkSheet(QString _id);
+        WorkSheet(QDomNode node);
+
+        QString getId() const;
+        void setId(const QString& value);
+
+        QString getTitle() const;
+        void setTitle(const QString& value);
+
+        QString getListFeedURL() const;
+        void setListFeedURL(const QString& value);
+
+    private:
+        QString id;
+        QString title;
+        QString listFeedURL;
+};
+
+class SpreadSheet : public DriveFile
+{
+    public:
+        SpreadSheet();
+        SpreadSheet(QString _id);
+        SpreadSheet(QDomNode node);
+
+        QList<WorkSheet> getWorkSheets() const;
+        WorkSheet getWorkSheet(QString title) const;
+        void setWorkSheets(const QList<WorkSheet>& value);
+
+    private:
+        QList<WorkSheet> workSheets;
 };
 
 Q_DECLARE_METATYPE(DriveFile)

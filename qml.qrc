@@ -10,9 +10,21 @@
         <file>QML/NavigationDrawer/NavigationDrawerHeader.qml</file>
         <file>QML/NavigationDrawer/NavigationDrawerSubheader.qml</file>
         <file>QML/NavigationDrawer/NavigationDrawerSyncItem.qml</file>
-        <file>QML/Shadow.qml</file>
-        <file>QML/MaterialShadow.qml</file>
         <file>QML/PopupDialog.qml</file>
+        <file>QML/PopupDialogButton.qml</file>
+        <file>QML/ActionBar.qml</file>
+        <file>QML/TabbedListView.qml</file>
+        <file>QML/MaterialCheckBox.qml</file>
+        <file>QML/Palette.qml</file>
+        <file>QML/qmldir</file>
+        <file>QML/Theme.qml</file>
+        <file>QML/InputPopupDialog.qml</file>
+        <file>QML/View.qml</file>
+        <file>QML/Label.qml</file>
+        <file>QML/PopupBase.qml</file>
+        <file>QML/TwoStateActionButton.qml</file>
+        <file>QML/TextFieldStyle.qml</file>
+        <file>QML/ButtonStyle.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>
