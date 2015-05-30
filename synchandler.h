@@ -27,6 +27,7 @@ class SyncHandler : public QObject
         QVariantList buildProcessorsData();
 
     private:
+        ISyncProcessor* getProcessorById(int processorId);
 
         void sync(ISyncProcessor* processor);
         QVariantMap buildProcessorData(ISyncProcessor* processor);

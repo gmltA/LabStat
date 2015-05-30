@@ -22,8 +22,7 @@ SyncHandler::~SyncHandler()
 
 void SyncHandler::sync(int processorIndex)
 {
-    ISyncProcessor* processor = syncProcessors.at(processorIndex);
-    sync(processor);
+    sync(getProcessorById(processorIndex));
 }
 
 void SyncHandler::sync(ISyncProcessor* processor)
@@ -68,6 +67,17 @@ QVariantList SyncHandler::buildProcessorsData()
     }
 
     return processorsData;
+}
+
+ISyncProcessor*SyncHandler::getProcessorById(int processorId)
+{
+    ISyncProcessor* result = nullptr;
+    foreach (ISyncProcessor* processor, syncProcessors)
+    {
+        if (processor->getId() == processorId)
+            result = processor;
+    }
+    return result;
 }
 
 void SyncHandler::registerProcessor(ISyncProcessor* processor)
