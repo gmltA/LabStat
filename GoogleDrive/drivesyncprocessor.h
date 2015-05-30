@@ -31,6 +31,7 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         StudentList             buildStudentList(QByteArray rawData);
         TimeTable               buildTimeTable(QByteArray rawData);
         StatTable               buildStats(QByteArray rawData);
+        int                     parseLabWorksCount(QByteArray rawData);
 
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
 

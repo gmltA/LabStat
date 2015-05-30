@@ -27,6 +27,9 @@ class StudentListModel : public QAbstractListModel
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
         bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+        int getTotalLabCount() const;
+        void setTotalLabCount(int value);
+
     signals:
         void statEntryAdded(StatTableEntry* entry);
 
@@ -34,6 +37,7 @@ class StudentListModel : public QAbstractListModel
         QHash<int, QByteArray> roleNames() const;
 
     private:
+        int totalLabCount;
         StudentList students;
         StatTable stats;
 

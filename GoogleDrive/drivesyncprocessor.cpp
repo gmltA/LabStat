@@ -39,6 +39,7 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
     WorkSheet other = sheet->getWorkSheet("Разное");
     QByteArray workSheetData = driveService->Sheets.getListFeed(other);
     dataFile->setGroupList(buildGroupList(workSheetData));
+    dataFile->setTotalLabCount(parseLabWorksCount(workSheetData));
 
     WorkSheet students = sheet->getWorkSheet("Список студентов");
     workSheetData = driveService->Sheets.getListFeed(students);
@@ -157,8 +158,8 @@ StatTable DriveSyncProcessor::buildStats(QByteArray rawData)
 
                 if (gsxCount >= 3)
                 {
-                    StatTableEntry* entry = new StatTableEntry{entryId++, timeTableAccordance.key(dataTag), index - 3,
-                                                                dataNodes.item(j).toElement().text() == "н" ? false : true};
+                    StatTableEntry* entry = new StatTableEntry(entryId++, timeTableAccordance.key(dataTag), index - 3,
+                                                                dataNodes.item(j).toElement().text());
 
                     statTable.push_back(entry);
                 }
@@ -166,6 +167,24 @@ StatTable DriveSyncProcessor::buildStats(QByteArray rawData)
         }
     }
     return statTable;
+}
+
+int DriveSyncProcessor::parseLabWorksCount(QByteArray rawData)
+{
+    QDomDocument doc;
+    if (doc.setContent(rawData))
+    {
+        QDomNodeList nodes = doc.elementsByTagName("entry").at(0).childNodes();
+        for (int i = 0, gsxCount = 0; i < nodes.size(); i++)
+        {
+            if (nodes.item(i).toElement().tagName().contains("gsx"))
+                gsxCount++;
+
+            if (gsxCount == 5)
+                return nodes.item(i).toElement().text().toInt();
+        }
+    }
+    return 0;
 }
 
 QList<QDomElement> DriveSyncProcessor::selectDateElementList(QDomNodeList dateNodes)

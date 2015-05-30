@@ -122,11 +122,22 @@ TimeTableModel* DataSheet::getTimeTableModel(int groupId)
                     }
                 }
             }
+            timeTableEntry->students->setTotalLabCount(totalLabCount);
             connect(timeTableEntry->students, &StudentListModel::statEntryAdded, this, &DataSheet::statEntryAdded);
             timeTableModel->addEntry(timeTableEntry);
         }
     }
     return timeTableModel;
+}
+
+int DataSheet::getTotalLabCount() const
+{
+    return totalLabCount;
+}
+
+void DataSheet::setTotalLabCount(int value)
+{
+    totalLabCount = value;
 }
 
 void DataSheet::statEntryAdded(StatTableEntry* entry)

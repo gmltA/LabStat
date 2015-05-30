@@ -87,8 +87,8 @@ void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
     StatTable stats;
     while (query.next())
     {
-        stats.push_back(new StatTableEntry{query.value(0).toInt(), query.value(1).toInt(),
-                                            query.value(2).toInt(), query.value(3).toBool()});
+        stats.push_back(new StatTableEntry(query.value(0).toInt(), query.value(1).toInt(),
+                                            query.value(2).toInt(), query.value(3).toBool()));
     }
 
     if (!stats.isEmpty())

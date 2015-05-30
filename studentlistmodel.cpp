@@ -51,7 +51,15 @@ QVariant StudentListModel::data(const QModelIndex & index, int role) const {
         {
             if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
             {
-                QVariantList labWorks = statEntry->labWorks;
+                auto stats = statEntry->labWorks;
+                QVariantList labWorks;
+                for (int index = 0; index < totalLabCount; index++)
+                {
+                    if (stats.contains(index))
+                        labWorks << stats[index];
+                    else
+                        labWorks << false;
+                }
                 return labWorks;
             }
             break;
@@ -97,7 +105,12 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
         {
             if (StatTableEntry* statEntry = statEntryForStudent(student->getId()))
             {
-                statEntry->labWorks = value.toList();
+                QMap<int,bool> updatedStats;
+                QVariantList labWorks = value.toList();
+                for (int listIndex = 0; listIndex < labWorks.size(); listIndex++)
+                    updatedStats[listIndex] = labWorks[listIndex].toBool();
+
+                statEntry->labWorks = updatedStats;
                 emit dataChanged(index, index);
                 return true;
             }
@@ -116,6 +129,16 @@ QHash<int, QByteArray> StudentListModel::roleNames() const {
     roles[AttendenceRole] = "attendence";
     roles[LabWorksRole] = "labWorks";
     return roles;
+}
+
+int StudentListModel::getTotalLabCount() const
+{
+    return totalLabCount;
+}
+
+void StudentListModel::setTotalLabCount(int value)
+{
+    totalLabCount = value;
 }
 
 StatTableEntry* StudentListModel::statEntryForStudent(int studentId) const

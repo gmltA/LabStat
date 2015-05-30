@@ -44,12 +44,16 @@ class DataSheet : public QObject
 
         TimeTableModel* getTimeTableModel(int groupId = 0);
 
+        int getTotalLabCount() const;
+        void setTotalLabCount(int value);
+
     private:
         uint id;
         QString fileName;
         int lastSyncProcessorId;
         QDateTime lastSyncTime;
 
+        int totalLabCount;
         QList<int> groups;
         StudentList students;
         TimeTable timeTable;
