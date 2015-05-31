@@ -19,7 +19,7 @@ class ISyncProcessor
          * Enum elements can be used to sync data with multiple processors simultainously
          * by choosing origin type.
          *
-         * \example syncHandler.sync(OriginOffline) will invoke sync operation for all
+         * \note \c syncHandler.sync(OriginOffline) will invoke sync operation for all
          * offline processors attached to the current subject.
          */
         enum Origin
@@ -48,8 +48,8 @@ class ISyncProcessor
         void setData(const QString& value) { data = value; }
 
         /*!
-         * \brief processorTypeName is used by ISyncProcessorCreator to provide name of processor
-         * to SyncProcessorProvider to form list of processors for front-end
+         * \brief processorTypeName is used by \c ISyncProcessorCreator to provide name of processor
+         * for \c SyncProcessorProvider to build list of processors for front-end
          */
         static const QString processorTypeName;
 
@@ -61,7 +61,7 @@ class ISyncProcessor
 
     protected:
         /*!
-         * \brief id is a global identicator unique for every processor
+         * \brief id is a global unique identificator for every processor
          */
         int id;
         /*!

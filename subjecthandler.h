@@ -12,7 +12,7 @@ class QJSEngine;
  * \brief SubjectHandler is a connector between front-end and back-end of the application.
  *
  * Singleton object provides selection\manage\interacting functionality for QML.
- * All invoked actions are performed on currentSubject object.
+ * All invoked actions are performed on \c currentSubject object.
  *
  * \note This singleton is pointer-based because QML requires object to be always available.
  * Otherwise ASSERT'ation on program exit happens.
