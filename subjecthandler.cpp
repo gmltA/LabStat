@@ -86,7 +86,7 @@ void SubjectHandler::deleteCurrentSubject()
     else
         setCurrentSubject();
 
-    delete current;
+    current->deleteLater();
 }
 
 void SubjectHandler::sendInitialList()
