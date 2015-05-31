@@ -21,85 +21,11 @@ ApplicationWindow {
         SubjectHandler.loadGroupData(groupId)
     }
 
-    function createDialog(builder) {
-        var p = drawer.parent
-        while (p.parent)
-            p = p.parent
-
-        var dialog = builder.createObject(p)
-        dialog.showing = true
-        return dialog
-    }
-
     FontLoader {
         id: materialIcons
         source: "qrc:/fonts/Material-Design-Icons.ttf"
     }
 
-    Component {
-        id: addSubjectDialogBuilder
-
-        InputPopupDialog {
-            text: "Add new subject to track stats for"
-
-            z: 5
-
-            onAccepted: {
-                SubjectHandler.addSubject(value)
-            }
-        }
-    }
-
-    Component {
-        id: deleteSubjectDialogBuilder
-
-        PopupDialog {
-            title: "Delete subject and all stored data?"
-            text: "Deleting subject would cause full data wipe including recorded stats, attached processors, etc."
-
-            z: 5
-
-            onAccepted: {
-                SubjectHandler.deleteCurrentSubject()
-                header.actionButton.toggleState()
-            }
-        }
-    }
-
-    Component {
-        id: addSyncProcessorDialogBuilder
-
-        PopupDialog {
-            title: "Add sync processor"
-            text: "Data can be used by processors differently. For Google Drive it should include Folder / File name"
-            z: 5
-            ComboBox {
-                id: processorSelector
-                width: parent.width
-                model: SubjectHandler.getAvailableProcessorTypes()
-                currentIndex: 1
-                onCurrentIndexChanged: {
-                    if (currentIndex == 0)
-                        text.forceActiveFocus()
-                    else if (parent)
-                        parent.forceActiveFocus()
-                }
-            }
-
-            TextField {
-                id: text
-                visible: processorSelector.currentIndex == 0
-                width: parent.width
-                height: 24 * dp
-                font.pixelSize: 14 * dp
-                style: TextFieldStyle {
-                }
-            }
-            onAccepted: {
-                SubjectHandler.attachProcessor(processorSelector.currentIndex, text.text)
-            }
-        }
-    }
 
     Connections {
         target: SubjectHandler
@@ -136,10 +62,34 @@ ApplicationWindow {
         }
     }
 
+    Text {
+        anchors.centerIn: parent
+        font.pointSize: 24
+        color: Qt.rgba(0, 0, 0, 0.1)
+        text: "Select group\nto display stats"
+        horizontalAlignment: Text.AlignHCenter
+        style: Text.Sunken
+        styleColor: "#AAAAAA"
+    }
+
+    TabbedListView {
+        id: stats
+        height: parent.height - actionBar.height
+        width: parent.width
+        anchors.top: actionBar.bottom
+
+        onModelChanged: {
+            var title = actionBar.defaultTitle
+            if (stats.model)
+                title = model.getGroupId().toString()
+
+            actionBar.title = title
+        }
+    }
+
     ActionBar {
         id: actionBar
         elevation: stats.state === "" ? 0 : 1
-        z: 1
 
         defaultTitle: "Application"
 
@@ -155,6 +105,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
 
         position: Qt.LeftEdge
+        open: true
 
         function togglePage() {
             menuPage.visible = !menuPage.visible
@@ -186,10 +137,10 @@ ApplicationWindow {
                         drawer.togglePage()
                     }
                     actionButton.onStateOneClicked: {
-                        createDialog(addSubjectDialogBuilder)
+                        addSubjectDialog.show()
                     }
                     actionButton.onStateTwoClicked: {
-                        createDialog(deleteSubjectDialogBuilder)
+                        deleteSubjectDialog.show()
                     }
                 }
 
@@ -250,7 +201,6 @@ ApplicationWindow {
                                         syncProcessors.processorsModel[index].state = ""
                                     else
                                         syncProcessors.processorsModel.splice(index, 1);
-
                                 }
                             }
                         }
@@ -264,7 +214,7 @@ ApplicationWindow {
                         icon: ""
                         caption: "Add sync processor"
                         onClicked: {
-                            createDialog(addSyncProcessorDialogBuilder)
+                            addSyncProcessorDialog.show()
                         }
                     }
                 }
@@ -272,28 +222,64 @@ ApplicationWindow {
         }
     }
 
-    Text {
-        anchors.centerIn: parent
-        font.pointSize: 24
-        color: Qt.rgba(0, 0, 0, 0.1)
-        text: "Select group\nto display stats"
-        horizontalAlignment: Text.AlignHCenter
-        style: Text.Sunken
-        styleColor: "#AAAAAA"
+    OverlayLayer {
+        id: dialogOverlayLayer
+        objectName: "dialogOverlayLayer"
+        z: 2
     }
 
-    TabbedListView {
-        id: stats
-        height: parent.height - actionBar.height
-        width: parent.width
-        anchors.top: actionBar.bottom
+    OverlayLayer {
+        id: overlayLayer
+    }
 
-        onModelChanged: {
-            var title = actionBar.defaultTitle
-            if (stats.model)
-                title = model.getGroupId().toString()
+    InputPopupDialog {
+        id: addSubjectDialog
+        text: "Add new subject to track stats for"
 
-            actionBar.title = title
+        onAccepted: {
+            SubjectHandler.addSubject(value)
+        }
+    }
+
+    PopupDialog {
+        id: deleteSubjectDialog
+        title: "Delete subject and all stored data?"
+        text: "Deleting subject would cause full data wipe including recorded stats, attached processors, etc."
+
+        onAccepted: {
+            SubjectHandler.deleteCurrentSubject()
+            header.actionButton.toggleState()
+        }
+    }
+
+    PopupDialog {
+        id: addSyncProcessorDialog
+        title: "Add sync processor"
+        text: "Data can be used by processors differently. For Google Drive it should include Folder / File name"
+        ComboBox {
+            id: processorSelector
+            width: parent.width
+            model: SubjectHandler.getAvailableProcessorTypes()
+            currentIndex: 1
+            onCurrentIndexChanged: {
+                if (currentIndex == 0)
+                    text.forceActiveFocus()
+                else if (parent)
+                    parent.forceActiveFocus()
+            }
+        }
+
+        TextField {
+            id: text
+            visible: processorSelector.currentIndex == 0
+            width: parent.width
+            height: 24 * dp
+            font.pixelSize: 14 * dp
+            style: TextFieldStyle {
+            }
+        }
+        onAccepted: {
+            SubjectHandler.attachProcessor(processorSelector.currentIndex, text.text)
         }
     }
 }

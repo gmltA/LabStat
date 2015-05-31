@@ -236,6 +236,7 @@ PopupBase {
                     id: negativeButton
 
                     text: negativeButtonText
+                    textColor: Theme.accentColor
                     context: "dialog"
 
                     anchors {
