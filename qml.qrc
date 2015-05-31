@@ -23,6 +23,7 @@
         <file>QML/Label.qml</file>
         <file>QML/PopupBase.qml</file>
         <file>QML/TwoStateActionButton.qml</file>
+        <file>QML/BrandingLoader.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>
