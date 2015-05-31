@@ -23,6 +23,7 @@ class GoogleDriveAPI : public QObject
                 QList<SpreadSheet> listFiles();
                 QList<WorkSheet> getWorkSheets(SpreadSheet file);
                 QByteArray getListFeed(WorkSheet sheet);
+                QByteArray editRow(QUrl editUrl, QByteArray rowData);
 
             private:
                 GoogleDriveAPI* drive;

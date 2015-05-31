@@ -1,9 +1,9 @@
 import QtQuick 2.2
 import "../."
 
-View {
+PopupBase {
     id: panel
-    elevation: 2
+    overlayLayer: "dialogOverlayLayer"
 
     property bool open: false                     // The open or close state of the drawer
     property int position: Qt.LeftEdge            // Which side of the screen the drawer is on, can be Qt.LeftEdge or Qt.RightEdge
@@ -24,28 +24,20 @@ View {
 
     default property alias data: contentItem.data
     readonly property real expandedFraction: 0.78  // How big fraction of the screen realesatate that is covered by an open menu
-    readonly property real _scaleFactor: _rootItem.width / 320 // Note, this should really be application global
+    readonly property real _scaleFactor: visualParent.width / 320 // Note, this should really be application global
     readonly property int _pullThreshold: panel.width/2
     readonly property int _slideDuration: 260
-    readonly property int _collapsedX: _rightEdge ? _rootItem.width :  - panel.width
-    readonly property int _expandedWidth: expandedFraction * _rootItem.width
-    readonly property int _expandedX: _rightEdge ? _rootItem.width - width : 0
+    readonly property int _collapsedX: _rightEdge ? visualParent.width :  - panel.width
+    readonly property int _expandedWidth: expandedFraction * visualParent.width
+    readonly property int _expandedX: _rightEdge ? visualParent.width - width : 0
     readonly property bool _rightEdge: position === Qt.RightEdge
-    readonly property int _minimumX:  _rightEdge ?  _rootItem.width - panel.width : -panel.width
-    readonly property int _maximumX: _rightEdge ? _rootItem.width : 0
+    readonly property int _minimumX:  _rightEdge ?  visualParent.width - panel.width : -panel.width
+    readonly property int _maximumX: _rightEdge ? visualParent.width : 0
     readonly property int _openMarginSize: 20 * _scaleFactor
 
     property real _velocity: 0
     property real _oldMouseX: -1
 
-    function _findRootItem() {
-        var p = panel;
-        while (p.parent != null)
-            p = p.parent;
-        return p;
-    }
-
-    property Item _rootItem: _findRootItem()
     height: parent.height
     on_RightEdgeChanged: _setupAnchors()
     onOpenChanged: completeSlideDirection()
@@ -53,8 +45,6 @@ View {
     x: _collapsedX
 
     function _setupAnchors() {     // Note that we can't reliably apply anchors using bindings
-        _rootItem = _findRootItem();
-
         shadow.anchors.right = undefined;
         shadow.anchors.left = undefined;
 
@@ -70,7 +60,7 @@ View {
         }
 
         slideAnimation.enabled = false;
-        panel.x =_rightEdge ? _rootItem.width :  - panel.width;
+        panel.x =_rightEdge ? visualParent.width :  - panel.width;
         slideAnimation.enabled = true;
     }
 
@@ -125,7 +115,7 @@ View {
     }
 
     Connections {
-        target: _rootItem
+        target: visualParent
         onWidthChanged: {
             slideAnimation.enabled = false
             panel.completeSlideDirection()
@@ -143,10 +133,10 @@ View {
 
     MouseArea {
         id: mouse
-        parent: _rootItem
+        parent: visualParent
 
         y: visualParent.y
-        width: open ? _rootItem.width : _openMarginSize
+        width: open ? visualParent.width : _openMarginSize
         height: visualParent.height
         onPressed:  if (!open) holdAnimation.restart();
         onClicked: handleClick(mouse)
@@ -156,7 +146,6 @@ View {
         drag.axis: Qt.Horizontal
         drag.onActiveChanged: if (active) holdAnimation.stop()
         onReleased: handleRelease()
-        z: open ? 1 : 0
         onMouseXChanged: {
             _velocity = (mouse.x - _oldMouseX);
             _oldMouseX = mouse.x;
@@ -167,19 +156,19 @@ View {
         id: backgroundDimmer
         parent: visualParent
         anchors.fill: parent
-        opacity: 0.5 * Math.min(1, Math.abs(panel.x - _collapsedX) / _rootItem.width/2)
+        opacity: 0.5 * Math.min(1, Math.abs(panel.x - _collapsedX) / visualParent.width/2)
         color: "black"
     }
 
-    Rectangle {
+    View {
         id: contentItem
-        parent: _rootItem
+        parent: visualParent
         width: panel.width
         height: panel.height
         x: panel.x
         y: panel.y
-        z: open ? 5 : 0
-        clip: true
-        color: "white"
+        z: 1
+        elevation: panelProgress == 0 ? 0 : 3
+        backgroundColor: "white"
     }
 }

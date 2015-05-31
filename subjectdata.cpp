@@ -17,8 +17,8 @@ SubjectData::SubjectData(QString _title, QObject *parent) : QObject(parent), tit
 
 SubjectData::~SubjectData()
 {
-    dataSheet->deleteLater();
-    syncHandler->deleteLater();
+    delete syncHandler;
+    delete dataSheet;
     AppDataStorage::getInstance().removeSubject(this);
 }
 
@@ -40,7 +40,7 @@ void SubjectData::attachProcessor(int processorId, int processorTypeId, QString 
     ISyncProcessor* processor = SyncProcessorProvider::getInstance().createProcessor(processorTypeId, additionalData);
     if (!processor)
     {
-        qDebug() << "Processor with given typed (" << processorTypeId << ") is not registered";
+        qDebug() << "Processor with given typeId (" << processorTypeId << ") is not registered";
         return;
     }
     if (processorId != PROC_ID_INVALID)

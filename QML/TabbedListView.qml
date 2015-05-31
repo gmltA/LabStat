@@ -220,25 +220,6 @@ Rectangle {
                     }
                 }
 
-                CheckBox {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10 * dp
-
-                    z: 1
-
-                    checked: attendence
-
-                    onClicked: {
-                        attendence = checked
-                    }
-
-                    style: MaterialCheckBox {
-                        color: Theme.accentColor
-                        uncheckedColor: Theme.iconColor
-                    }
-                }
-
                 MouseArea {
                     anchors.fill: parent
 
@@ -262,6 +243,23 @@ Rectangle {
 
                     onClicked: {
                         personDelegateElement.state = personDelegateElement.state == "" ? "expanded" : ""
+                    }
+                }
+
+                CheckBox {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10 * dp
+
+                    checked: attendence
+
+                    onClicked: {
+                        attendence = checked
+                    }
+
+                    style: MaterialCheckBox {
+                        color: Theme.accentColor
+                        uncheckedColor: Theme.iconColor
                     }
                 }
             }
@@ -345,44 +343,6 @@ Rectangle {
         }
     }
 
-    View {
-        id: tabContainer
-
-        // BUG: should be parent.width, but this property assigns after element init
-        //      and this causes buggy tab highlight behaviour
-        width: mainWindow.width
-        height: 48 * dp
-        y: Math.min(0, Math.max(-height, content.currentItem ? content.currentItem.scrollDiff : 0))
-        elevation: 1
-        z: 2
-
-        tintColor: Theme.primaryColor
-
-        Behavior on y {
-            NumberAnimation {
-                duration: 100
-                easing.type: Easing.OutCubic
-            }
-        }
-
-        ListView {
-            id: dateTabs
-            interactive: false
-
-            width: parent.width
-            height: parent.height
-
-            orientation: ListView.Horizontal
-            highlightRangeMode: ItemView.StrictlyEnforceRange
-            boundsBehavior: Flickable.StopAtBounds
-            snapMode: ListView.SnapOneItem
-            model: root.model
-            delegate: tabDelegate
-            preferredHighlightBegin: parent.width / 3
-            preferredHighlightEnd: (parent.width / 3) * 2
-        }
-    }
-
     ListView {
         id: content
 
@@ -417,6 +377,43 @@ Rectangle {
 
         onCurrentIndexChanged: {
             dateTabs.currentIndex = currentIndex
+        }
+    }
+
+    View {
+        id: tabContainer
+
+        // BUG: should be parent.width, but this property assigns after element init
+        //      and this causes buggy tab highlight behaviour
+        width: mainWindow.width
+        height: 48 * dp
+        y: Math.min(0, Math.max(-height, content.currentItem ? content.currentItem.scrollDiff : 0))
+        elevation: 1
+
+        tintColor: Theme.primaryColor
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        ListView {
+            id: dateTabs
+            interactive: false
+
+            width: parent.width
+            height: parent.height
+
+            orientation: ListView.Horizontal
+            highlightRangeMode: ItemView.StrictlyEnforceRange
+            boundsBehavior: Flickable.StopAtBounds
+            snapMode: ListView.SnapOneItem
+            model: root.model
+            delegate: tabDelegate
+            preferredHighlightBegin: parent.width / 3
+            preferredHighlightEnd: (parent.width / 3) * 2
         }
     }
 

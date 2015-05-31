@@ -20,6 +20,8 @@ class AppDataStorage
         void removeSubject(SubjectData* subject);
         void removeProcessor(SubjectData* subject, ISyncProcessor* processor);
 
+        QSqlDatabase* getDB();
+
     private:
         AppDataStorage();
 

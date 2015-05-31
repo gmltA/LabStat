@@ -15,6 +15,13 @@ Rectangle {
 
     signal headerContentScrolled(int index)
 
+    function isModelValid(checkingModel) {
+        if (header.model && header.model.length !== 0)
+            return true
+        else
+            return false
+    }
+
     height: 144 * dp
     width: parent.width
 
@@ -48,7 +55,7 @@ Rectangle {
         id: headerList
         anchors.fill: parent
 
-        visible: header.model !== undefined && header.model.length !== 0
+        visible: isModelValid(model)
 
         orientation: ListView.Horizontal
         highlightRangeMode: ListView.StrictlyEnforceRange

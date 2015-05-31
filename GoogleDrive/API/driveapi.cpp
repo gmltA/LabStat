@@ -192,3 +192,9 @@ QByteArray GoogleDriveAPI::SheetsAPI::getListFeed(WorkSheet sheet)
     QNetworkReply* reply = drive->sendRequest(GoogleAPIRequest(sheet.getListFeedURL(), "GET"));
     return reply->readAll();
 }
+
+QByteArray GoogleDriveAPI::SheetsAPI::editRow(QUrl editUrl, QByteArray rowData)
+{
+    QNetworkReply* reply = drive->sendRequest(Sheets::EditRowRequest(editUrl, rowData));
+    return reply->readAll();
+}

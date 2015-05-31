@@ -14,13 +14,27 @@ class StatTableEntry
         StatTableEntry(int _id, int _timeTableId, int _studentId, QString statData)
             : id(_id), timeTableId(_timeTableId), studentId(_studentId)
         {
-            if (statData.toLower() == "н")
-                attended = false;
+            extractLabStatData(statData);
+        }
+
+        QString labStatsToString()
+        {
+            QString strLabStatData;
+            if (!attended)
+            {
+                strLabStatData = "н";
+            }
             else
             {
-                attended = true;
-                extractLabStatData(statData);
+                QStringList dataList;
+                for (QMap<int, bool>::iterator iter = labWorks.begin(); iter != labWorks.end(); iter++)
+                {
+                    if (iter.value())
+                        dataList.append(QString::number(iter.key()));
+                }
+                strLabStatData = dataList.join(",");
             }
+            return strLabStatData;
         }
 
         int id;
@@ -32,10 +46,16 @@ class StatTableEntry
     private:
         void extractLabStatData(QString statData)
         {
-            QStringList dataList = statData.split(",");
-            foreach (QString labData, dataList)
+            if (statData.toLower() == "н")
+                attended = false;
+            else
             {
-                labWorks[labData.toInt()] = true;
+                attended = true;
+                QStringList dataList = statData.split(",");
+                foreach (QString labData, dataList)
+                {
+                    labWorks[labData.toInt()] = true;
+                }
             }
         }
 };

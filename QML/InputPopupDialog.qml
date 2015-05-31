@@ -17,6 +17,10 @@ PopupDialog {
     property alias placeholderText: textField.placeholderText
     property alias value: textField.text
 
+    onClosed: {
+        textField.text = ""
+    }
+
     TextField {
         id: textField
 

@@ -16,26 +16,38 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
 
         void init() override final;
         void syncFile(DataSheet* dataFile) override final;
+        void clear(DataSheet* dataFile) override final;
 
         GoogleDriveAPI* getDriveService() const;
         void setDriveService(GoogleDriveAPI* value);
 
         static const QString processorTypeName;
 
+        void saveData(DataSheet* dataFile);
+        void loadData(DataSheet* dataFile);
+
     private:
         GoogleDriveAPI* driveService;
         SpreadSheet* sheet;
 
         void fillSpreadSheet();
+        void createDbStructure();
+        void clearTimeTableTagAccordance();
+        void saveTimeTableTagAccordance();
+        void loadTimeTableTagAccordance();
+
         QList<int>              parseGroupList(QByteArray rawData);
         StudentList             parseStudentList(QByteArray rawData);
         TimeTable               parseTimeTable(QByteArray rawData);
         StatTable               parseStats(QByteArray rawData);
         int                     parseLabWorksCount(QByteArray rawData);
 
+        void saveStats(QByteArray rawData, DataSheet* dataFile);
+        bool saveStatEntry(QDomDocument* row, StatTableEntry* entry);
+
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
 
-        QMap<int, QString>      timeTableAccordance;
+        QMap<int, QString>      timeTableTagAccordance;
 
     signals:
         void initFinished(bool success) override final;
