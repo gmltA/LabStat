@@ -31,21 +31,48 @@ void SQLiteSyncProcessor::init()
     emit initFinished(false);
 }
 
-void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
+void SQLiteSyncProcessor::clearLabCount(DataSheet* dataFile)
+{
+    QSqlQuery query(db);
+    QString clearQuery = "DELETE FROM lab_works_count WHERE subjectId = %1";
+    query.exec(clearQuery.arg(dataFile->getId()));
+}
+
+void SQLiteSyncProcessor::clearTimeTable(DataSheet* dataFile)
 {
     QSqlQuery query(db);
     QString clearQuery = "DELETE FROM timetable_entry WHERE subjectId = %1";
     query.exec(clearQuery.arg(dataFile->getId()));
+}
 
-    QString basicQuery = "INSERT INTO timetable_entry VALUES %1;";
+void SQLiteSyncProcessor::clearStatTable(DataSheet* dataFile)
+{
+    QSqlQuery query(db);
+    QString clearQuery = "DELETE FROM stats WHERE subjectId = %1";
+    query.exec(clearQuery.arg(dataFile->getId()));
+}
+
+void SQLiteSyncProcessor::clearStudentList(DataSheet* dataFile)
+{
+    QSqlQuery query(db);
+    QString clearQuery = "DELETE FROM students WHERE subjectId = %1";
+    query.exec(clearQuery.arg(dataFile->getId()));
+}
+
+void SQLiteSyncProcessor::saveTimeTable(DataSheet* dataFile)
+{
+    clearTimeTable(dataFile);
+
+    QSqlQuery query(db);
+    QString insertQuery = "INSERT INTO timetable_entry VALUES %1;";
     QString timeTableData = "";
     foreach (TimeTableEntry* entry, dataFile->getTimeTable())
         timeTableData += serializeTimeTableEntry(dataFile->getId(), entry);
 
     timeTableData.chop(1);
-    basicQuery = basicQuery.arg(timeTableData);
+    insertQuery = insertQuery.arg(timeTableData);
 
-    query.exec(basicQuery);
+    query.exec(insertQuery);
 }
 
 void SQLiteSyncProcessor::loadLabCount(DataSheet* dataFile)
@@ -59,14 +86,13 @@ void SQLiteSyncProcessor::loadLabCount(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::saveLabCount(DataSheet* dataFile)
 {
+    clearLabCount(dataFile);
+
     QSqlQuery query(db);
-    QString clearQuery = "DELETE FROM lab_works_count WHERE subjectId = %1";
-    query.exec(clearQuery.arg(dataFile->getId()));
+    QString insertQuery = "INSERT INTO lab_works_count VALUES (%1, %2);";
+    insertQuery = insertQuery.arg(dataFile->getId()).arg(dataFile->getTotalLabCount());
 
-    QString basicQuery = "INSERT INTO lab_works_count VALUES (%1, %2);";
-    basicQuery = basicQuery.arg(dataFile->getId()).arg(dataFile->getTotalLabCount());
-
-    query.exec(basicQuery);
+    query.exec(insertQuery);
 }
 
 void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
@@ -86,19 +112,18 @@ void SQLiteSyncProcessor::loadTimeTable(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::saveStatTable(DataSheet* dataFile)
 {
-    QSqlQuery query(db);
-    QString clearQuery = "DELETE FROM stats WHERE subjectId = %1";
-    query.exec(clearQuery.arg(dataFile->getId()));
+    clearStatTable(dataFile);
 
-    QString basicQuery = "INSERT INTO stats VALUES %1;";
+    QSqlQuery query(db);
+    QString insertQuery = "INSERT INTO stats VALUES %1;";
     QString statTableData = "";
     foreach (StatTableEntry* entry, dataFile->getStatTable())
         statTableData += serializeStatTableEntry(dataFile->getId(), entry);
 
     statTableData.chop(1);
-    basicQuery = basicQuery.arg(statTableData);
+    insertQuery = insertQuery.arg(statTableData);
 
-    query.exec(basicQuery);
+    query.exec(insertQuery);
 }
 
 void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
@@ -118,11 +143,10 @@ void SQLiteSyncProcessor::loadStatTable(DataSheet* dataFile)
 
 void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
 {
-    QSqlQuery query(db);
-    QString cleanQuery = "DELETE FROM students WHERE subjectId = %1";
-    query.exec(cleanQuery.arg(dataFile->getId()));
+    clearStudentList(dataFile);
 
-    QString basicQuery = "INSERT INTO students VALUES %1;";
+    QSqlQuery query(db);
+    QString insertQuery = "INSERT INTO students VALUES %1;";
     QString studentsData = "";
     foreach (Student* person, dataFile->getStudentList())
     {
@@ -131,9 +155,9 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
     }
 
     studentsData.chop(1);
-    basicQuery = basicQuery.arg(studentsData);
+    insertQuery = insertQuery.arg(studentsData);
 
-    query.exec(basicQuery);
+    query.exec(insertQuery);
 }
 
 void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
@@ -198,7 +222,7 @@ void SQLiteSyncProcessor::loadData(DataSheet* dataFile)
 void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
 {
     // no sync was made or data was updated from different source
-    if (dataFile->getLastSyncTime().isValid() && dataFile->getLastSyncProcessorId() != id)
+    if (dataFile->getLastSyncTime().isValid()/* && dataFile->getLastSyncProcessorId() != id*/)
     {
         saveData(dataFile);
     }
@@ -209,6 +233,14 @@ void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
 
     dataFile->synced(id);
     emit syncDone();
+}
+
+void SQLiteSyncProcessor::clear(DataSheet* dataFile)
+{
+    clearLabCount(dataFile);
+    clearTimeTable(dataFile);
+    clearStatTable(dataFile);
+    clearStudentList(dataFile);
 }
 
 void SQLiteSyncProcessor::createDbStructure()

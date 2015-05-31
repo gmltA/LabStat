@@ -23,6 +23,7 @@ class ISyncProcessor
 
         virtual void init() = 0;
         virtual void syncFile(DataSheet* dataFile) = 0;
+        virtual void clear(DataSheet* dataFile) = 0;
 
         Origin getOrigin() const { return origin; }
         void setOrigin(const Origin& value) { origin = value; }

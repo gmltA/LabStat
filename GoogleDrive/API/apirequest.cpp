@@ -1,5 +1,4 @@
 #include "apirequest.h"
-#include <QDebug>
 
 GoogleAPIRequest::GoogleAPIRequest(QUrl _requestURL, QByteArray _verb, QByteArray _data)
     : QNetworkRequest(_requestURL), requestData(_data)

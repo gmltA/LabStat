@@ -19,7 +19,7 @@ class SyncHandler : public QObject
         void registerProcessor(ISyncProcessor* processor);
         void unregisterProcessor(ISyncProcessor* processor);
 
-        void deleteProcessor(int processorIndex);
+        void deleteProcessor(int processorId);
 
         Q_INVOKABLE void sync(int processorIndex);
         void sync(ISyncProcessor::Origin origin = ISyncProcessor::OriginAny);
@@ -31,6 +31,8 @@ class SyncHandler : public QObject
 
         void sync(ISyncProcessor* processor);
         QVariantMap buildProcessorData(ISyncProcessor* processor);
+
+        void deleteProcessor(ISyncProcessor* processor);
 
         QVector<ISyncProcessor*> syncProcessors;
         QSignalMapper* signalMapper;

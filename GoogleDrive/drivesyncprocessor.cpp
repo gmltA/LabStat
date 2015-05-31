@@ -80,6 +80,12 @@ void DriveSyncProcessor::syncFile(DataSheet* dataFile)
     emit syncDone();
 }
 
+void DriveSyncProcessor::clear(DataSheet* dataFile)
+{
+    Q_UNUSED(dataFile)
+    clearTimeTableTagAccordance();
+}
+
 GoogleDriveAPI* DriveSyncProcessor::getDriveService() const
 {
     return driveService;
@@ -106,15 +112,20 @@ void DriveSyncProcessor::createDbStructure()
                "tagName TEXT(255) NOT NULL,"
                "PRIMARY KEY (processorId, timeTableId)"
                ")");
-    qDebug() << query.lastError().text();
 }
 
-void DriveSyncProcessor::saveTimeTableTagAccordance()
+void DriveSyncProcessor::clearTimeTableTagAccordance()
 {
     QSqlQuery query(*(AppDataStorage::getInstance().getDB()));
     QString clearQuery = "DELETE FROM timetable_tag_accordance WHERE processorId = %1";
     query.exec(clearQuery.arg(id));
+}
 
+void DriveSyncProcessor::saveTimeTableTagAccordance()
+{
+    clearTimeTableTagAccordance();
+
+    QSqlQuery query(*(AppDataStorage::getInstance().getDB()));
     QString insertQuery = "INSERT INTO timetable_tag_accordance VALUES %1;";
     QString tagAccordanceData = "";
     QString rowTemplate = "(%1, '%2', '%3'),";

@@ -15,8 +15,7 @@ SyncHandler::~SyncHandler()
 {
     foreach(ISyncProcessor* processor, syncProcessors)
     {
-        AppDataStorage::getInstance().removeProcessor(dynamic_cast<SubjectData*>(parent()), processor);
-        dynamic_cast<QObject*>(processor)->deleteLater();
+        deleteProcessor(processor);
     }
 }
 
@@ -45,6 +44,16 @@ QVariantMap SyncHandler::buildProcessorData(ISyncProcessor* processor)
     processorData["online"] = processor->getOrigin() == ISyncProcessor::OriginOnline ? 1 : 0;
 
     return processorData;
+}
+
+void SyncHandler::deleteProcessor(ISyncProcessor* processor)
+{
+    SubjectData* subject = dynamic_cast<SubjectData*>(parent());
+
+    processor->clear(subject->getDataSheet());
+    AppDataStorage::getInstance().removeProcessor(subject, processor);
+
+    dynamic_cast<QObject*>(processor)->deleteLater();
 }
 
 void SyncHandler::sync(ISyncProcessor::Origin origin)
@@ -122,14 +131,13 @@ void SyncHandler::unregisterProcessor(ISyncProcessor* processor)
     syncProcessors.removeOne(processor);
 }
 
-void SyncHandler::deleteProcessor(int processorIndex)
+void SyncHandler::deleteProcessor(int processorId)
 {
     foreach (ISyncProcessor* processor, syncProcessors)
-        if (processor->getId() == processorIndex)
+        if (processor->getId() == processorId)
         {
             unregisterProcessor(processor);
-            AppDataStorage::getInstance().removeProcessor(dynamic_cast<SubjectData*>(parent()), processor);
-            dynamic_cast<QObject*>(processor)->deleteLater();
+            deleteProcessor(processor);
             break;
         }
 }

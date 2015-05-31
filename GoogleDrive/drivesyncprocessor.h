@@ -16,6 +16,7 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
 
         void init() override final;
         void syncFile(DataSheet* dataFile) override final;
+        void clear(DataSheet* dataFile) override final;
 
         GoogleDriveAPI* getDriveService() const;
         void setDriveService(GoogleDriveAPI* value);
@@ -31,6 +32,7 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
 
         void fillSpreadSheet();
         void createDbStructure();
+        void clearTimeTableTagAccordance();
         void saveTimeTableTagAccordance();
         void loadTimeTableTagAccordance();
 
