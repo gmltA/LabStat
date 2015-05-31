@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Window 2.2
 
 FocusScope {
     id: popup
@@ -21,12 +22,34 @@ FocusScope {
         }
     }
 
+    function findRoot(obj) {
+        while (obj.parent) {
+            obj = obj.parent
+        }
+
+        return obj
+    }
+
+    function findRootChild(obj, objectName) {
+        obj = findRoot(obj)
+
+        var childs = new Array(0);
+        childs.push(obj)
+        while (childs.length > 0) {
+            if (childs[0].objectName == objectName) {
+                return childs[0]
+            }
+            for (var i in childs[0].data) {
+                childs.push(childs[0].data[i])
+            }
+            childs.splice(0, 1);
+        }
+        return null;
+    }
+
     function open() {
         __lastFocusedItem = Window.activeFocusItem
-        var p = (popup, overlayLayer).parent
-        while (p.parent)
-            p = p.parent
-        parent = p
+        parent = findRootChild(popup, overlayLayer)
 
         if (!parent.enabled)
             return
