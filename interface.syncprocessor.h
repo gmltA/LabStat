@@ -70,6 +70,12 @@ class ISyncProcessor
         int typeId;
 
         QString title;
+        /*!
+         * \brief data holds various information
+         *
+         * This value can be used differently by every processor
+         * \note data for \c DriveSyncProcessor holds full path inside Drive to the stat file
+         */
         QString data;
 
         Origin origin;
