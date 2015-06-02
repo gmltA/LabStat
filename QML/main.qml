@@ -7,15 +7,13 @@ import "../QML/NavigationDrawer"
 import "."
 import SubjectHandler 1.0
 
-ApplicationWindow {
-    title: "LabStat"
+Item {
+    //title: "LabStat"
     id: mainWindow
-    width: 360
-    height: 640
-    visible: true
-
-    // for QMLScene debug only!
-    property real dp: mainWindow.width / 320
+    //width: 360
+    //height: 640
+    anchors.fill: parent
+    visible: false
 
     function groupItemClicked(groupId) {
         SubjectHandler.loadGroupData(groupId)
@@ -25,7 +23,6 @@ ApplicationWindow {
         id: materialIcons
         source: "qrc:/fonts/Material-Design-Icons.ttf"
     }
-
 
     Connections {
         target: SubjectHandler
@@ -130,7 +127,7 @@ ApplicationWindow {
 
                 NavigationDrawerHeader {
                     id: header
-                    mainText: "Alex gmlt.A"
+                    mainText: "BSUIR"
                     listEnabled: !actionButton.stateTwoActive
 
                     buttonArea.onClicked: {
@@ -156,11 +153,6 @@ ApplicationWindow {
                         id: groupList
                         icon: ""
                         caption: "Groups"
-                    }
-
-                    NavigationDrawerItem {
-                        icon: ""
-                        caption: "Test"
                     }
 
                     NavigationDrawerDivider {
@@ -258,14 +250,29 @@ ApplicationWindow {
         text: "Data can be used by processors differently. For Google Drive it should include Folder / File name"
         ComboBox {
             id: processorSelector
+
             width: parent.width
-            model: SubjectHandler.getAvailableProcessorTypes()
-            currentIndex: 1
             onCurrentIndexChanged: {
                 if (currentIndex == 0)
                     text.forceActiveFocus()
                 else if (parent)
                     parent.forceActiveFocus()
+            }
+
+            Component.onCompleted:
+            { loadModel.start() }
+
+            /*! HACK! App crashes if model is set immediately on combobox creation!
+              */
+            Timer {
+                id: loadModel
+                interval: 1000
+                running: false
+                repeat: false
+                onTriggered: {
+                    processorSelector.model = SubjectHandler.getAvailableProcessorTypes()
+                    processorSelector.currentIndex = 1
+                }
             }
         }
 

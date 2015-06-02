@@ -185,7 +185,6 @@ TimeTable DriveSyncProcessor::parseTimeTable(QByteArray rawData)
 
     if (doc.setContent(rawData))
     {
-        // BUG: firstChildElement doesn't work
         QList<QDomElement> dateList = selectDateElementList(doc.elementsByTagName("entry").at(0).childNodes());
         QDomNodeList timeNodes = doc.elementsByTagName("entry").at(1).childNodes();
         QDomNodeList groupNodes = doc.elementsByTagName("entry").at(2).childNodes();
@@ -203,7 +202,10 @@ TimeTable DriveSyncProcessor::parseTimeTable(QByteArray rawData)
                 QStringList groupData;
                 for (int groupIndex = 0; groupIndex < groupNodes.size(); groupIndex++)
                     if (groupNodes.item(groupIndex).toElement().tagName() == timeElement.tagName())
+                    {
                         groupData = groupNodes.item(groupIndex).toElement().text().split("-");
+                        break;
+                    }
 
                 int group = groupData[0].toInt();
                 int subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();

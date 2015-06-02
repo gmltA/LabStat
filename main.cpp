@@ -66,8 +66,7 @@ int main(int argc, char *argv[])
     SyncProcessorProvider::getInstance().addCreator(new SQLiteSyncProcessorCreator);
     SubjectHandler::init();
 
-    engine.load(QUrl("qrc:/QML/main.qml"));
-    SubjectHandler::getInstance()->sendInitialList();
+    engine.load(QUrl("qrc:/QML/BrandingLoader.qml"));
 
     return app.exec();
 }

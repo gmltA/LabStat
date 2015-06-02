@@ -423,7 +423,7 @@ Rectangle {
             when: !root.model
             PropertyChanges {
                 target: root
-                visible: false
+                opacity: 0
             }
             PropertyChanges {
                 target: tabContainer
