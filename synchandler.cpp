@@ -120,7 +120,10 @@ void SyncHandler::checkProcessorInit(bool success)
         signalMapper->setMapping(dynamic_cast<QObject*>(processor), processor->getId());
     }
     else
+    {
         unregisterProcessor(processor);
+        delete processor;
+    }
 
     processorData["result"] = success;
     emit processorAdded(processorData);
