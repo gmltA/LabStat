@@ -43,6 +43,9 @@ void DriveSyncProcessor::saveData(DataSheet* dataFile)
     WorkSheet labs = sheet->getWorkSheet("Лабораторные работы");
     QByteArray workSheetData = driveService->Sheets.getListFeed(labs);
     saveStats(workSheetData, dataFile);
+    WorkSheet studentList = sheet->getWorkSheet("Список студентов");
+    workSheetData = driveService->Sheets.getListFeed(studentList);
+    saveNotes(workSheetData, dataFile);
 }
 
 void DriveSyncProcessor::loadData(DataSheet* dataFile)
@@ -268,6 +271,50 @@ int DriveSyncProcessor::parseLabWorksCount(QByteArray rawData)
         }
     }
     return 0;
+}
+
+void DriveSyncProcessor::saveNotes(QByteArray rawData, DataSheet* dataFile)
+{
+    QDomDocument doc;
+    if (doc.setContent(rawData))
+    {
+        QDomNodeList studentNodes = doc.elementsByTagName("entry");
+        StudentList students = dataFile->getStudentList();
+        for (int index = 0; index < studentNodes.size(); index++)
+        {
+            Student* student = students[index];
+            if (student->getUpdatedDate() <= dataFile->getLastSyncTime())
+                continue;
+
+            QDomNode studentNode = studentNodes.item(index);
+
+            QString selfLink = studentNode.firstChildElement("id").toElement().text();
+            QByteArray rowDataRaw = driveService->sendRequest(GoogleAPIRequest(selfLink, "GET"))->readAll();
+
+            QDomDocument row;
+            row.setContent(rowDataRaw);
+            saveStudentNote(&row, student->getNote());
+
+            QByteArray updatedRowFeed;
+            QTextStream stream(&updatedRowFeed);
+            row.save(stream, QDomNode::CDATASectionNode);
+
+            QString editUrl = studentNode.toElement().elementsByTagName("link").item(1).toElement().attribute("href");
+
+            driveService->Sheets.editRow(QUrl(editUrl), updatedRowFeed);
+        }
+    }
+}
+
+void DriveSyncProcessor::saveStudentNote(QDomDocument* row, QString note)
+{
+    const QString notesTag = "gsx:заметки";
+    QDomElement newStatElement = row->createElement(notesTag);
+    QDomText statText = row->createTextNode(note);
+    newStatElement.appendChild(statText);
+
+    QDomNode rootNode = row->elementsByTagName("entry").item(0);
+    rootNode.replaceChild(newStatElement, row->elementsByTagName(notesTag).item(0));
 }
 
 void DriveSyncProcessor::saveStats(QByteArray rawData, DataSheet* dataFile)
