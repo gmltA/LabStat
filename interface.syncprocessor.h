@@ -18,11 +18,18 @@ class ISyncProcessor
             OriginAny
         };
 
+        enum SyncDirection
+        {
+            SyncDefault = -1,
+            SyncLoad = 0,
+            SyncWrite
+        };
+
         ISyncProcessor(QString _title, QString _data, Origin _origin) : id(PROC_ID_INVALID), title(_title), data(_data), origin(_origin) {}
         virtual ~ISyncProcessor() {}
 
         virtual void init() = 0;
-        virtual void syncFile(DataSheet* dataFile) = 0;
+        virtual void syncFile(DataSheet* dataFile, SyncDirection direction) = 0;
         virtual void clear(DataSheet* dataFile) = 0;
 
         Origin getOrigin() const { return origin; }

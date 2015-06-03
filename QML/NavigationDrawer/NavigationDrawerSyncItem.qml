@@ -116,11 +116,16 @@ Item {
 
             width: root.width - 1
             enabled: !flickable.flicking
+
             opacity: {
                 if (flickable.dragging)
                     return Math.min(1, Math.max(0, 0.3 - Math.abs(flickable.visibleArea.xPosition)))
                 else
                     return 1
+            }
+
+            onPressAndHold: {
+                forcedSyncDialog.show()
             }
 
             Behavior on opacity {
@@ -226,4 +231,21 @@ Item {
             }
         }
     ]
+
+    PopupDialog {
+        id: forcedSyncDialog
+        title: "Perform forced sync?"
+        text: "All data in the destination storage will be replaced with current stats. This may cause data loss! \n\nUse this action on your own risc!"
+        positiveButtonText: "Forced load"
+        negativeButtonText: "Forced write"
+
+        onAccepted: {
+            SubjectHandler.forcedSync(processorId, 0)
+            root.state = "syncing"
+        }
+        onRejected: {
+            SubjectHandler.forcedSync(processorId, 1)
+            root.state = "syncing"
+        }
+    }
 }

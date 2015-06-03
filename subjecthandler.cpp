@@ -111,6 +111,11 @@ void SubjectHandler::sync(int processorIndex)
     currentSubject->getSyncHandler()->sync(processorIndex);
 }
 
+void SubjectHandler::forcedSync(int processorIndex, int direction)
+{
+    currentSubject->getSyncHandler()->sync(processorIndex, ISyncProcessor::SyncDirection(direction));
+}
+
 void SubjectHandler::attachProcessor(int processorTypeId, QString rootFolder)
 {
     QtConcurrent::run(currentSubject, &SubjectData::attachProcessor, PROC_ID_INVALID, processorTypeId, rootFolder);

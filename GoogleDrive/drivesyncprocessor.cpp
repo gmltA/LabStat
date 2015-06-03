@@ -1,6 +1,7 @@
 #include "drivesyncprocessor.h"
 #include <QSqlQuery>
 #include "../appdatastorage.h"
+#include <QDebug>
 
 const QString DriveSyncProcessor::processorTypeName = "Google Drive";
 
@@ -65,16 +66,16 @@ void DriveSyncProcessor::loadData(DataSheet* dataFile)
     dataFile->setStatTable(parseStats(workSheetData));
 }
 
-void DriveSyncProcessor::syncFile(DataSheet* dataFile)
+void DriveSyncProcessor::syncFile(DataSheet* dataFile, ISyncProcessor::SyncDirection direction)
 {
-    /*!
-     * \todo implement proper algorythm to choose between load and store functions
-     */
-    if (dataFile->getLastSyncTime().isValid())
+    if (direction == ISyncProcessor::SyncDefault)
+        direction = dataFile->getLastSyncTime().isValid() ? ISyncProcessor::SyncWrite : SyncLoad;
+
+    if (direction == ISyncProcessor::SyncWrite)
     {
         saveData(dataFile);
     }
-    else
+    else if (direction == ISyncProcessor::SyncLoad)
     {
         loadData(dataFile);
     }

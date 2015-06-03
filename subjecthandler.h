@@ -32,6 +32,7 @@ class SubjectHandler : public QObject
         }
 
         Q_INVOKABLE void sync(int processorIndex);
+        Q_INVOKABLE void forcedSync(int processorIndex, int direction);
 
         Q_INVOKABLE void attachProcessor(int processorTypeId, QString rootFolder = "LabStat");
         Q_INVOKABLE void deleteProcessor(int processorIndex);

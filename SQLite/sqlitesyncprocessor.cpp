@@ -219,14 +219,16 @@ void SQLiteSyncProcessor::loadData(DataSheet* dataFile)
     loadLabCount(dataFile);
 }
 
-void SQLiteSyncProcessor::syncFile(DataSheet* dataFile)
+void SQLiteSyncProcessor::syncFile(DataSheet* dataFile, ISyncProcessor::SyncDirection direction)
 {
-    // no sync was made or data was updated from different source
-    if (dataFile->getLastSyncTime().isValid()/* && dataFile->getLastSyncProcessorId() != id*/)
+    if (direction == ISyncProcessor::SyncDefault)
+        direction = dataFile->getLastSyncTime().isValid() ? ISyncProcessor::SyncWrite : SyncLoad;
+
+    if (direction == ISyncProcessor::SyncWrite)
     {
         saveData(dataFile);
     }
-    else
+    else if (direction == ISyncProcessor::SyncLoad)
     {
         loadData(dataFile);
     }

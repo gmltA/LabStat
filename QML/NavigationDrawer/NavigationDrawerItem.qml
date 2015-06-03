@@ -21,11 +21,24 @@ Button {
     property var extraData
 
     signal triggered(var extraData);
+    signal pressAndHold();
 
     Connections {
         target: root
         onClicked: {
             triggered(extraData)
+        }
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        propagateComposedEvents: true
+        onPressAndHold: {
+            root.pressAndHold()
+        }
+        onClicked: {
+            root.clicked()
         }
     }
 
@@ -97,7 +110,7 @@ Button {
         background: Rectangle {
             implicitWidth: 100
             implicitHeight: 25
-            color: control.pressed ? "#E6E6E6" : "white"
+            color: control.pressed || mouseArea.pressed ? "#E6E6E6" : "white"
         }
     }
 }

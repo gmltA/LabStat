@@ -19,12 +19,12 @@ SyncHandler::~SyncHandler()
     }
 }
 
-void SyncHandler::sync(int processorIndex)
+void SyncHandler::sync(int processorIndex, ISyncProcessor::SyncDirection direction)
 {
-    sync(getProcessorById(processorIndex));
+    sync(getProcessorById(processorIndex), direction);
 }
 
-void SyncHandler::sync(ISyncProcessor* processor)
+void SyncHandler::sync(ISyncProcessor* processor, ISyncProcessor::SyncDirection direction)
 {
     if (!processor)
     {
@@ -33,7 +33,7 @@ void SyncHandler::sync(ISyncProcessor* processor)
     }
 
     connect(dynamic_cast<QObject*>(processor), SIGNAL(syncDone()), signalMapper, SLOT(map()));
-    QtConcurrent::run(processor, &ISyncProcessor::syncFile, dynamic_cast<SubjectData*>(parent())->getDataSheet());
+    QtConcurrent::run(processor, &ISyncProcessor::syncFile, dynamic_cast<SubjectData*>(parent())->getDataSheet(), direction);
 }
 
 QVariantMap SyncHandler::buildProcessorData(ISyncProcessor* processor)
