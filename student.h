@@ -51,6 +51,11 @@ class Student : public QObject
         int group;
         int subgroup;
 
+        /*!
+         * \brief updated label stores time of last data update.
+         *
+         * This object should be used to decide whether we should send student's data to sync processor or not.
+         */
         QDateTime updated;
 };
 

@@ -7,9 +7,9 @@
 #include <QObject>
 
 /*!
- * SubjectData stores everything related to particular subject entry.
+ * \brief SubjectData stores everything related to particular subject entry.
  *
- * Instance of this class created and added to SubjectHandler when user
+ * Instance of this class is created and added to SubjectHandler when user
  * decides to track data for one more subject.
  */
 

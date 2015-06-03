@@ -3,6 +3,9 @@
 
 #include <QObject>
 
+/*!
+ * \brief The IAuthClient interface is used by DriveAPI to obtain credentials in different ways.
+ */
 class IAuthClient
 {
     public:

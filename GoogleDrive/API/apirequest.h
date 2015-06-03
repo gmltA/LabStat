@@ -7,6 +7,9 @@
 #include <QObject>
 #include <QUrl>
 
+/*!
+ * \brief The GoogleAPIRequest is a basic class for every reqeust executed on drive service
+ */
 class GoogleAPIRequest : public QNetworkRequest
 {
     public:

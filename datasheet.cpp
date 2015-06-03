@@ -17,6 +17,9 @@ DataSheet::~DataSheet()
 
     foreach (StatTableEntry* entry, stats)
         delete entry;
+
+    foreach (Student* student, students)
+        delete student;
 }
 
 uint DataSheet::getId() const

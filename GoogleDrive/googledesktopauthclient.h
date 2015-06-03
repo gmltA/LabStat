@@ -4,6 +4,9 @@
 #include "interface.authclient.h"
 #include <QObject>
 
+/*!
+ * \brief The GoogleAuthClient class extracts credentials to connect to Drive in desktop application.
+ */
 class GoogleDesktopAuthClient : public QObject, public IAuthClient
 {
         Q_OBJECT

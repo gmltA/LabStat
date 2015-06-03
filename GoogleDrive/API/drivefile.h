@@ -9,6 +9,11 @@
 #include <QDomDocument>
 #include "../../datasheet.h"
 
+/*!
+ * \brief The DriveFile class is a basic entry for file on Drive
+ *
+ * Class has set of constructors to extract data from different formats of API results.
+ */
 class DriveFile : public IDataItem
 {
         Q_INTERFACES(IDataItem)
@@ -47,6 +52,9 @@ class DriveFile : public IDataItem
         QString content;
 };
 
+/*!
+ * \brief The WorkSheet class represents Spreadsheet page called Worksheet
+ */
 class WorkSheet
 {
     public:
@@ -69,6 +77,9 @@ class WorkSheet
         QString listFeedURL;
 };
 
+/*!
+ * \brief The SpreadSheet class is an specific kind of Drive file compatible with Sheets API
+ */
 class SpreadSheet : public DriveFile
 {
     public:

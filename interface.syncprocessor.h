@@ -31,6 +31,9 @@ class ISyncProcessor
             OriginAny
         };
 
+        /*!
+         * \brief The SyncDirection enum defines whether sync direction set by user explicitly.
+         */
         enum SyncDirection
         {
             SyncDefault = -1,

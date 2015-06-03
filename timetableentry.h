@@ -25,8 +25,10 @@ class TimeTableEntry : public QObject
 
         ~TimeTableEntry()
         {
-            // BUG! Causes app crash
-            //delete students;
+            /*!
+             * \warning Possible app crash.
+             */
+            delete students;
         }
 
         int id;

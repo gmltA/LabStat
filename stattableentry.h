@@ -4,6 +4,9 @@
 #include <QList>
 #include <QVariantList>
 
+/*!
+ * \brief The StatTableEntry class represents cell for specific student on specific date
+ */
 class StatTableEntry
 {
     public:
@@ -41,6 +44,11 @@ class StatTableEntry
         int timeTableId;
         int studentId;
         bool attended;
+        /*!
+         * \brief labWorks is a map of student's stats.
+         *
+         * Key represents number of lab work and bool value shows whether student passed that work or not.
+         */
         QMap<int, bool> labWorks;
 
     private:

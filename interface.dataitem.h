@@ -3,6 +3,12 @@
 
 #include <QObject>
 
+/*!
+ * \brief The IDataItem interface should be implemented by every data entry used in specific SyncProcessor
+ *
+ * \warning This interface was designed to unify interaction between diffeerent sync processors by passing
+ * abstract data entry. For now it is useless due to replacement by generic \c DataSheet object.
+ */
 class IDataItem
 {
     public:

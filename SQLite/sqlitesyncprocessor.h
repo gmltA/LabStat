@@ -5,6 +5,11 @@
 #include <QObject>
 #include "interface.syncprocessor.h"
 
+/*!
+ * \brief The SQLiteSyncProcessor class creates a gate between SQLite DB and LabStat.
+ *
+ * This object extracts data from specific DB and creates DataSheet contents based on extracted data and vice-versa.
+ */
 class SQLiteSyncProcessor : public QObject, public ISyncProcessor
 {
         Q_OBJECT

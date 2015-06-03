@@ -3,6 +3,11 @@
 
 #include "apirequest.h"
 
+/*!
+ * \brief Sheets namespace holds requests related only to Sheets API on Drive.
+ *
+ * These requests has different URLs and result format. That's why extraction to separate namespace took place.
+ */
 namespace Sheets
 {
 class ListFilesRequest : public GoogleAPIRequest

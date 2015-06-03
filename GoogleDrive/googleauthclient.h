@@ -4,6 +4,9 @@
 #include "interface.authclient.h"
 #include <QObject>
 
+/*!
+ * \brief The GoogleAuthClient class interacts with JRE and obtains Google Play auth token to connect to Drive.
+ */
 class GoogleAuthClient : public QObject, public IAuthClient
 {
         Q_OBJECT

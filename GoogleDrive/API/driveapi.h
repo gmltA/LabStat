@@ -4,10 +4,16 @@
 #include "apirequest.h"
 #include <QNetworkReply>
 
+/*!
+ * \macro VERBOSE prints some debug data to console based on \c GoogleDriveAPI::verboseOutput parameter
+ */
 #define VERBOSE(message) \
     if (verboseOutput) \
         qDebug() << message;
 
+/*!
+ * \brief The GoogleDriveAPI class provides C++ interface to Google's Drive REST API.
+ */
 class GoogleDriveAPI : public QObject
 {
         Q_OBJECT

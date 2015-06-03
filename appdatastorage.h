@@ -5,6 +5,15 @@
 
 #include <QtSql>
 
+/*!
+ * \brief The AppDataStorage class is a global object (singleton) that is used to store global application DataSheet
+ *
+ * It uses isolated SQLite connection to separate DB that stores generic data (subjects, processors per subject).
+ * Class also provides pointer to DB object for SyncProcessors to store specific data
+ * \see DriveSyncProcessor::saveTimeTableTagAccordance
+ *
+ * \todo Replace with \c QSettings
+ */
 class AppDataStorage
 {
         Q_DISABLE_COPY(AppDataStorage)

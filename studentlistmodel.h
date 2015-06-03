@@ -5,10 +5,19 @@
 #include "student.h"
 #include "stattableentry.h"
 
+/*!
+ * \brief The StudentListModel class represents student's stats to QML engine
+ *
+ * Model is editible \see StudentListModel::setData.
+ * Every update emits corresponding signal \see Student::emitDataUpdated.
+ */
 class StudentListModel : public QAbstractListModel
 {
         Q_OBJECT
     public:
+        /*!
+         * \brief The StudentDataRoles enum holds all editible fields of model object.
+         */
         enum StudentDataRoles {
             NameRole = Qt::UserRole + 1,
             SurnameRole,
@@ -31,6 +40,10 @@ class StudentListModel : public QAbstractListModel
         void setTotalLabCount(int value);
 
     signals:
+        /*!
+         * \brief statEntryAdded notifies DataSheet about new stat entry added to scope
+         * \param entry
+         */
         void statEntryAdded(StatTableEntry* entry);
 
     protected:
