@@ -1,19 +1,6 @@
 #include "drivefile.h"
 #include <QRegularExpression>
 
-QDataStream& operator<<(QDataStream &out, const DriveFileInfo &obj)
-{
-    out << obj.id << obj.modifiedDate;
-    return out;
-}
-
-QDataStream& operator>>(QDataStream &in, DriveFileInfo &obj)
-{
-    in >> obj.id;
-    in >> obj.modifiedDate;
-    return in;
-}
-
 DriveFile::DriveFile(DataSheet* dataSheet)
     : IDataItem(dataSheet->getFileName()), mimeType("text/tsv"), content(dataSheet->toString())
 {

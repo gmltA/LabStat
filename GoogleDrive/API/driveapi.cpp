@@ -10,9 +10,6 @@
 GoogleDriveAPI::GoogleDriveAPI(QString _rootFolderName, QObject* parent)
  : QObject(parent), verboseOutput(false), Sheets(this)
 {
-    qRegisterMetaType<DriveFileInfo>("DriveFileInfo");
-    qRegisterMetaTypeStreamOperators<DriveFileInfo>("DriveFileInfo");
-
     appRootDir = new DriveFile(_rootFolderName, "application/vnd.google-apps.folder", "root");
 }
 
