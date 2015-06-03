@@ -34,7 +34,7 @@ View {
     }
     Behavior on tintColor {
         ColorAnimation {
-            duration: 100
+            duration: 50
         }
     }
 
@@ -76,7 +76,7 @@ View {
             PropertyChanges {
                 target: root
                 rotation: 45
-                tintColor: button.pressed ? Qt.darker(Theme.accentColor, 1.3) : Theme.accentColor
+                tintColor: button.pressed ? Qt.darker(Theme.accentColor, 1.1) : Theme.accentColor
             }
             PropertyChanges {
                 target: buttonText

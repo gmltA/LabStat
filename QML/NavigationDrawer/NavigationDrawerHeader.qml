@@ -45,8 +45,10 @@ Rectangle {
 
     TwoStateActionButton {
         id: button
+        anchors.top: parent.top
         anchors.right: parent.right
-        anchors.rightMargin: 18 * dp
+        anchors.topMargin: 10 * dp
+        anchors.rightMargin: 10 * dp
         z: 1
         elevation: 2
     }
