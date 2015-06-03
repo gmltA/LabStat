@@ -40,6 +40,13 @@ Button {
 
         color: Theme.iconColor
         text: ""
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 100
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     Text {
@@ -53,6 +60,13 @@ Button {
 
         color: Theme.textColor
         text: "Caption"
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 100
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     Item {

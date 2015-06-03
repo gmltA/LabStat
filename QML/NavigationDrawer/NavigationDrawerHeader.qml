@@ -138,7 +138,7 @@ Rectangle {
                 id: icon
                 anchors.centerIn: parent
                 text: ""
-                font.pointSize: 14
+                font.pixelSize: 20 * dp
                 font.family: materialIcons.name
 
                 color: "white"

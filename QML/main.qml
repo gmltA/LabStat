@@ -32,13 +32,13 @@ Item {
         onProcessorListChanged: {
             var model = []
             processors.forEach(function(processor) {
-                model.push({"title": processor['title'], "id": processor['id'], "state": ""})
+                model.push({"title": processor['title'], "id": processor['id'], "state": "", "origin": processor['online']})
             })
             syncProcessors.processorsModel = model
         }
         onProcessorAddCalled: {
             var model = syncProcessors.processorsModel
-            model.push({"title": processorData['title'], "id": processorData['id'], "state": "inactive"})
+            model.push({"title": processorData['title'], "id": processorData['id'], "state": "inactive", "origin": processorData['online']})
             syncProcessors.processorsModel =  model
         }
         onGroupListChanged: {
@@ -187,6 +187,7 @@ Item {
                                 processorId: syncProcessors.processorsModel[index].id
                                 caption: syncProcessors.processorsModel[index].title
                                 state: syncProcessors.processorsModel[index].state
+                                online: syncProcessors.processorsModel[index].origin === 1
 
                                 onInitCompleted: {
                                     if (success)

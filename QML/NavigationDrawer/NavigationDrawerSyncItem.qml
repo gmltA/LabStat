@@ -6,7 +6,9 @@ Item {
     id: root
 
     property alias caption: item.caption
+    property alias icon: item.icon
     property int processorId
+    property bool online
 
     signal initCompleted(bool success)
 
@@ -107,7 +109,7 @@ Item {
 
         NavigationDrawerItem {
             id: item
-            icon: ""
+            icon: online ? "" : ""
             rightIcon: ""
             rightIconItem.state: "hidden"
             caption: "Item"
@@ -209,6 +211,8 @@ Item {
             PropertyChanges {
                 target: item
                 enabled: false
+                color: Theme.primaryColor
+                iconColor: Theme.primaryColor
             }
 
             PropertyChanges {
