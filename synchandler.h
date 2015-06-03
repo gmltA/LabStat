@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QSignalMapper>
 #include <QVariantMap>
-#include <QVector>
 
 /*!
  * \brief The SyncHandler class is responsible for subject syncProcessors

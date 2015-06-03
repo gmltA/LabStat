@@ -22,8 +22,6 @@ SOURCES += main.cpp \
     SQLite/sqlitesyncprocessor.cpp \
     studentlistmodel.cpp \
     timetablemodel.cpp \
-    stattableentry.cpp \
-    timetableentry.cpp \
     appdatastorage.cpp \
     syncprocessorprovider.cpp \
     SQLite/sqlitesyncprocessorcreator.cpp \

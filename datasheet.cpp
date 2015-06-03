@@ -1,6 +1,4 @@
 #include "datasheet.h"
-#include <QMetaEnum>
-#include <QDebug>
 
 DataSheet::DataSheet(QString _fileName, int _id, QObject *parent)
     : QObject(parent), id(_id), fileName(_fileName), timeTableModel(nullptr)

@@ -2,7 +2,6 @@
 #define STATTABLEENTRY_H
 
 #include <QList>
-#include <QVariantList>
 
 /*!
  * \brief The StatTableEntry class represents cell for specific student on specific date
