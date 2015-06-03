@@ -8,7 +8,7 @@
 #include <QNetworkRequest>
 
 GoogleDriveAPI::GoogleDriveAPI(QString _rootFolderName, QObject* parent)
- : QObject(parent), verboseOutput(false), Sheets(this)
+ : QObject(parent), Sheets(this), verboseOutput(false)
 {
     appRootDir = new DriveFile(_rootFolderName, "application/vnd.google-apps.folder", "root");
 }
