@@ -227,6 +227,7 @@ Rectangle {
                         personDelegateElement.state = "expanded"
 
                         editNoteDialog.open()
+                        editNoteDialog.value = note
                         editNoteDialog.accepted.connect(updateNote)
                         editNoteDialog.closed.connect(disconnectUpdate)
                     }

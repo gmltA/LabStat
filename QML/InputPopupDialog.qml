@@ -19,6 +19,7 @@ PopupDialog {
 
     onOpened: {
         value = ""
+        textField.forceActiveFocus()
     }
 
     TextField {
