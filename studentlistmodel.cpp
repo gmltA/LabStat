@@ -92,6 +92,7 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             if (!entry->attended)
                 entry->labWorks.clear();
 
+            student->emitDataUpdated();
             emit dataChanged(index, index);
             return true;
             break;
@@ -101,6 +102,8 @@ bool StudentListModel::setData(const QModelIndex& index, const QVariant& value, 
             StatTableEntry* entry = getOrCreateStatEntryForStudent(student->getId());
             entry->attended = true;
             entry->labWorks = convertListToMap(value);
+
+            student->emitDataUpdated();
             emit dataChanged(index, index);
             return true;
         }

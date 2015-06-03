@@ -279,8 +279,11 @@ void DriveSyncProcessor::saveStats(QByteArray rawData, DataSheet* dataFile)
         StudentList students = dataFile->getStudentList();
         for (int index = 3; index < studentNodes.size(); index++)
         {
-            QDomNode studentNode = studentNodes.item(index);
             Student* student = students[index - 3];
+            if (student->getUpdatedDate() <= dataFile->getLastSyncTime())
+                continue;
+
+            QDomNode studentNode = studentNodes.item(index);
 
             QString selfLink = studentNode.firstChildElement("id").toElement().text();
             QByteArray rowDataRaw = driveService->sendRequest(GoogleAPIRequest(selfLink, "GET"))->readAll();

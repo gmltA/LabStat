@@ -1,6 +1,7 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
+#include <QDateTime>
 #include <QDomDocument>
 #include <QObject>
 
@@ -32,8 +33,11 @@ class Student : public QObject
         int getId() const;
         void setId(int value);
 
+        QDateTime getUpdatedDate() const;
+        void emitDataUpdated();
+
     signals:
-        void dataChanged(Student* student);
+        void dataUpdated(Student* student);
 
     private:
         int id;
@@ -46,6 +50,8 @@ class Student : public QObject
 
         int group;
         int subgroup;
+
+        QDateTime updated;
 };
 
 typedef QList<Student*> StudentList;

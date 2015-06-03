@@ -151,7 +151,7 @@ void SQLiteSyncProcessor::saveStudentList(DataSheet* dataFile)
     foreach (Student* person, dataFile->getStudentList())
     {
         studentsData += serializeStudent(dataFile->getId(), person);
-        connect(person, &Student::dataChanged, this, &SQLiteSyncProcessor::updateStudent);
+        connect(person, &Student::dataUpdated, this, &SQLiteSyncProcessor::updateStudent);
     }
 
     studentsData.chop(1);
@@ -174,7 +174,7 @@ void SQLiteSyncProcessor::loadStudentList(DataSheet* dataFile)
                                         query.value(4).toString());
         person->setGroup(query.value(5).toInt());
         person->setSubgroup(query.value(6).toInt());
-        connect(person, &Student::dataChanged, this, &SQLiteSyncProcessor::updateStudent);
+        connect(person, &Student::dataUpdated, this, &SQLiteSyncProcessor::updateStudent);
 
         studentList.push_back(person);
 

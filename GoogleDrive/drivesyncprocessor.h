@@ -45,6 +45,9 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         void saveStats(QByteArray rawData, DataSheet* dataFile);
         bool saveStatEntry(QDomDocument* row, StatTableEntry* entry);
 
+        void saveNotes(QByteArray rawData, DataSheet* dataFile);
+        void saveStudentNote(QDomDocument* row, QString note);
+
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
 
         QMap<int, QString>      timeTableTagAccordance;

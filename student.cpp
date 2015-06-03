@@ -19,6 +19,7 @@ Student::Student(int _id, QDomNode studentNode) : QObject(), id(_id)
     subgroup = groupData.size() < 2 ? 0 : groupData[1].toInt();
 
     note = studentNode.firstChildElement("gsx:заметки").text();
+    updated = QDateTime::fromString(studentNode.firstChildElement("updated").text(), Qt::ISODate);
 }
 
 QString Student::getName() const
@@ -29,7 +30,7 @@ QString Student::getName() const
 void Student::setName(const QString& value)
 {
     name = value;
-    emit dataChanged(this);
+    emitDataUpdated();
 }
 
 QString Student::getSurname() const
@@ -40,7 +41,7 @@ QString Student::getSurname() const
 void Student::setSurname(const QString& value)
 {
     surname = value;
-    emit dataChanged(this);
+    emitDataUpdated();
 }
 
 QString Student::getPatronymic() const
@@ -51,7 +52,7 @@ QString Student::getPatronymic() const
 void Student::setPatronymic(const QString& value)
 {
     patronymic = value;
-    emit dataChanged(this);
+    emitDataUpdated();
 }
 
 int Student::getGroup() const
@@ -62,7 +63,7 @@ int Student::getGroup() const
 void Student::setGroup(const int& value)
 {
     group = value;
-    emit dataChanged(this);
+    emitDataUpdated();
 }
 
 int Student::getSubgroup() const
@@ -73,7 +74,7 @@ int Student::getSubgroup() const
 void Student::setSubgroup(const int& value)
 {
     subgroup = value;
-    emit dataChanged(this);
+    emitDataUpdated();
 }
 
 QString Student::getNote() const
@@ -84,7 +85,7 @@ QString Student::getNote() const
 void Student::setNote(const QString& value)
 {
     note = value;
-    emit dataChanged(this);
+    emitDataUpdated();
 }
 
 int Student::getId() const
@@ -95,5 +96,16 @@ int Student::getId() const
 void Student::setId(int value)
 {
     id = value;
-    emit dataChanged(this);
+    emitDataUpdated();
+}
+
+QDateTime Student::getUpdatedDate() const
+{
+    return updated;
+}
+
+void Student::emitDataUpdated()
+{
+    updated = QDateTime::currentDateTimeUtc();
+    emit dataUpdated(this);
 }
