@@ -15,7 +15,7 @@ class SQLiteSyncProcessor : public QObject, public ISyncProcessor
         ~SQLiteSyncProcessor();
 
         void init() override final;
-        void syncFile(DataSheet* dataFile) override final;
+        void syncFile(DataSheet *dataFile, SyncDirection direction) override final;
         void clear(DataSheet* dataFile) override final;
 
         void updateStudent(Student* person);

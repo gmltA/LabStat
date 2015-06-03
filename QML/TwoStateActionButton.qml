@@ -24,7 +24,7 @@ View {
     state: "first"
 
     radius: height / 2
-    tintColor: button.pressed ? Qt.lighter(Theme.primaryColor, 1.1) : Theme.primaryColor
+    tintColor: button.pressed ? Qt.darker(Theme.primaryColor, 1.1) : Theme.primaryColor
 
     Behavior on rotation {
         RotationAnimation {
@@ -76,7 +76,7 @@ View {
             PropertyChanges {
                 target: root
                 rotation: 45
-                tintColor: button.pressed ? Qt.lighter(Theme.accentColor, 1.3) : Theme.accentColor
+                tintColor: button.pressed ? Qt.darker(Theme.accentColor, 1.3) : Theme.accentColor
             }
             PropertyChanges {
                 target: buttonText

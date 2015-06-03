@@ -26,6 +26,7 @@
         <file>QML/TextFieldStyle.qml</file>
         <file>QML/ButtonStyle.qml</file>
         <file>QML/OverlayLayer.qml</file>
+        <file>QML/BrandingLoader.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Material-Design-Icons.ttf</file>

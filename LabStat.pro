@@ -62,7 +62,8 @@ DISTFILES += \
     QML/TwoStateActionButton.qml \
     QML/TextFieldStyle.qml \
     QML/ButtonStyle.qml \
-    QML/OverlayLayer.qml
+    QML/OverlayLayer.qml \
+    QML/BrandingLoader.qml
 
 DISTFILES += \ android-sources/AndroidManifest.xml \
     android-sources/project.properties \

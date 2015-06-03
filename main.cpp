@@ -57,17 +57,16 @@ int main(int argc, char *argv[])
     // now calculate the dp ratio
     qreal dp = dpi / 160.f;
 
-    SyncProcessorProvider::getInstance().addCreator(new DriveSyncProcessorCreator);
-    SyncProcessorProvider::getInstance().addCreator(new SQLiteSyncProcessorCreator);
-    SubjectHandler::init();
-
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("dp", dp);
     engine.rootContext()->setContextProperty("isMobile", isMobile);
 
-    engine.load(QUrl("qrc:/QML/main.qml"));
-    SubjectHandler::getInstance()->sendInitialList();
+    SyncProcessorProvider::getInstance().addCreator(new DriveSyncProcessorCreator);
+    SyncProcessorProvider::getInstance().addCreator(new SQLiteSyncProcessorCreator);
+    SubjectHandler::init();
+
+    engine.load(QUrl("qrc:/QML/BrandingLoader.qml"));
 
     return app.exec();
 }

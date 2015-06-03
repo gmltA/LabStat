@@ -247,8 +247,8 @@ PopupBase {
                     }
 
                     onClicked: {
-                        close();
                         rejected();
+                        close();
                     }
                 }
 
@@ -267,8 +267,8 @@ PopupBase {
                     }
 
                     onClicked: {
-                        close()
                         accepted();
+                        close()
                     }
                 }
             }

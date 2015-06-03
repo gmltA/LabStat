@@ -60,7 +60,7 @@ int TimeTableModel::getGroupId() const
 
 int TimeTableModel::getClosestEntryIndex()
 {
-    QDateTime now = QDateTime::currentDateTime();
+    QDateTime now = QDateTime::currentDateTimeUtc();
 
     int closest = 0;
 

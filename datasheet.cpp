@@ -89,7 +89,7 @@ int DataSheet::getLastSyncProcessorId() const
 void DataSheet::synced(int processorId)
 {
     lastSyncProcessorId = processorId;
-    lastSyncTime = QDateTime::currentDateTime();
+    lastSyncTime = QDateTime::currentDateTimeUtc();
 }
 
 TimeTableModel* DataSheet::getTimeTableModel(int groupId)

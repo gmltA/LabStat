@@ -21,6 +21,7 @@ class SubjectHandler : public QObject
         static SubjectHandler* getInstance();
 
         static void init();
+        Q_INVOKABLE void initData();
 
         static QObject* qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine)
         {
@@ -31,6 +32,7 @@ class SubjectHandler : public QObject
         }
 
         Q_INVOKABLE void sync(int processorIndex);
+        Q_INVOKABLE void forcedSync(int processorIndex, int direction);
 
         Q_INVOKABLE void attachProcessor(int processorTypeId, QString rootFolder = "LabStat");
         Q_INVOKABLE void deleteProcessor(int processorIndex);
@@ -69,6 +71,8 @@ class SubjectHandler : public QObject
 
         void groupListChanged(QList<int> groups);
         void groupDataLoaded(TimeTableModel* timeTable);
+
+        void dataInitialized();
 };
 
 #endif // SUBJECTHANDLER_H

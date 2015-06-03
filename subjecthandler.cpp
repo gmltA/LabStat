@@ -97,13 +97,23 @@ void SubjectHandler::sendInitialList()
 void SubjectHandler::init()
 {
     qmlRegisterSingletonType<SubjectHandler>("SubjectHandler", 1, 0, "SubjectHandler", &SubjectHandler::qmlInstance);
+}
+
+void SubjectHandler::initData()
+{
     AppDataStorage::getInstance().initDBStructure();
     AppDataStorage::getInstance().loadSubjectsFromDB();
+    emit dataInitialized();
 }
 
 void SubjectHandler::sync(int processorIndex)
 {
     currentSubject->getSyncHandler()->sync(processorIndex);
+}
+
+void SubjectHandler::forcedSync(int processorIndex, int direction)
+{
+    currentSubject->getSyncHandler()->sync(processorIndex, ISyncProcessor::SyncDirection(direction));
 }
 
 void SubjectHandler::attachProcessor(int processorTypeId, QString rootFolder)

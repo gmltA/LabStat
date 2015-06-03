@@ -15,7 +15,7 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
         ~DriveSyncProcessor();
 
         void init() override final;
-        void syncFile(DataSheet* dataFile) override final;
+        void syncFile(DataSheet* dataFile, SyncDirection direction) override final;
         void clear(DataSheet* dataFile) override final;
 
         GoogleDriveAPI* getDriveService() const;
@@ -44,6 +44,9 @@ class DriveSyncProcessor : public QObject, public ISyncProcessor
 
         void saveStats(QByteArray rawData, DataSheet* dataFile);
         bool saveStatEntry(QDomDocument* row, StatTableEntry* entry);
+
+        void saveNotes(QByteArray rawData, DataSheet* dataFile);
+        void saveStudentNote(QDomDocument* row, QString note);
 
         QList<QDomElement>      selectDateElementList(QDomNodeList dateNodes);
 

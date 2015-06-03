@@ -10,14 +10,6 @@ Rectangle {
     property var model
 
     Component {
-        id: modifyNoteDialogBuilder
-
-        InputPopupDialog {
-            text: "Modify sutdent's note"
-        }
-    }
-
-    Component {
         id: pageDelegate
         Item {
             property alias scrollStop: pupils.scrollStop
@@ -188,6 +180,14 @@ Rectangle {
 
             property var dialog: undefined
 
+            function updateNote() {
+                note = editNoteDialog.value
+            }
+
+            function disconnectUpdate() {
+                editNoteDialog.accepted.disconnect(updateNote)
+            }
+
             height: personHeader.height + personStats.height
             width: root.width
 
@@ -226,19 +226,10 @@ Rectangle {
                     onPressAndHold: {
                         personDelegateElement.state = "expanded"
 
-                        if (!dialog)
-                        {
-                            var p = personHeader.parent
-                            while (p.parent)
-                                p = p.parent
-
-                            dialog = modifyNoteDialogBuilder.createObject(p)
-                            dialog.value = noteField.text
-                            dialog.accepted.connect(function(){
-                                note = dialog.value
-                            })
-                        }
-                        dialog.showing = true
+                        editNoteDialog.open()
+                        editNoteDialog.value = note
+                        editNoteDialog.accepted.connect(updateNote)
+                        editNoteDialog.closed.connect(disconnectUpdate)
                     }
 
                     onClicked: {
@@ -417,13 +408,18 @@ Rectangle {
         }
     }
 
+    InputPopupDialog {
+        id: editNoteDialog
+        text: "Modify sutdent's note"
+    }
+
     states: [
         State {
             name: "hidden"
             when: !root.model
             PropertyChanges {
                 target: root
-                visible: false
+                opacity: 0
             }
             PropertyChanges {
                 target: tabContainer
