@@ -8,9 +8,22 @@
 
 #define PROC_ID_INVALID -1
 
+/*!
+ * \brief ISyncProcessor is an interface for every sync processor
+ * that can be integrated into application.
+ */
 class ISyncProcessor
 {
     public:
+        /*!
+         * \brief The Origin enum represents kind of data storage e.g. online or offline
+         *
+         * Enum elements can be used to sync data with multiple processors simultainously
+         * by choosing origin type.
+         *
+         * \note \c syncHandler.sync(OriginOffline) will invoke sync operation for all
+         * offline processors attached to the current subject.
+         */
         enum Origin
         {
             OriginOffline,
@@ -44,6 +57,10 @@ class ISyncProcessor
         QString getData() const { return data; }
         void setData(const QString& value) { data = value; }
 
+        /*!
+         * \brief processorTypeName is used by \c ISyncProcessorCreator to provide name of processor
+         * for \c SyncProcessorProvider to build list of processors for front-end
+         */
         static const QString processorTypeName;
 
         QString getTitle() const { return title; }
@@ -53,10 +70,22 @@ class ISyncProcessor
         virtual void syncDone() = 0;
 
     protected:
+        /*!
+         * \brief id is a global unique identificator for every processor
+         */
         int id;
+        /*!
+         * \brief typeId is set by derived class
+         */
         int typeId;
 
         QString title;
+        /*!
+         * \brief data holds various information
+         *
+         * This value can be used differently by every processor
+         * \note data for \c DriveSyncProcessor holds full path inside Drive to the stat file
+         */
         QString data;
 
         Origin origin;

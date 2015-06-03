@@ -6,6 +6,12 @@
 
 #include <QObject>
 
+/*!
+ * SubjectData stores everything related to particular subject entry.
+ *
+ * Instance of this class created and added to SubjectHandler when user
+ * decides to track data for one more subject.
+ */
 
 class SubjectData : public QObject
 {

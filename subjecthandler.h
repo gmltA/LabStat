@@ -8,11 +8,15 @@
 class QQmlEngine;
 class QJSEngine;
 
-/*
- * Pointer singleton here because QML requires object to be pointer.
+/*!
+ * \brief SubjectHandler is a connector between front-end and back-end of the application.
+ *
+ * Singleton object provides selection\manage\interacting functionality for QML.
+ * All invoked actions are performed on \c currentSubject object.
+ *
+ * \note This singleton is pointer-based because QML requires object to be always available.
  * Otherwise ASSERT'ation on program exit happens.
  */
-
 class SubjectHandler : public QObject
 {
         Q_OBJECT
@@ -20,9 +24,21 @@ class SubjectHandler : public QObject
     public:
         static SubjectHandler* getInstance();
 
+        /*!
+         * \brief init embeds SubjectHandler type as singleton to QML.
+         *
+         * It registers C++ type as QML module. Functions of singleton can be invoked from QML code
+         * without creating explicit object;
+         */
         static void init();
         Q_INVOKABLE void initData();
 
+        /*!
+         * \brief qmlInstance is a function that provides class instance to QML engine
+         * \param engine is unused
+         * \param scriptEngine is unused
+         * \return instance of SubjectHandler
+         */
         static QObject* qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine)
         {
             Q_UNUSED(engine);
